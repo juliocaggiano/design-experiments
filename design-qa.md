@@ -1,3 +1,144 @@
+# Vault-wide Easing Blueprint remediation — 2026-07-16
+
+## Scope
+
+- Re-audited all 65 registered cards against animations.dev's Easing Blueprint and the current official `emil-design-eng` skill.
+- Implemented all 18 items from the previous audit, measured the dependency-owned Embla Carousel, and added Gradient Spin to the final matrix.
+- Full evidence: `artifacts/audits/easing-blueprint-fixes-2026-07-16/AUDIT.md`.
+
+## Verification
+
+- Final disposition: 55 aligned, 10 static/N/A, 0 remaining tuning items.
+- Live computed-style checks passed for Panel Reveal, Input Clear, 3D Tilt, and Scroll Gallery. Carousel runtime samples confirm a fast, interruptible physical settle.
+- Source/implementation captures were opened together to check visual regression: card layouts, type, crop, borders, radii, and hierarchy remain consistent with the existing light vault.
+- TypeScript passes, `git diff --check` passes, and the production Vite build passes. The existing bundle-size advisory remains non-blocking.
+- Reduced-motion media emulation was unavailable in the current in-app browser surface; Meeting Overlay's new settled branch was source-verified and its standard render was regression-checked.
+
+## Findings
+
+- No actionable P0, P1, or P2 motion issue remains from the audit.
+
+final result: passed
+
+# Gradient Spin — 2026-07-16
+
+## Scope and visual truth
+
+- Route: `/vault/gradient-spin`
+- Source visual truth: `https://gradient-spin.vercel.app/` plus the MIT-licensed `BIAsia/gradient-spin` source for its palettes, pattern functions, OKLab sampling, shared opacity keyframe, and negative phase-delay behavior.
+- Source captures: `artifacts/design-qa/gradient-spin-2026-07-16/source/desktop-light.png`, the complete source scroll sequence in the same directory, and the configured Ripple/Snake captures at the evidence root.
+- Implementation captures: `artifacts/design-qa/gradient-spin-2026-07-16/implementation/desktop-top.png`, `desktop-controls.png`, `desktop-feed-gradient-spin.png`, and the source/implementation board at `artifacts/design-qa/gradient-spin-2026-07-16/comparison-controls.png`.
+- Implementation viewport: 1280 × 720. The in-app browser currently retains that fixed CSS viewport when tabs are requested at 390 or 320 px; compact behavior was therefore checked through the dedicated responsive rules and intrinsic flex/grid sizing rather than represented by a misleading desktop screenshot labelled mobile.
+
+## Fidelity comparison
+
+- The implementation preserves the source's defining mechanism rather than approximating it with a video or rotating gradient: every cell shares one linear opacity animation and receives a negative delay derived from the selected pattern and gradient axis.
+- All eight source palettes are present and sampled in OKLab. Arrow, Diagonal, Snake, and Ripple use the source phase formulas; Along path and Top down remap the phase/color axis exactly as the reference does.
+- The source/implementation comparison board was opened as one visual input. The local component preserves the reference's compact color swatches, segmented pattern/axis controls, six ranges, light neutral surfaces, and centered spinner while translating them into the vault's 720 px editorial shell.
+- The thumbnail intentionally reduces the reference to one spring/snake specimen and one status line. The expanded hero and Implementation use the same component and visual state, while only the expanded version exposes exploration controls.
+
+## Interaction, motion, and implementation verification
+
+- Palette Bubble, pattern Ripple, and axis Top down each update their pressed state; the complete option counts are 8 palettes, 4 patterns, and 2 axes.
+- In the expanded specimen, sampled cell opacity changed from `0.1` to `0.877512` over 260 ms. In the visible feed thumbnail, 37 of 49 sampled cells changed over 220 ms.
+- The feed thumbnail reports `data-active=true` when visible and the offscreen expanded hero reports `data-active=false`, confirming IntersectionObserver gating rather than 65 always-running feed animations.
+- Reduced motion freezes the grid to a legible phase. Linear timing is an intentional exception because this is a perpetual loading cycle, not a spatial transition between interface states.
+- Native range inputs preserve keyboard and pointer semantics. At widths up to 540 px, control groups collapse to one column and palette buttons wrap without fixed-width overflow.
+- Browser console: zero errors and zero warnings beyond Vite/React development informational messages.
+- TypeScript passes.
+- Production build passes; the existing bundle-size warning remains non-blocking.
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain for this card.
+
+final result: passed
+
+# Scribble Index — 2026-07-16
+
+## Scope and visual truth
+
+- Route: `/vault/scribble-index`
+- Source visual truth: Julio's supplied Benji Taylor writing-list screenshot at `/var/folders/v3/0q42bz6971780hq07q9qvfth0000gn/T/codex-clipboard-f3d2df43-5d7f-41ba-8a8e-c0872f48ffc2.png` plus the current `https://benji.org/` Writing DOM and production CSS.
+- Implementation captures: `artifacts/design-qa/scribble-index-2026-07-16/detail-full.png`, `artifacts/design-qa/scribble-index-2026-07-16/feed-desktop.png`, `artifacts/design-qa/scribble-index-2026-07-16/detail-drawn.png`, and the pencil refinement under `artifacts/design-qa/scribble-index-pencil-2026-07-16/`.
+- Desktop viewport: 1280 × 720. Responsive layout checks: 390 × 844 and 320 × 844.
+- States exercised: initial rough “New” annotation, six-row automatic focus cycle, pointer hover, freehand drawing, keyboard row selection, undo, reset, feed containment, compact mobile fit, and reduced-motion code path.
+
+## Fidelity comparison
+
+- Reproduced the reference hierarchy exactly: muted Writing heading, title-column-only inner separators, full-width year boundaries, year/title/date columns, right-aligned tabular dates, magenta New label, and one fully active row against faded siblings.
+- Matched the live production interaction rule: hovering the list fades sibling labels and dates, the active row returns to full opacity, and the opacity transition lasts 140 ms. The local muted color is `#c9c9c9`, producing the same optical fade on the vault's white surface.
+- Recreated the rough double-loop magenta circle from the screenshot without a raster asset. The refined canvas keeps the original outer thickness while building each line from a deterministically broken core, fine offset fibers, and restrained graphite-like flecks. Both the initial circle and freehand marks now read as a dry pencil/thin brush rather than a clean digital stroke.
+- The compact feed card advances one active row every 1450 ms only when at least 35% visible. Hover takes control immediately, leaving the viewport pauses the timer, and reduced motion keeps a settled first row.
+- The desktop feed capture was opened beside the supplied screenshot in the same comparison input. Column alignment, line weight, hierarchy, copy, and rough annotation are materially aligned; only proportional scale changes to fit the vault's canonical 1344 / 520 card ratio.
+
+## Interaction and responsive verification
+
+- Canvas drag adds one normalized stroke while preserving the current hover row; dragging inside the feed preview leaves the `?category=interactions` URL unchanged.
+- Expanded Undo removes the latest user stroke without removing the initial annotation. Reset clears all user strokes and restores the original magenta circle.
+- Keyboard activation selected Honkish as the only pressed row. All six row buttons remain semantic while pointer hit-testing runs through the drawing canvas.
+- At 390 px, the compact specimen ends 6.125 px above its frame edge; at 320 px it ends 4.875 px above the edge. Both widths report zero document overflow. The expanded mobile specimen retains 56 px below its final row.
+- Browser console: zero errors and zero warnings on feed and detail routes.
+- TypeScript passes.
+- Production build passes; the existing bundle-size warning remains non-blocking.
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain for this card.
+
+final result: passed
+
+# Attachment card correction — 2026-07-16
+
+## Scope and visual truth
+
+- Route: `/vault/shadcn-attachment`
+- Source visual truth: Julio's two diagnostic screenshots at `/var/folders/v3/0q42bz6971780hq07q9qvfth0000gn/T/codex-clipboard-5fa3793e-3afe-4b42-90c3-8ba0adbd3e88.png` and `/var/folders/v3/0q42bz6971780hq07q9qvfth0000gn/T/codex-clipboard-489fabd6-6748-4d0c-b08a-0889c51c8376.png`.
+- Implementation screenshots: `artifacts/design-qa/attachment-2026-07-16/attachment-detail-after.png`, `artifacts/design-qa/attachment-2026-07-16/attachment-feed-after.png`, and `artifacts/design-qa/attachment-2026-07-16/attachment-image-preview.png`.
+- Desktop viewport: 987 × 993. Responsive checks: 390 × 844 and 320 × 844.
+- States compared and exercised: feed default, expanded default, upload canceled, image preview open/closed, completed-file removal, and compact thumbnail containment.
+
+## Comparison history
+
+### Initial findings
+
+- [P1] The expanded hero scaled an unresponsive 403 px-tall specimen into a 264 px frame. The transformed layout remained vertically offset, so both status rows crossed the lower crop boundary.
+- [P1] The feed thumbnail used the same transformed stack, leaving a very large empty upper field while the upload row was cut at the bottom.
+- [P1] The visible X controls were inert and image cards had no preview behavior.
+- [P2] At the 320 px feed width, the first compact correction still overflowed by 8 px and the image removal target competed with the image-preview target.
+
+### Fixes and post-fix evidence
+
+- Replaced transform scaling for Attachment with a real container-responsive grid. The three image cards share one row, status files share a second row, and the complete composition is centered by its actual layout box.
+- Reduced only Attachment's Implementation stage from 480 px to 360 px, which removes the unnecessary empty vertical field without changing the other shadcn cards.
+- Added working image preview, Escape/backdrop/close dismissal, upload cancellation, image removal, and completed-file removal. Interactive thumbnail events explicitly stay inside the card instead of triggering navigation.
+- Added a dedicated short-container treatment. At 320 px the 68.28 px demo sits within the 90.08 px preview with approximately 10.9 px above and below, and document overflow is exactly zero. At these smallest sizes, image-removal overlays yield to the larger image-preview target while upload cancellation remains available.
+- Reopened the diagnostic feed and expanded screenshots beside the post-fix captures in the same comparison inputs. The revised images show balanced whitespace, complete status rows, uncropped edges, preserved Inter typography, and the same component hierarchy in feed and detail.
+
+## Required fidelity surfaces
+
+- Fonts and typography: Inter/base-rhea remains in place; 14 px labels, 12 px metadata, medium filenames, truncation, and compact 10 px metadata are optically consistent and legible.
+- Spacing and layout rhythm: the composition now uses measured 12/8/6/4 px gaps, centered real boxes rather than transformed overflow, 12/16 px radii, balanced outer whitespace, and a shorter Attachment-only implementation stage.
+- Colors and visual tokens: white surfaces, neutral `#e5e5e5` hairlines, `#171717` text, `#737373` metadata, and the existing subtle focus ring remain consistent with the light vault and shadcn source.
+- Image quality and asset fidelity: all three existing local 900 px images remain sharp. Thumbnails use intentional 4:3 cover crops, while the full-screen preview uses `object-fit: contain` to reveal the complete image without distortion.
+- Copy and content: filenames, file types, sizes, upload percentage, labels, and category caption are preserved. Accessible labels now describe preview, cancel, remove, and close actions precisely.
+
+## Interaction and responsive verification
+
+- Desktop upload cancellation removes the correct row; the image preview opens at full size and closes from its X control.
+- The 320 px feed thumbnail cancels without navigating, then opens its image preview without navigating. The compact preview exposes no overlapping image-removal target.
+- Feed, expanded hero, and Implementation all use the same stateful component.
+- Desktop, 390 px, and 320 px layouts have no document overflow or attachment crop.
+- Browser console: zero errors.
+- TypeScript passes.
+- Production build passes; the existing bundle-size warning remains non-blocking.
+
+## Findings
+
+- No actionable P0, P1, or P2 issues remain for the requested attachment-card correction.
+
+final result: passed
+
 # Interface Craft Guidelines — 2026-07-16
 
 ## Scope and visual truth

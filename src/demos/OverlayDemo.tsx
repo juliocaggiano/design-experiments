@@ -58,6 +58,8 @@ export function OverlayDemo({
     let phase: Phase = 'walkIn'
     let phaseStart = 0
     let ready = false
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let redraw = () => {}
 
     const walkSheet = new Image()
     walkSheet.src = '/vault/overlay/clawd_walk.png'
@@ -70,7 +72,10 @@ export function OverlayDemo({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
     resize()
-    const ro = new ResizeObserver(resize)
+    const ro = new ResizeObserver(() => {
+      resize()
+      redraw()
+    })
     ro.observe(canvas)
 
     Promise.all([
@@ -174,16 +179,26 @@ export function OverlayDemo({
     }
 
     const render = (t: number) => {
-      raf = requestAnimationFrame(render)
       const w = canvas.clientWidth
       const h = canvas.clientHeight
       ctx.clearRect(0, 0, w, h)
-      if (!ready || !walkSheet.naturalWidth) return
+      if (!ready || !walkSheet.naturalWidth) {
+        raf = requestAnimationFrame(render)
+        return
+      }
 
       const { holdMs: hold, speed: spd, spriteH: sh } = propsRef.current
       const sw = sh * (FRAME_W / FRAME_H)
       const stopX = Math.max(U, w * STOP_FRAC)
       const groundY = h - sh
+
+      if (reducedMotion) {
+        drawSprite(idleSheet, 0, stopX, groundY, sh, false)
+        drawBubble(stopX + sw * 0.5, groundY, 1)
+        return
+      }
+
+      raf = requestAnimationFrame(render)
       const walkDist = stopX + sw
       const walkMs = (walkDist / spd) * 1000
       const el = t - phaseStart
@@ -233,6 +248,9 @@ export function OverlayDemo({
       const bob = phase === 'walkIn' || phase === 'walkOut' ? (Math.floor(t / STEP_MS) % 2) * -2 : 0
       drawSprite(sheet, frame, x, groundY + bob, sh, flip)
       if (bubbleScale > 0) drawBubble(x + sw * 0.5, groundY, bubbleScale)
+    }
+    redraw = () => {
+      if (reducedMotion && ready) render(performance.now())
     }
     raf = requestAnimationFrame(render)
     return () => { cancelAnimationFrame(raf); ro.disconnect() }

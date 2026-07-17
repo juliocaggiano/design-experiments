@@ -18,6 +18,8 @@ import { EmilSkillsDemo } from './demos/EmilSkillsDemo'
 import { SonnerDemo } from './demos/SonnerDemo'
 import { ShadcnDemo } from './demos/shadcn/ShadcnDemo'
 import { InterfaceGuidelinesDemo } from './demos/InterfaceGuidelinesDemo'
+import { ScribbleIndexDemo } from './demos/ScribbleIndexDemo'
+import { GradientSpinDemo } from './demos/GradientSpinDemo'
 import { MeetingOverlayDetail } from './pages/MeetingOverlayDetail'
 import { FluidSpringsDetail } from './pages/FluidSpringsDetail'
 import { SheetDetail } from './pages/SheetDetail'
@@ -28,6 +30,8 @@ import { EmilSkillDetail } from './pages/EmilSkillDetail'
 import { SonnerDetail } from './pages/SonnerDetail'
 import { ShadcnDetail } from './pages/ShadcnDetail'
 import { InterfaceGuidelinesDetail } from './pages/InterfaceGuidelinesDetail'
+import { ScribbleIndexDetail } from './pages/ScribbleIndexDetail'
+import { GradientSpinDetail } from './pages/GradientSpinDetail'
 import { EMIL_SKILL_DEFINITIONS, getEmilSkillDefinition, type EmilSkillDefinition } from './emilskills/catalog'
 import { MicroButtonsDetail } from './pages/MicroButtonsDetail'
 import { ScrollgalleryDetail } from './pages/ScrollgalleryDetail'
@@ -83,6 +87,7 @@ function CategoryFilter({
   const tabsRef = useRef<HTMLDivElement>(null)
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
   const [pill, setPill] = useState({ x: 0, width: 0 })
+  const [instantPill, setInstantPill] = useState(true)
   const visibleCount = selected === 'All'
     ? VAULT_ITEMS.length
     : VAULT_ITEMS.filter((item) => item.category === selected).length
@@ -104,6 +109,7 @@ function CategoryFilter({
   const selectAt = (index: number) => {
     const next = categories[index]
     if (!next) return
+    setInstantPill(true)
     onChange(next)
     window.requestAnimationFrame(() => {
       tabRefs.current[index]?.focus()
@@ -146,7 +152,7 @@ function CategoryFilter({
             style={{
               width: pill.width,
               transform: `translateX(${pill.x - 4}px)`,
-              transition: 'transform 250ms cubic-bezier(0.2, 0.8, 0.2, 1), width 250ms cubic-bezier(0.2, 0.8, 0.2, 1)',
+              transition: instantPill ? 'none' : 'transform 180ms var(--ease-move), width 180ms var(--ease-move)',
             }}
           />
           {categories.map((category, index) => {
@@ -163,7 +169,10 @@ function CategoryFilter({
                 aria-selected={active}
                 aria-controls="vault-filter-results"
                 tabIndex={active ? 0 : -1}
-                onClick={() => onChange(category)}
+                onClick={() => {
+                  setInstantPill(false)
+                  onChange(category)
+                }}
                 className={`relative z-10 inline-flex h-7 items-center gap-1.5 rounded-[8px] border border-transparent bg-transparent px-2.5 text-[12px] transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] active:scale-[0.98] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-1 ${active ? 'font-medium text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'}`}
               >
                 {category}
@@ -378,6 +387,17 @@ function SonnerCard() {
   )
 }
 
+function GradientSpinCard() {
+  return (
+    <LinkCard href="/vault/gradient-spin" label="Open Gradient Spin">
+      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
+        <GradientSpinDemo compact />
+      </div>
+      <Caption title="Gradient Spin" category="Motion" />
+    </LinkCard>
+  )
+}
+
 function ShadcnCard({ definition }: { definition: ShadcnDefinition }) {
   return (
     <LinkCard href={definition.path} interactive label={`Open ${definition.title}`}>
@@ -404,6 +424,17 @@ function InterfaceGuidelinesCard() {
         <InterfaceGuidelinesDemo compact />
       </div>
       <Caption title="Interface Craft Guidelines" category="Skills" />
+    </LinkCard>
+  )
+}
+
+function ScribbleIndexCard() {
+  return (
+    <LinkCard href="/vault/scribble-index" interactive label="Open Scribble Index">
+      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
+        <ScribbleIndexDemo compact />
+      </div>
+      <Caption title="Scribble Index" category="Interactions" />
     </LinkCard>
   )
 }
@@ -470,6 +501,8 @@ function MeetingOverlayCard() {
 
 const FEED_CARDS = [
   { path: '/vault/meeting-overlay', category: 'Motion', Card: MeetingOverlayCard },
+  { path: '/vault/gradient-spin', category: 'Motion', Card: GradientSpinCard },
+  { path: '/vault/scribble-index', category: 'Interactions', Card: ScribbleIndexCard },
   ...EMIL_SKILL_FEED_CARDS,
   { path: '/vault/sonner', category: 'Interactions', Card: SonnerCard },
   ...SHADCN_FEED_CARDS,
@@ -527,6 +560,8 @@ export default function App() {
     : aiCss ? <AiCssDetail definition={aiCss} />
     : emilSkill ? <EmilSkillDetail definition={emilSkill} />
     : shadcn ? <ShadcnDetail definition={shadcn} />
+    : path === '/vault/gradient-spin' ? <GradientSpinDetail />
+    : path === '/vault/scribble-index' ? <ScribbleIndexDetail />
     : path === '/vault/interface-guidelines' ? <InterfaceGuidelinesDetail />
     : path === '/vault/sonner' ? <SonnerDetail />
     : path === '/vault/animation-principles' ? <AnimationPrinciplesDetail />

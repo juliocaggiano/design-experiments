@@ -30,6 +30,8 @@ A personal vault of small design-engineering experiments, reconstructed from the
 
 ## Current custom routes
 
+- `/vault/gradient-spin`
+- `/vault/scribble-index`
 - `/vault/interface-guidelines`
 - `/vault/shadcn-attachment`
 - `/vault/shadcn-calendar`
@@ -106,6 +108,46 @@ node node_modules/vite/bin/vite.js build
 ```
 
 ## Update log
+
+### 2026-07-16 — Easing Blueprint remediation with Emil Design Engineering (Codex)
+
+- Re-audited all 65 registered cards using the existing Easing Blueprint matrix plus Emil Kowalski's current `emil-design-eng` skill. Confirmed that the bundled skill is byte-for-byte identical to GitHub commit `6bf24434f7730ad169077756cf9c7cd7bd675fc6`.
+- Implemented all 18 previously identified tuning items. Added the exact shared on-screen movement curve `cubic-bezier(0.77, 0, 0.175, 1)`; retuned Card Resize, Text States, Panel Reveal, Page Side-by-Side, Icon Swap, Tabs Sliding, Dropdown Morph, Accordion, Thinking + Reasoning, To-do List, Scroll Gallery, and Road Cup Knockout; and separated Web Search entrances from gentle state changes.
+- Removed the delayed ease-in behavior from Panel Reveal and Input Clear, made 3D Tilt pointer tracking transition-free, made keyboard-driven tab/category changes immediate, and shortened repeated spatial reflows to 180–260 ms. Corrected the Animation Principles guide so it no longer teaches ease-in exits.
+- Added a settled reduced-motion rendering path to Meeting Overlay. Continuous linear effects, real springs, direct drawing/dragging, and intentional instructional “Before” examples remain explicit exceptions rather than false positives.
+- Measured the Embla Carousel rather than rewriting dependency-owned motion: it covers about 84% of its snap distance in the first 45 ms, then settles progressively and remains interruptible. Added Gradient Spin as the 65th aligned card.
+- Final disposition: 55 aligned, 10 static/N/A, 0 remaining tuning items. TypeScript, `git diff --check`, and the production build pass. The report, source captures, implementation captures, complete matrix, and limitations are in `artifacts/audits/easing-blueprint-fixes-2026-07-16/AUDIT.md`.
+
+### 2026-07-16 — Gradient Spin card (Codex)
+
+- Added `/vault/gradient-spin` directly after the promoted meeting card, titled “Gradient Spin” and categorized under Motion. The central catalog now drives its feed caption, category count, breadcrumb, route, and cyclic previous/next neighbors.
+- Rebuilt the MIT-licensed `BIAsia/gradient-spin` mechanism locally: a single shared opacity keyframe, negative per-cell phase delays, exact Arrow/Diagonal/Snake/Ripple phase maps, path/top-down axes, and OKLab sampling across all eight source palettes. The upstream license is bundled beside the implementation.
+- Kept the feed thumbnail focused on one quiet spring/snake loading specimen. It animates only while at least 35% visible, pauses offscreen, and freezes to a useful state under reduced motion. The expanded hero stays visually synchronized and the Implementation section exposes the original palette, pattern, axis, timing, dim, grid, size, and gap controls.
+- Added a self-contained expanded page with interaction explanation, implementation notes, full React/CSS source, copy prompt, reference links, MIT credit, and a note explaining why linear timing is intentional for this perpetual cycle.
+- Verified palette/pattern/axis interaction, live cell-opacity changes in the detail and feed specimens, viewport gating, clean browser logs, TypeScript, and the production build. Source/implementation captures and the passing comparison are under `artifacts/design-qa/gradient-spin-2026-07-16/`; the QA report is at the top of `design-qa.md`.
+
+### 2026-07-16 — Vault-wide Easing Blueprint audit (Codex)
+
+- Audited all 64 registered cards against animations.dev's Easing Blueprint using a full source scan plus focused live checks of the feed, category navigation, the animation-principles guide, the explicit Motion Audit comparison, and a spring-driven reference implementation.
+- Classified 36 cards as aligned, 18 as needing easing/accessibility tuning, and 10 as static or not meaningfully subject to spatial easing. Intentional “Before” examples and legitimate continuous linear motion such as spinners, shimmer travel, and hue cycles were kept exempt.
+- Highest-priority findings: reconcile the Animation Principles card's `ease-in` exit recommendation with the chosen blueprint; add reduced-motion behavior to Meeting Overlay; remove ease-in exits from Panel Reveal and Input Clear; stop filtering pointer-driven 3D Tilt through a 400 ms tween; and retune the long Scroll Gallery/Road Cup reflows.
+- Made no runtime changes. The complete 64-card matrix, source locations, screenshots, limitations, and recommended implementation order are in `artifacts/audits/easing-blueprint-2026-07-16/AUDIT.md`.
+
+### 2026-07-16 — Scribble Index card (Codex)
+
+- Added `/vault/scribble-index` directly after the promoted meeting card, titled “Scribble Index” and categorized under Interactions. Feed metadata, filters, breadcrumbs, and cyclic previous/next navigation use the central vault catalog.
+- Recreated Benji Taylor’s writing index from Julio’s screenshot and the live `benji.org` DOM/CSS: muted Writing heading, fixed year/title/date columns, title-column separators, full-width year boundaries, 140 ms sibling fading, tabular dates, and the rough magenta New annotation.
+- Built a real responsive canvas above the list. Mouse, pen, and touch drags create normalized two-pass magenta strokes that survive resizing; Undo removes the latest mark and Reset restores the initial rough circle. Pointer hit-testing drives the same row-hover behavior through the canvas, while semantic row buttons preserve keyboard selection.
+- The compact feed thumbnail automatically advances one highlighted row every 1450 ms only while at least 35% visible, pauses when hovered or offscreen, and settles under reduced motion. Drawing in the thumbnail remains contained and does not open the detail page; the caption still navigates normally.
+- Refined the magenta renderer into a drier pencil/brush texture without changing its outer stroke thickness: a deterministically broken core, fine offset fibers, and restrained graphite-like grain now roughen both the initial New circle and user-drawn marks at every size.
+- Verified the screenshot comparison, desktop hover/drawing, feed autoplay and containment, keyboard selection, Undo/Reset, 390/320 px fit with zero overflow, clean browser logs, TypeScript, and the production build. Evidence is under `artifacts/design-qa/scribble-index-2026-07-16/` and the passing report is at the top of `design-qa.md`.
+
+### 2026-07-16 — Attachment layout and interaction correction (Codex)
+
+- Rebuilt only the Attachment specimen's responsive layout after Julio's screenshots showed the shared transform scaler pushing its status rows below the expanded and feed crop boundaries. The three images now use a true responsive grid, the two status files share a second row, the composition is centered from its real dimensions, and the Attachment-only Implementation stage is 360 px rather than 480 px.
+- Added direct functionality to the shared feed/detail component: clicking an image opens a full-size contained preview; Escape, the backdrop, and the close control dismiss it; upload cancellation, image removal, and completed-file removal now update local state. Explicit event containment keeps thumbnail actions from navigating to the detail route.
+- Added compact height treatments for the fixed-ratio feed card. At 320 px the complete compact specimen fits with balanced top/bottom space and zero document overflow; the tiny image-removal overlay is suppressed at that breakpoint so it cannot compete with the image-preview target, while upload cancellation remains available.
+- Visually compared both supplied diagnostic screenshots with settled browser captures, tested desktop and 390/320 px layouts, exercised cancel/open/close/containment behavior, confirmed zero console errors, and passed TypeScript and the production build. Evidence and the passing report are under `artifacts/design-qa/attachment-2026-07-16/` and at the top of `design-qa.md`.
 
 ### 2026-07-16 — Interface Craft Guidelines card (Codex)
 

@@ -49,6 +49,7 @@ import {
   type ComponentProps,
   type ReactNode,
 } from 'react'
+import { createPortal } from 'react-dom'
 import type { ShadcnId } from '../../shadcn/catalog'
 import './ShadcnDemo.css'
 
@@ -102,44 +103,151 @@ const attachmentImages = [
 ]
 
 function AttachmentDemo({ controls }: { controls?: ShadcnDemoControls }) {
-  exposeControls(controls, () => {}, () => {})
+  const [images, setImages] = useState(attachmentImages)
+  const [uploadVisible, setUploadVisible] = useState(true)
+  const [codeFileVisible, setCodeFileVisible] = useState(true)
+  const [activePreview, setActivePreview] = useState<(typeof attachmentImages)[number] | null>(null)
+
+  const reset = () => {
+    setImages(attachmentImages)
+    setUploadVisible(true)
+    setCodeFileVisible(true)
+    setActivePreview(null)
+  }
+
+  exposeControls(controls, reset, reset)
+
+  useEffect(() => {
+    if (!activePreview) return
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setActivePreview(null)
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [activePreview])
 
   return (
-    <div className="sx-attachment-demo sx-rhea">
-      <div className="sx-attachment-group" role="group" aria-label="Image attachments">
-        {attachmentImages.map((image) => (
-          <div className="sx-attachment sx-attachment-vertical" data-state="done" key={image.name}>
-            <div className="sx-attachment-media sx-attachment-image">
-              <img src={image.src} alt={image.alt} />
+    <>
+      <div className="sx-attachment-demo sx-rhea">
+        <div className="sx-attachment-group" role="group" aria-label="Image attachments">
+          {images.map((image) => (
+            <div className="sx-attachment sx-attachment-vertical" data-state="done" key={image.name}>
+              <button
+                type="button"
+                className="sx-attachment-open"
+                aria-label={`Open ${image.name} preview`}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  setActivePreview(image)
+                }}
+              >
+                <span className="sx-attachment-media sx-attachment-image">
+                  <img src={image.src} alt={image.alt} />
+                </span>
+                <span className="sx-attachment-content">
+                  <span className="sx-attachment-title">{image.name}</span>
+                  <span className="sx-attachment-description">{image.meta}</span>
+                </span>
+              </button>
+              <div className="sx-attachment-actions sx-attachment-image-actions">
+                <ExactButton
+                  variant="ghost"
+                  size="icon-xs"
+                  aria-label={`Remove ${image.name}`}
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setImages((current) => current.filter((item) => item.name !== image.name))
+                  }}
+                >
+                  <X />
+                </ExactButton>
+              </div>
             </div>
-            <div className="sx-attachment-content">
-              <span className="sx-attachment-title">{image.name}</span>
-              <span className="sx-attachment-description">{image.meta}</span>
+          ))}
+        </div>
+
+        <div className="sx-attachment-statuses" aria-live="polite">
+          {uploadVisible ? (
+            <div className="sx-attachment sx-attachment-horizontal" data-state="uploading">
+              <div className="sx-attachment-media"><span className="sx-spinner" aria-label="Uploading" /></div>
+              <div className="sx-attachment-content">
+                <span className="sx-attachment-title sx-shimmer">sales-dashboard.pdf</span>
+                <span className="sx-attachment-description">Uploading · 64%</span>
+              </div>
+              <div className="sx-attachment-actions">
+                <ExactButton
+                  variant="ghost"
+                  size="icon-xs"
+                  aria-label="Cancel sales-dashboard.pdf upload"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setUploadVisible(false)
+                  }}
+                >
+                  <X />
+                </ExactButton>
+              </div>
+            </div>
+          ) : null}
+
+          {codeFileVisible ? (
+            <div className="sx-attachment sx-attachment-horizontal" data-state="done">
+              <div className="sx-attachment-media"><FileCode /></div>
+              <div className="sx-attachment-content">
+                <span className="sx-attachment-title">message-renderer.tsx</span>
+                <span className="sx-attachment-description">TypeScript · 12 KB</span>
+              </div>
+              <div className="sx-attachment-actions">
+                <ExactButton
+                  variant="ghost"
+                  size="icon-xs"
+                  aria-label="Remove message-renderer.tsx"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                    setCodeFileVisible(false)
+                  }}
+                >
+                  <X />
+                </ExactButton>
+              </div>
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {activePreview ? createPortal(
+        <div
+          className="sx-attachment-lightbox sx-rhea"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`Preview ${activePreview.name}`}
+          onMouseDown={(event) => {
+            if (event.currentTarget === event.target) setActivePreview(null)
+          }}
+        >
+          <div className="sx-attachment-lightbox-panel">
+            <ExactButton
+              className="sx-attachment-lightbox-close"
+              variant="outline"
+              size="icon-sm"
+              aria-label="Close image preview"
+              autoFocus
+              onClick={() => setActivePreview(null)}
+            >
+              <X />
+            </ExactButton>
+            <img src={activePreview.src} alt={activePreview.alt} />
+            <div className="sx-attachment-lightbox-caption">
+              <strong>{activePreview.name}</strong>
+              <span>{activePreview.meta}</span>
             </div>
           </div>
-        ))}
-      </div>
-      <div className="sx-attachment sx-attachment-horizontal" data-state="uploading">
-        <div className="sx-attachment-media"><span className="sx-spinner" aria-label="Uploading" /></div>
-        <div className="sx-attachment-content">
-          <span className="sx-attachment-title sx-shimmer">sales-dashboard.pdf</span>
-          <span className="sx-attachment-description">Uploading · 64%</span>
-        </div>
-        <div className="sx-attachment-actions">
-          <ExactButton variant="ghost" size="icon-xs" aria-label="Cancel upload"><X /></ExactButton>
-        </div>
-      </div>
-      <div className="sx-attachment sx-attachment-horizontal" data-state="done">
-        <div className="sx-attachment-media"><FileCode /></div>
-        <div className="sx-attachment-content">
-          <span className="sx-attachment-title">message-renderer.tsx</span>
-          <span className="sx-attachment-description">TypeScript · 12 KB</span>
-        </div>
-        <div className="sx-attachment-actions">
-          <ExactButton variant="ghost" size="icon-xs" aria-label="Remove message-renderer.tsx"><X /></ExactButton>
-        </div>
-      </div>
-    </div>
+        </div>,
+        document.body,
+      ) : null}
+    </>
   )
 }
 

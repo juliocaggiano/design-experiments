@@ -123,7 +123,7 @@
 
 .ac-reasoning-trigger svg {
   color: var(--ac-muted);
-  transition: transform 260ms cubic-bezier(.2,.8,.2,1);
+  transition: transform 220ms var(--ease-move);
 }
 
 .ac-reasoning-card[data-open='true'] .ac-reasoning-trigger svg {
@@ -133,7 +133,7 @@
 .ac-reasoning-clip {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 360ms cubic-bezier(.2,.8,.2,1);
+  transition: grid-template-rows 220ms var(--ease-move);
 }
 
 .ac-reasoning-card[data-open='true'] .ac-reasoning-clip {
@@ -216,7 +216,7 @@
   opacity: .38;
   filter: blur(1.5px);
   transform: translateY(3px);
-  transition: opacity 320ms ease, filter 320ms ease, transform 320ms ease, background-color 180ms ease;
+  transition: opacity 200ms ease, filter 200ms ease, transform 220ms var(--ease-out), background-color 160ms ease;
 }
 
 .ac-source-list > div[data-resolved='true'] {
@@ -659,13 +659,13 @@
 
 .ac-task-header b { color: var(--ac-ink); font-size: 12px; font-weight: 500; }
 .ac-task-header small { font-size: 10px; font-variant-numeric: tabular-nums; }
-.ac-task-header > svg { transition: transform 280ms cubic-bezier(.2,.8,.2,1); }
+.ac-task-header > svg { transition: transform 220ms var(--ease-move); }
 .ac-task-list > div[data-open='true'] .ac-task-header > svg { transform: rotate(180deg); }
 
 .ac-task-clip {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 330ms cubic-bezier(.2,.8,.2,1);
+  transition: grid-template-rows 220ms var(--ease-move);
 }
 
 .ac-task-list > div[data-open='true'] .ac-task-clip { grid-template-rows: 1fr; }

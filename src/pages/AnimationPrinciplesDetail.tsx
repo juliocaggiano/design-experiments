@@ -43,7 +43,7 @@ const RULE_GROUPS = [
     summary: 'Match the curve to the direction and reserve linear motion for progress.',
     rules: [
       ['easing-entrance-ease-out', 'Use ease-out for entrances: arrive quickly, then settle.'],
-      ['easing-exit-ease-in', 'Use ease-in for exits: gather momentum before leaving.'],
+      ['easing-exit-ease-out', 'Use ease-out for exits: respond immediately, then leave cleanly.'],
       ['easing-no-linear-motion', 'Use linear easing for progress, not spatial motion.'],
       ['easing-natural-decay', 'Use exponential ramps when audio or energy should decay naturally.'],
     ],
@@ -73,7 +73,7 @@ const RULE_GROUPS = [
 
 const QUICK_CHECK = [
   ['Duration', 'Is direct-manipulation feedback below 300ms?'],
-  ['Curve', 'Does arrival ease out and departure ease in?'],
+  ['Curve', 'Do both arrival and departure respond immediately with ease-out?'],
   ['Physics', 'Is overshoot spring-driven and deformation restrained?'],
   ['Focus', 'Is there one dominant animated subject?'],
   ['Depth', 'Do backdrop and z-index reinforce the intended hierarchy?'],

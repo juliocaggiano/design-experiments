@@ -63,6 +63,7 @@
   --scrollbar-thumb-hover: #b8b5ad;
   --copy-ok: #1aa251;
   --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-move: cubic-bezier(0.77, 0, 0.175, 1);
   --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-amo: cubic-bezier(0.175, 0.885, 0.32, 1.1);
 }
@@ -132,18 +133,18 @@ body {
 
 /* Paged knockout bracket: every piece shares the same reflow timing. */
 .kb-stage {
-  transition: height 0.5s var(--ease-expo);
+  transition: height 260ms var(--ease-move);
 }
 
 .kb-move,
 .kb-line {
   transition:
-    left 0.5s var(--ease-expo),
-    top 0.5s var(--ease-expo),
-    width 0.5s var(--ease-expo),
-    height 0.5s var(--ease-expo),
-    opacity 0.35s var(--ease-out),
-    transform 0.5s var(--ease-expo);
+    left 260ms var(--ease-move),
+    top 260ms var(--ease-move),
+    width 260ms var(--ease-move),
+    height 260ms var(--ease-move),
+    opacity 180ms ease,
+    transform 260ms var(--ease-move);
 }
 
 @media (prefers-reduced-motion: reduce) {

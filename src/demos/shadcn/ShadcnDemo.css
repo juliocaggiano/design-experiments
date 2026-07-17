@@ -191,29 +191,30 @@
 }
 
 /* Attachment — official base-rhea primary demo */
+.sh-demo[data-id="attachment"] .sx-preview {
+  padding: 12px;
+}
+
+.sh-demo[data-id="attachment"] .sx-native {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  place-items: center;
+  transform: none;
+}
+
 .sx-attachment-demo {
-  display: flex;
-  width: min(384px, calc(100cqw - 32px));
-  max-width: 384px;
-  flex-direction: column;
-  gap: 12px;
-  padding: 48px 0;
+  display: grid;
+  width: min(720px, calc(100cqw - 24px), 180cqh);
+  min-width: 0;
+  gap: clamp(8px, 2.25cqh, 12px);
 }
 
 .sx-attachment-group {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   min-width: 0;
-  gap: 12px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: 4px 0;
-  scroll-padding-inline: 4px;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-}
-
-.sx-attachment-group::-webkit-scrollbar {
-  display: none;
+  gap: clamp(6px, 1.7cqh, 12px);
 }
 
 .sx-attachment {
@@ -230,23 +231,42 @@
   color: var(--sx-foreground);
   background: #fff;
   font-size: 14px;
-  transition: background-color 120ms ease;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .sx-attachment:focus-within {
-  box-shadow: 0 0 0 1px rgb(163 163 163 / 30%);
+  border-color: #d4d4d4;
+  box-shadow: 0 0 0 3px rgb(163 163 163 / 18%);
 }
 
 .sx-attachment-horizontal {
   width: 100%;
-  min-width: 160px;
+  min-width: 0;
   align-items: center;
 }
 
 .sx-attachment-vertical {
-  width: 120px;
+  width: auto;
   flex-direction: column;
-  scroll-snap-align: start;
+  padding: clamp(5px, 1.5cqh, 8px);
+}
+
+.sx-attachment-open {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: zoom-in;
+}
+
+.sx-attachment-open:hover .sx-attachment-image img {
+  transform: scale(1.025);
 }
 
 .sx-attachment-media {
@@ -270,13 +290,14 @@
 
 .sx-attachment-vertical .sx-attachment-media {
   width: 100%;
+  aspect-ratio: 4 / 3;
 }
 
 .sx-attachment-image img {
   width: 100%;
   height: 100%;
-  aspect-ratio: 1;
   object-fit: cover;
+  transition: transform 180ms ease-out;
 }
 
 .sx-attachment-content {
@@ -321,6 +342,190 @@
 
 .sx-attachment-actions .sx-button {
   border-radius: 16px;
+}
+
+.sx-attachment-image-actions {
+  position: absolute;
+  top: clamp(8px, 2cqh, 12px);
+  right: clamp(8px, 2cqh, 12px);
+}
+
+.sx-attachment-image-actions .sx-button {
+  border: 1px solid rgb(229 229 229 / 80%);
+  background: rgb(255 255 255 / 86%);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+  backdrop-filter: blur(8px);
+}
+
+.sx-attachment-image-actions .sx-button:hover {
+  background: #fff;
+}
+
+.sx-attachment-statuses {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(6px, 1.7cqh, 12px);
+  min-width: 0;
+}
+
+.sx-attachment-statuses:empty {
+  display: none;
+}
+
+.sx-attachment-lightbox {
+  position: fixed;
+  z-index: 2000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(23 23 23 / 42%);
+  backdrop-filter: blur(10px);
+}
+
+.sx-attachment-lightbox-panel {
+  position: relative;
+  display: flex;
+  width: min(880px, calc(100vw - 48px));
+  max-height: calc(100vh - 48px);
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 70%);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 24%);
+}
+
+.sx-attachment-lightbox-panel > img {
+  width: 100%;
+  max-height: calc(100vh - 132px);
+  min-height: 0;
+  object-fit: contain;
+  background: #f5f5f5;
+}
+
+.sx-attachment-lightbox-close {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 12px;
+  border-color: rgb(229 229 229 / 80%);
+  background: rgb(255 255 255 / 90%);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+  backdrop-filter: blur(8px);
+}
+
+.sx-attachment-lightbox-caption {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  color: #171717;
+  font-size: 14px;
+}
+
+.sx-attachment-lightbox-caption strong {
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sx-attachment-lightbox-caption span {
+  flex: none;
+  margin-left: auto;
+  color: #737373;
+  font-size: 12px;
+}
+
+@container (max-height: 300px) {
+  .sx-attachment {
+    gap: 6px;
+    border-radius: 12px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .sx-attachment-vertical {
+    padding: 5px;
+  }
+
+  .sx-attachment-open {
+    gap: 5px;
+  }
+
+  .sx-attachment-media {
+    width: 32px;
+    border-radius: 6px;
+  }
+
+  .sx-attachment-description {
+    margin-top: 1px;
+    font-size: 10px;
+  }
+
+  .sx-attachment-image-actions {
+    top: 8px;
+    right: 8px;
+  }
+
+  .sx-attachment-image-actions .sx-button {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@container (max-height: 180px) {
+  .sh-demo[data-id="attachment"] .sx-preview {
+    padding: 8px;
+  }
+
+  .sx-attachment-demo {
+    width: min(calc(100cqw - 16px), 150cqh);
+    gap: 4px;
+  }
+
+  .sx-attachment-group,
+  .sx-attachment-statuses {
+    gap: 4px;
+  }
+
+  .sx-attachment-statuses {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sx-attachment-vertical .sx-attachment-content,
+  .sx-attachment-statuses > .sx-attachment:last-child {
+    display: none;
+  }
+
+  .sx-attachment-vertical {
+    padding: 4px;
+  }
+
+  .sx-attachment-vertical .sx-attachment-media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .sx-attachment-horizontal {
+    min-height: 28px;
+    padding: 2px 4px;
+    font-size: 10px;
+  }
+
+  .sx-attachment-horizontal .sx-attachment-media {
+    width: 24px;
+  }
+
+  .sx-attachment-horizontal .sx-attachment-description {
+    display: none;
+  }
+
+  .sx-attachment-image-actions {
+    display: none;
+  }
 }
 
 .sx-spinner {

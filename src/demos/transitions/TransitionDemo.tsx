@@ -415,22 +415,31 @@ const TAB_LABELS = ['Plan', 'Debug', 'Ask'] as const
 
 function TabsSliding({ controls }: SpecimenProps) {
   const [active, setActive] = useState(0)
-  const replay = () => setActive((value) => (value + 1) % TAB_LABELS.length)
-  const reset = () => setActive(0)
+  const [instant, setInstant] = useState(false)
+  const replay = () => {
+    setInstant(false)
+    setActive((value) => (value + 1) % TAB_LABELS.length)
+  }
+  const reset = () => {
+    setInstant(false)
+    setActive(0)
+  }
   exposeControls(controls, replay, reset)
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return
     event.preventDefault()
+    setInstant(true)
     if (event.key === 'Home') setActive(0)
     else if (event.key === 'End') setActive(TAB_LABELS.length - 1)
     else setActive((value) => (value + (event.key === 'ArrowRight' ? 1 : -1) + TAB_LABELS.length) % TAB_LABELS.length)
+    window.requestAnimationFrame(() => setInstant(false))
   }
 
   return (
     <Specimen label="Sliding tabs indicator" className="td-tabs-demo">
-      <div className="td-tabs" role="tablist" aria-label="Mode" onKeyDown={onKeyDown} style={{ '--td-tab': active } as CSSProperties}>
+      <div className="td-tabs" data-instant={instant ? 'true' : 'false'} role="tablist" aria-label="Mode" onKeyDown={onKeyDown} style={{ '--td-tab': active } as CSSProperties}>
         <i aria-hidden="true" />
-        {TAB_LABELS.map((label, index) => <button type="button" role="tab" aria-selected={active === index} tabIndex={active === index ? 0 : -1} key={label} onClick={() => setActive(index)}>{label}</button>)}
+        {TAB_LABELS.map((label, index) => <button type="button" role="tab" aria-selected={active === index} tabIndex={active === index ? 0 : -1} key={label} onClick={() => { setInstant(false); setActive(index) }}>{label}</button>)}
       </div>
       <small>{active === 0 ? 'Planning next moves' : active === 1 ? 'Inspecting the interface' : 'Ask about this project'}</small>
     </Specimen>
@@ -470,18 +479,27 @@ function TooltipOpenClose({ controls }: SpecimenProps) {
 
 function CardTilt({ controls }: SpecimenProps) {
   const [tilt, setTilt] = useState({ x: 0, y: 0, gx: 50, gy: 50 })
-  const replay = () => setTilt((value) => value.x === 0 ? { x: -9, y: 12, gx: 72, gy: 28 } : { x: 0, y: 0, gx: 50, gy: 50 })
-  const reset = () => setTilt({ x: 0, y: 0, gx: 50, gy: 50 })
+  const [pointerActive, setPointerActive] = useState(false)
+  const replay = () => {
+    setPointerActive(false)
+    setTilt((value) => value.x === 0 ? { x: -9, y: 12, gx: 72, gy: 28 } : { x: 0, y: 0, gx: 50, gy: 50 })
+  }
+  const reset = () => {
+    setPointerActive(false)
+    setTilt({ x: 0, y: 0, gx: 50, gy: 50 })
+  }
   exposeControls(controls, replay, reset)
 
   return (
     <Specimen label="Pointer-responsive 3D card tilt" className="td-tilt-demo">
       <div
         className="td-tilt-track"
+        data-active={pointerActive ? 'true' : 'false'}
         onPointerMove={(event) => {
           const rect = event.currentTarget.getBoundingClientRect()
           const px = (event.clientX - rect.left) / rect.width
           const py = (event.clientY - rect.top) / rect.height
+          setPointerActive(true)
           setTilt({ x: (0.5 - py) * 28, y: (px - 0.5) * 28, gx: px * 100, gy: py * 100 })
         }}
         onPointerDown={(event) => event.currentTarget.setPointerCapture(event.pointerId)}

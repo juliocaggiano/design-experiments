@@ -41,7 +41,9 @@ Visual system:
 - Keep the thumbnail, expanded hero, and implementation on the same canonical specimen.
 ${definition.id === 'command'
     ? '- Keep Basic, Shortcuts, Groups, Scrollable, and RTL as separate examples in the expanded complete guide; do not crowd them into the thumbnail.'
-    : '- Do not add alternate examples, wrapper controls, decorative styling, or vault-specific reinterpretations inside the demo.'}
+    : definition.id === 'attachment'
+      ? '- Keep the official attachment anatomy, then add direct image preview, upload cancellation, and file removal without adding a separate control bar.'
+      : '- Do not add alternate examples, wrapper controls, decorative styling, or vault-specific reinterpretations inside the demo.'}
 
 The complete shared component collection follows. Render the specimen with id="${definition.id}".`
 
@@ -68,12 +70,15 @@ The complete shared component collection follows. Render the specimen with id="$
             <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
           </header>
 
-          <div className="relative z-10 h-[480px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] max-sm:h-[420px]">
+          <div className={`relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] ${
+            definition.id === 'attachment' ? 'h-[360px] max-sm:h-[300px]' : 'h-[480px] max-sm:h-[420px]'
+          }`}>
             <ShadcnDemo id={definition.id} />
           </div>
           <p className="text-[12px] text-[var(--text-tertiary)]">
-            This is the canonical primary demo from the official shadcn/ui source, reproduced in place so it remains
-            interactive without leaving the vault.
+            {definition.id === 'attachment'
+              ? 'The official attachment anatomy is preserved, with local preview, cancel, and remove behavior added directly to the specimen.'
+              : 'This is the canonical primary demo from the official shadcn/ui source, reproduced in place so it remains interactive without leaving the vault.'}
           </p>
         </section>
 
