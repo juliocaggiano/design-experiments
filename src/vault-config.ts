@@ -16,6 +16,7 @@ export type VaultItem = {
 
 export const VAULT_ITEMS: readonly VaultItem[] = [
   { path: '/vault/meeting-overlay', title: 'Stop missing your meetings', date: 'Jul 8, 2026', category: 'Motion' },
+  { path: '/vault/reactive-dither', title: 'Reactive Dither', date: 'Jul 18, 2026', category: 'Motion' },
   { path: '/vault/gradient-spin', title: 'Gradient Spin', date: 'Jul 16, 2026', category: 'Motion' },
   { path: '/vault/scribble-index', title: 'Scribble Index', date: 'Jul 16, 2026', category: 'Interactions' },
   ...EMIL_SKILL_DEFINITIONS.map(({ path, title, date, category }) => ({ path, title, date, category })),

@@ -1,3 +1,23 @@
+# Reactive Dither — 2026-07-18
+
+## Scope and visual truth
+
+- Route: `/vault/reactive-dither` (feed position: directly after the promoted meeting card, Motion category).
+- Behavioral visual truth: Emil Kowalski's reference post (https://x.com/emilkowalski/status/2036778116748542220) — a canvas dot-mark with a pointer-following circular influence field, radial displacement with cubic falloff, and a soft spring return. Clean-room implementation; no upstream source copied.
+- Implementation captures: `artifacts/design-qa/reactive-dither-2026-07-18/` (feed card, expanded hero, controls, inverted colors, pointer-displaced and settled canvas states, 390/320 px feed and detail).
+
+## Verification
+
+- Reusable QA: `scripts/verify-reactive-dither.mjs` — 20/20 checks pass.
+- Thumbnail: idle drift animates while visible, pointer movement visibly displaces dots, rendering pauses offscreen, animation resumes on re-entry.
+- Detail: route works on direct browser load; hero and implementation share one engine; seven range controls plus Normal/Inverted segmented control render and update the live canvas immediately; Reset restores defaults; previous/next navigation works.
+- Reduced motion (emulated): settled static mark, no loop, no pointer response.
+- Zero console errors on the feed and detail route; zero horizontal overflow at 1440 px, 390 px, and 320 px.
+- TypeScript passes and the production build passes; the pre-existing bundle-size advisory remains non-blocking.
+- One defect found and fixed during QA: reading `event.currentTarget` inside a deferred state updater threw after range-input changes and unmounted the app; the value is now captured during event dispatch.
+
+final result: passed
+
 # Vault-wide Easing Blueprint remediation — 2026-07-16
 
 ## Scope

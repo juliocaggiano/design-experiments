@@ -20,6 +20,7 @@ import { ShadcnDemo } from './demos/shadcn/ShadcnDemo'
 import { InterfaceGuidelinesDemo } from './demos/InterfaceGuidelinesDemo'
 import { ScribbleIndexDemo } from './demos/ScribbleIndexDemo'
 import { GradientSpinDemo } from './demos/GradientSpinDemo'
+import { ReactiveDitherDemo } from './demos/ReactiveDitherDemo'
 import { MeetingOverlayDetail } from './pages/MeetingOverlayDetail'
 import { FluidSpringsDetail } from './pages/FluidSpringsDetail'
 import { SheetDetail } from './pages/SheetDetail'
@@ -32,6 +33,7 @@ import { ShadcnDetail } from './pages/ShadcnDetail'
 import { InterfaceGuidelinesDetail } from './pages/InterfaceGuidelinesDetail'
 import { ScribbleIndexDetail } from './pages/ScribbleIndexDetail'
 import { GradientSpinDetail } from './pages/GradientSpinDetail'
+import { ReactiveDitherDetail } from './pages/ReactiveDitherDetail'
 import { EMIL_SKILL_DEFINITIONS, getEmilSkillDefinition, type EmilSkillDefinition } from './emilskills/catalog'
 import { MicroButtonsDetail } from './pages/MicroButtonsDetail'
 import { ScrollgalleryDetail } from './pages/ScrollgalleryDetail'
@@ -387,6 +389,17 @@ function SonnerCard() {
   )
 }
 
+function ReactiveDitherCard() {
+  return (
+    <LinkCard href="/vault/reactive-dither" label="Open Reactive Dither">
+      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
+        <ReactiveDitherDemo compact />
+      </div>
+      <Caption title="Reactive Dither" category="Motion" />
+    </LinkCard>
+  )
+}
+
 function GradientSpinCard() {
   return (
     <LinkCard href="/vault/gradient-spin" label="Open Gradient Spin">
@@ -501,6 +514,7 @@ function MeetingOverlayCard() {
 
 const FEED_CARDS = [
   { path: '/vault/meeting-overlay', category: 'Motion', Card: MeetingOverlayCard },
+  { path: '/vault/reactive-dither', category: 'Motion', Card: ReactiveDitherCard },
   { path: '/vault/gradient-spin', category: 'Motion', Card: GradientSpinCard },
   { path: '/vault/scribble-index', category: 'Interactions', Card: ScribbleIndexCard },
   ...EMIL_SKILL_FEED_CARDS,
@@ -560,6 +574,7 @@ export default function App() {
     : aiCss ? <AiCssDetail definition={aiCss} />
     : emilSkill ? <EmilSkillDetail definition={emilSkill} />
     : shadcn ? <ShadcnDetail definition={shadcn} />
+    : path === '/vault/reactive-dither' ? <ReactiveDitherDetail />
     : path === '/vault/gradient-spin' ? <GradientSpinDetail />
     : path === '/vault/scribble-index' ? <ScribbleIndexDetail />
     : path === '/vault/interface-guidelines' ? <InterfaceGuidelinesDetail />

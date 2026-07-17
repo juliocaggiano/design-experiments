@@ -30,6 +30,7 @@ A personal vault of small design-engineering experiments, reconstructed from the
 
 ## Current custom routes
 
+- `/vault/reactive-dither`
 - `/vault/gradient-spin`
 - `/vault/scribble-index`
 - `/vault/interface-guidelines`
@@ -108,6 +109,16 @@ node node_modules/vite/bin/vite.js build
 ```
 
 ## Update log
+
+### 2026-07-18 — Reactive Dither card (Kimi)
+
+- Added `/vault/reactive-dither` directly after the promoted meeting card, titled "Reactive Dither" and categorized under Motion, from Julio's reference post (Emil Kowalski's canvas dither interaction, x.com/emilkowalski/status/2036778116748542220). Clean-room implementation; no upstream source copied.
+- Built a real canvas particle system in `src/demos/ReactiveDitherDemo.tsx` (+ `.css`, `rd-` namespace): a vector-drawn rounded-square ring with a solid center dot is rendered into an offscreen 512 px mask and sampled into an evenly spaced dot grid. An invisible circular influence field follows the pointer with light smoothing; dots inside it are pushed radially outward with cubic falloff (`strength x (1 - d / R)^3`) and return home through a damped spring (`v = (v + (target - p) x stiffness) x damping`).
+- One engine and one set of visual defaults power the feed thumbnail, expanded hero, and implementation. The thumbnail idles with a subtle Lissajous influence drift, gates on 35% viewport visibility, pauses offscreen, yields to the pointer immediately, and resumes after 4.5 s idle. Rendering is requestAnimationFrame-based, devicePixelRatio-aware (capped at 2), sprite-stamped via drawImage, delta-time normalized, and sleeps once every dot settles; ResizeObserver resamples instead of stretching. No React state is touched inside the loop, and all frames, observers, listeners, and timers clean up on unmount.
+- The expanded page (`src/pages/ReactiveDitherDetail.tsx`) follows the vault's detail structure: hero, explanation, live implementation with Reset, a compact light-mode controls panel (dot spacing, dot radius, interaction radius, displacement strength, return stiffness, damping, cubic falloff intensity, invert colors), a ten-part How it works guide with a reusable engine example, full local source in Code tabs and the copy prompt, credits, and the reference link.
+- Reduced motion renders the settled mark once with the loop, idle drift, and pointer response disabled. Pointer input covers mouse, touch, and pen, and the stage keeps vertical page scrolling via `touch-action: pan-y`.
+- Registered the card in the central catalog, feed order, breadcrumbs, category counts, and cyclic previous/next navigation. Fixed one defect found during QA: reading `event.currentTarget` inside a deferred state updater threw and unmounted the app; the value is now captured during dispatch.
+- Verified with `scripts/verify-reactive-dither.mjs` (20/20): idle drift, pointer displacement, offscreen pause, re-entry resume, direct-load route, live controls, invert, reset, reduced motion, zero console errors, and zero horizontal overflow at 1440/390/320 px. TypeScript and the production build pass (the pre-existing bundle-size warning remains). Evidence is under `artifacts/design-qa/reactive-dither-2026-07-18/`.
 
 ### 2026-07-16 — Easing Blueprint remediation with Emil Design Engineering (Codex)
 
