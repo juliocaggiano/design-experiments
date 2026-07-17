@@ -1,0 +1,1608 @@
+<title>Vault — CAGGIANO</title>
+<style>
+  /* Vault design system, committed to its light world on purpose —
+     colors are explicit so the viewer's dark theme can't invert it. */
+  @font-face {
+    font-family: "Press Start 2P";
+    src: url(data:font/ttf;base64,__FONT_B64__) format("truetype");
+    font-display: swap;
+  }
+  :root {
+    --bg-page: #fcfcfc;
+    --bg-surface: #ffffff;
+    --bg-hover: #f7f7f7;
+    --text-primary: #1b1b1b;
+    --text-body: #2f2f2f;
+    --text-secondary: #6b6b6b;
+    --text-tertiary: #b5b5b5;
+    --border-line: #f0f0f0;
+    --border-subtle: rgba(0, 0, 0, 0.05);
+    --border-ring: rgba(0, 0, 0, 0.1);
+    --copy-ok: #1aa251;
+    --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+  html { background: var(--bg-page); }
+  body {
+    margin: 0 auto;
+    max-width: 720px;
+    padding: 0 32px;
+    background: var(--bg-page);
+    color: var(--text-body);
+    font: 400 15px/1.7 -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  @media (min-width: 640px) { body { padding: 0 16px; } }
+  ::selection { background: #d9d6d0; color: var(--text-primary); }
+  .page { padding: 96px 0; animation: fade-in 0.5s var(--ease-out) both; }
+  @keyframes fade-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .page { animation: none; } }
+
+  .col { display: flex; flex-direction: column; min-width: 0; }
+  .g3 { gap: 12px; } .g4 { gap: 16px; } .g8 { gap: 32px; } .g10 { gap: 40px; } .g14 { gap: 56px; }
+  .row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  h1, h2 { font-size: 15px; font-weight: 600; color: var(--text-primary); margin: 0; }
+  p { margin: 0; }
+  a { color: inherit; }
+
+  .close-x {
+    display: flex; align-items: center; justify-content: center;
+    padding: 4px; border-radius: 6px; color: var(--text-secondary);
+    transition: background-color 0.15s var(--ease-out), color 0.15s var(--ease-out), transform 0.15s var(--ease-out);
+    text-decoration: none; position: relative;
+  }
+  .close-x:hover { background: var(--bg-hover); color: var(--text-primary); }
+  .close-x:active { transform: scale(0.96); }
+  .close-x::after { content: ""; position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; transform: translate(-50%, -50%); }
+
+  .card {
+    display: block; border: 1px solid var(--border-line); background: var(--bg-surface);
+    border-radius: 12px; padding: 8px; text-align: left; text-decoration: none;
+    transition: border-color 0.15s var(--ease-out);
+  }
+  a.card:hover { border-color: var(--border-ring); }
+  .media {
+    position: relative; overflow: hidden; border-radius: 12px;
+    border: 1px solid var(--border-line); background: var(--bg-page);
+    aspect-ratio: 1344 / 520; user-select: none;
+  }
+  .media canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .caption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 4px 4px; }
+  .caption .t { font-size: 14px; color: var(--text-primary); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+  .caption .d { font-size: 13px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; flex-shrink: 0; }
+
+  .teaser { position: relative; display: grid; gap: 16px; max-height: 192px; overflow: hidden; }
+  .teaser .card { border-style: dashed; }
+  .teaser .ph {
+    display: flex; align-items: center; justify-content: center;
+    aspect-ratio: 16 / 9; border: 1px dashed var(--border-line); border-radius: 12px;
+    font-size: 12px; color: var(--text-tertiary);
+  }
+  .teaser .sp { display: block; height: 1.4em; margin: 10px 4px 4px; }
+  .fade { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 0%, var(--bg-page) 92%); pointer-events: none; }
+
+  .sec-h { padding-bottom: 8px; border-bottom: 1px solid var(--border-line); }
+  .hr-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border-subtle); }
+  .hr-row:last-child { border-bottom: 0; }
+  .hr-row .k { color: var(--text-secondary); }
+  .hr-row .v { color: var(--text-primary); }
+  .hr-row a { color: var(--text-primary); text-decoration: underline; text-decoration-color: var(--border-line); text-underline-offset: 2px; transition: text-decoration-color 0.15s; }
+  .hr-row a:hover { text-decoration-color: var(--border-ring); }
+  .foot { margin-top: 8px; text-align: center; font-size: 12px; color: var(--text-tertiary); }
+  .foot a { color: inherit; text-decoration: underline; text-decoration-color: var(--border-line); text-underline-offset: 2px; }
+
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px;
+    border: 1px solid var(--border-line); border-radius: 8px; background: var(--bg-surface);
+    font: 500 12px/1 inherit; font-family: inherit; color: var(--text-secondary); cursor: pointer;
+    transition: background-color 0.15s var(--ease-out), border-color 0.15s var(--ease-out), color 0.15s var(--ease-out);
+  }
+  .chip:hover { background: var(--bg-hover); border-color: var(--border-ring); color: var(--text-primary); }
+  .chip:active { transform: scale(0.98); }
+  .chip .swap { position: relative; display: inline-flex; height: 1.2em; align-items: center; width: 74px; transition: width 0.2s var(--ease-out); }
+  .chip .swap span { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); white-space: nowrap; transition: opacity 0.2s var(--ease-out), filter 0.2s var(--ease-out); }
+  .chip .swap .b { opacity: 0; filter: blur(3px); color: var(--copy-ok); }
+  .chip.ok .swap { width: 48px; }
+  .chip.ok .swap .a { opacity: 0; filter: blur(3px); }
+  .chip.ok .swap .b { opacity: 1; filter: blur(0); }
+
+  .play { position: relative; overflow: hidden; border-radius: 12px; border: 1px solid var(--border-line); background: var(--bg-page); min-height: 190px; }
+  .play canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .panel {
+    margin-top: -20px; padding: 32px 16px 16px; display: flex; flex-direction: column; gap: 14px;
+    border: 1px solid var(--border-line); border-top: 0; border-radius: 0 0 12px 12px; background: var(--bg-surface);
+  }
+  .inputs { display: flex; flex-direction: column; gap: 8px; }
+  @media (min-width: 640px) { .inputs { flex-direction: row; align-items: center; } }
+  .inputs input {
+    height: 32px; border: 1px solid var(--border-line); border-radius: 8px; background: var(--bg-page);
+    padding: 0 12px; font: 400 13px/1 inherit; font-family: inherit; color: var(--text-body); outline: none;
+    transition: border-color 0.15s; min-width: 0;
+  }
+  .inputs input:focus { border-color: var(--border-ring); }
+  .inputs .main { flex: 1; }
+  .inputs .small { width: 100%; font-size: 12px; padding: 0 10px; }
+  @media (min-width: 640px) { .inputs .small { width: 124px; } }
+  .inputs input::placeholder { color: var(--text-tertiary); }
+  .sliders { display: grid; gap: 12px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .sliders { grid-template-columns: 1fr 1fr 1fr; } }
+  .slider {
+    position: relative; display: flex; align-items: center; height: 32px; overflow: hidden;
+    border: 1px solid var(--border-line); border-radius: 8px; background: var(--bg-page);
+    cursor: pointer; touch-action: none; user-select: none;
+  }
+  .slider:focus-visible { outline: none; box-shadow: 0 0 0 1px var(--border-ring); }
+  .slider .fill { position: absolute; top: 0; bottom: 0; left: 0; background: var(--bg-hover); pointer-events: none; }
+  .slider .thumb { position: absolute; top: 50%; height: 16px; width: 3px; border-radius: 999px; background: var(--text-primary); opacity: 0.4; transform: translateY(-50%); pointer-events: none; }
+  .slider .lbl { position: relative; z-index: 1; padding-left: 12px; font-size: 12px; color: var(--text-secondary); pointer-events: none; }
+  .slider .val { position: relative; z-index: 1; margin-left: auto; padding-right: 12px; font-size: 12px; color: var(--text-secondary); font-variant-numeric: tabular-nums; pointer-events: none; }
+
+  .codebox { overflow: hidden; border: 1px solid var(--border-line); border-radius: 12px; background: var(--bg-surface); }
+  .tabs { display: flex; align-items: center; gap: 0; padding: 4px; border-bottom: 1px solid var(--border-line); position: relative; overflow-x: auto; }
+  .tabs .pill { position: absolute; top: 4px; bottom: 4px; border: 1px solid var(--border-line); border-radius: 6px; background: var(--bg-hover); transition: transform 0.34s var(--ease-out), width 0.34s var(--ease-out); pointer-events: none; }
+  .tabs button {
+    position: relative; z-index: 1; flex-shrink: 0; white-space: nowrap; border: 0; background: none;
+    border-radius: 6px; padding: 4px 8px; font: 500 12px/1.4 inherit; font-family: inherit;
+    color: var(--text-tertiary); cursor: pointer; transition: color 0.15s;
+  }
+  .tabs button:hover { color: var(--text-secondary); }
+  .tabs button.on { color: var(--text-primary); }
+  .codebox pre {
+    margin: 0; max-height: 384px; overflow: auto; overscroll-behavior: none; padding: 16px;
+    font: 400 13px/1.7 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: -0.01em; color: var(--text-body);
+  }
+  .prose p { color: var(--text-primary); text-wrap: pretty; }
+  .prose { display: flex; flex-direction: column; gap: 12px; }
+  .fs-chip {
+    position: absolute; left: 0; top: 0; width: 96px; height: 64px;
+    cursor: grab; user-select: none; touch-action: none; will-change: transform;
+  }
+  .fs-chip .inner {
+    display: flex; flex-direction: column; justify-content: space-between;
+    height: 100%; padding: 10px; border: 1px solid var(--border-line);
+    border-radius: 10px; background: #fff; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  .fs-chip .dot { display: block; width: 10px; height: 10px; border-radius: 999px; background: #0d99ff; }
+  .fs-chip .ln { display: block; height: 6px; border-radius: 999px; background: var(--border-line); }
+  .fs-chip .ln + .ln { margin-top: 4px; }
+  .fs-chip .ln.a { width: 75%; }
+  .fs-chip .ln.b { width: 50%; }
+  .sh-bg { position: absolute; inset: 0; transform-origin: top center; padding: 16px; will-change: transform; }
+  .sh-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px;
+    border: 1px solid var(--border-line); border-radius: 10px; background: #fff;
+    cursor: pointer; transition: border-color 0.15s var(--ease-out);
+  }
+  .sh-row:hover { border-color: var(--border-ring); }
+  .sh-row + .sh-row { margin-top: 10px; }
+  .sh-row .av { width: 24px; height: 24px; flex-shrink: 0; border-radius: 999px; background: var(--bg-hover); }
+  .sh-row .lns { flex: 1; min-width: 0; }
+  .sh-row .ln { display: block; height: 6px; border-radius: 999px; background: var(--border-line); }
+  .sh-row .ln.sub { width: 33%; margin-top: 6px; background: var(--bg-hover); }
+  .sh-scrim { position: absolute; inset: 0; background: #000; opacity: 0; pointer-events: none; }
+  .sh-sheet {
+    position: absolute; left: 12px; right: 12px; top: 0; height: 100%;
+    cursor: grab; user-select: none; touch-action: none; will-change: transform;
+  }
+  .sh-sheet .surface {
+    height: 100%; border: 1px solid var(--border-line); border-bottom: 0;
+    border-radius: 14px 14px 0 0; background: #fff; box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.08);
+  }
+  .sh-sheet .grab { width: 36px; height: 4px; margin: 8px auto 0; border-radius: 999px; background: var(--border-line); }
+  .sh-sheet .body { display: flex; flex-direction: column; gap: 8px; padding: 12px 16px 16px; }
+  .sh-sheet .t { display: block; height: 8px; width: 33%; border-radius: 999px; background: var(--text-tertiary); opacity: 0.4; }
+  .sh-sheet .l { display: block; height: 6px; border-radius: 999px; background: var(--border-line); }
+/* ── Micro buttons demo — one pill per interaction family ──
+   Behavior matched 1:1 to Amicro's catalogue (hover-driven; icon swaps on a
+   stiff spring ≈ stiffness 600 / damping 25), surfaces in the vault's light
+   language. A `.hot` class stands in for hover so touch, the idle loop, and
+   Play-all can drive the same states. --bt-speed divides every duration;
+   --bt-pop adds to the pulse peak. */
+.bt-box {
+  --bt-speed: 1;
+  --bt-pop: 0.12;
+  /* overshoot curve approximating the spring(600, 25) feel */
+  --bt-spring: cubic-bezier(0.3, 1.25, 0.5, 1);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bt-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(96px, 148px));
+  gap: 12px 14px;
+  justify-content: center;
+  width: 100%;
+  padding: 0 16px;
+}
+.bt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border-line);
+  border-radius: 40px;
+  background: #fff;
+  font: 500 13px/1 inherit;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  cursor: pointer;
+  overflow: visible;
+  transition:
+    border-color calc(0.15s / var(--bt-speed)) var(--ease-out),
+    background-color calc(0.15s / var(--bt-speed)) var(--ease-out),
+    transform calc(0.15s / var(--bt-speed)) var(--ease-out);
+  will-change: transform;
+}
+.bt.hot { border-color: var(--border-ring); background: #fafafa; transform: scale(1.02); }
+.bt:active { transform: scale(0.96); }
+.bt .bt-label { white-space: nowrap; }
+
+/* fixed 16px icon slot; two icons stacked, swapped by .hot */
+.bt-ic { position: relative; width: 16px; height: 16px; flex-shrink: 0; margin-right: 10px; }
+.bt-ic .i1, .bt-ic .i2 {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity calc(0.3s / var(--bt-speed)) var(--bt-spring),
+    transform calc(0.3s / var(--bt-speed)) var(--bt-spring),
+    color calc(0.3s / var(--bt-speed)) var(--ease-out);
+}
+.bt svg { display: block; }
+
+/* morph: icons crossfade with a 0.5 → 1 scale */
+.bt-morph .i2 { opacity: 0; transform: scale(0.5); }
+.bt-morph.hot .i1 { opacity: 0; transform: scale(0.5); }
+.bt-morph.hot .i2 { opacity: 1; transform: scale(1); }
+
+/* copy: same morph, plus the label swaps to "Copied" while hot */
+.bt-lswap { position: relative; display: inline-flex; justify-content: center; }
+.bt-lswap .l2 { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; opacity: 0; }
+.bt-lswap .l1, .bt-lswap .l2 { transition: opacity calc(0.2s / var(--bt-speed)) var(--ease-out); }
+.bt.hot .bt-lswap .l1 { opacity: 0; }
+.bt.hot .bt-lswap .l2 { opacity: 1; }
+
+
+/* sparkle: the star drops in from below while the old icon lifts away,
+   then two mini stars pop at offset delays */
+.bt-sparkle .i1 { transform: translateY(0); }
+.bt-sparkle .i2 { opacity: 0; transform: translateY(15px) scale(0.8); }
+.bt-sparkle.hot .i1 { opacity: 0; transform: translateY(-15px) scale(0.8); }
+.bt-sparkle.hot .i2 { opacity: 1; transform: translateY(0) scale(1); color: #eab308; }
+.bt-mini {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg) translateY(10px);
+  transition:
+    opacity calc(0.3s / var(--bt-speed)) var(--bt-spring),
+    transform calc(0.3s / var(--bt-speed)) var(--bt-spring);
+  color: #facc15;
+  pointer-events: none;
+}
+.bt-mini.m1 { top: -12px; right: -8px; width: 10px; height: 10px; transition-delay: calc(0.05s / var(--bt-speed)); }
+.bt-mini.m2 { top: -4px; left: -12px; width: 6px; height: 6px; transform: scale(0) rotate(45deg) translateX(10px); transition-delay: calc(0.1s / var(--bt-speed)); }
+.bt-sparkle.hot .bt-mini { opacity: 1; transform: scale(1) rotate(0) translate(0, 0); }
+
+/* pulse: one heartbeat on hover; the heart fills pink while hot */
+@keyframes bt-beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(calc(1.13 + var(--bt-pop))); }
+}
+.bt-pulse.hot .i1 { animation: bt-beat calc(0.4s / var(--bt-speed)) ease-in-out; color: #ec4899; }
+.bt-pulse.hot .i1 svg { fill: currentColor; }
+
+/* rotate: half turn while hot, springs back on leave */
+.bt-rotate .bt-ic { transition: transform calc(0.4s / var(--bt-speed)) var(--bt-spring); }
+.bt-rotate.hot .bt-ic { transform: rotate(180deg); }
+
+/* shake: the icon bobs and wiggles once; icon and label read red while hot */
+@keyframes bt-jiggle {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  20% { transform: translateY(-2px) rotate(-10deg); }
+  45% { transform: translateY(0) rotate(10deg); }
+  70% { transform: translateY(-2px) rotate(-10deg); }
+}
+.bt-shake .i1, .bt-shake .bt-label { transition: color calc(0.3s / var(--bt-speed)) var(--ease-out); }
+.bt-shake.hot .i1 { animation: bt-jiggle calc(0.4s / var(--bt-speed)); color: #ef4444; }
+.bt-shake.hot .bt-label { color: #ef4444; }
+
+/* ring: bell swaps to a ringing bell with a rotate-in, plus a red dot */
+.bt-ring .i1 { transform: rotate(0) scale(1); }
+.bt-ring .i2 { opacity: 0; transform: rotate(-15deg) scale(0.8); }
+.bt-ring.hot .i1 { opacity: 0; transform: rotate(15deg) scale(0.8); }
+.bt-ring.hot .i2 { opacity: 1; transform: rotate(0) scale(1); color: #f97316; }
+.bt-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ef4444;
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    opacity calc(0.2s / var(--bt-speed)) var(--ease-out),
+    transform calc(0.35s / var(--bt-speed)) cubic-bezier(0.2, 1.6, 0.4, 1);
+  transition-delay: calc(0.1s / var(--bt-speed));
+}
+.bt-ring.hot .bt-dot { opacity: 1; transform: scale(1); }
+
+.bt-box { container-type: size; }
+@container (max-height: 150px) {
+  .bt-grid { gap: 7px 8px; padding: 0 10px; grid-template-columns: repeat(3, minmax(84px, 118px)); }
+  .bt { height: 29px; font-size: 11px; padding: 0 6px; }
+  .bt-ic { margin-right: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bt, .bt-ic .i1, .bt-ic .i2, .bt-mini, .bt-dot, .bt-rotate .bt-ic, .bt-lswap .l1, .bt-lswap .l2 { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+  .gl-box {
+    --gl-blue: 0.75; --gl-edge: 0.9; --gl-gloss: 0.8;
+    position: absolute; inset: 0; overflow: hidden; touch-action: none;
+    background: #e2e3e6;
+  }
+  .gl-card {
+    position: absolute; inset: -24px 44px 40px -24px;
+    border-radius: 0 0 72px 0; border: 4px solid #fff; background: #eceded;
+  }
+  .gl-topband {
+    position: absolute; top: 0; left: 0; right: 0; height: 21%;
+    background: #eff0f1; border-bottom: 3px solid #fff;
+  }
+  .gl-btn {
+    position: absolute; left: 50%; top: 50%;
+    display: flex; align-items: center; justify-content: center;
+    width: 160px; height: 100px; margin: -50px 0 0 -80px;
+    border: 0; border-radius: 999px;
+    background:
+      radial-gradient(70% 120% at 16% 90%, rgba(255, 255, 255, 0.42), transparent 52%),
+      radial-gradient(70% 120% at 86% 10%, rgba(255, 255, 255, 0.36), transparent 52%),
+      radial-gradient(125% 165% at 50% 42%, #6cbdf0 0%, #54ade2 48%, #7fc6f1 82%, #a9dcf7 100%);
+    box-shadow:
+      0 0 0 1px rgba(110, 175, 220, 0.4),
+      0 12px 28px rgba(120, 170, 210, 0.25);
+    cursor: grab; user-select: none; touch-action: none; will-change: transform; overflow: hidden;
+  }
+  .gl-btn::after {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    background: #eaf4fb;
+    opacity: calc((1 - var(--gl-blue)) * 0.6);
+    pointer-events: none;
+  }
+  .gl-rim {
+    position: absolute; inset: 0; border-radius: inherit; padding: 3.5px;
+    background: conic-gradient(
+      from 210deg,
+      rgba(255, 255, 255, 1) 0deg,
+      rgba(160, 210, 245, 0.22) 85deg,
+      rgba(255, 255, 255, 0.98) 175deg,
+      rgba(160, 210, 245, 0.2) 265deg,
+      rgba(255, 255, 255, 1) 360deg
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    opacity: var(--gl-edge); pointer-events: none; z-index: 3;
+  }
+  .gl-spec {
+    position: absolute; width: 120px; height: 120px; margin: -60px 0 0 -60px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(255, 255, 255, 0.5), transparent 70%);
+    opacity: 0; transition: opacity 0.25s var(--ease-out); pointer-events: none; z-index: 1;
+  }
+  .gl-btn:hover .gl-spec { opacity: var(--gl-gloss); }
+  .gl-arrow { position: relative; z-index: 2; pointer-events: none; filter: drop-shadow(0 1px 2px rgba(70, 140, 190, 0.3)); }
+  @media (prefers-reduced-transparency: reduce) {
+    .gl-btn { background: #5cb1e6; }
+    .gl-btn::after { display: none; }
+  }
+  @media (prefers-contrast: more) {
+    .gl-btn { box-shadow: 0 0 0 2px currentColor, 0 12px 28px rgba(120, 170, 210, 0.25); }
+  }
+  .ot-box {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: flex-start; justify-content: center; gap: 16px;
+    padding: 0 24px; overflow: hidden;
+    cursor: ew-resize; user-select: none; touch-action: none;
+  }
+  .ot-label {
+    display: block; font-size: 10px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-tertiary); margin-bottom: 2px;
+  }
+  .ot-line { white-space: nowrap; font-weight: 600; color: var(--text-primary); }
+  .ot-line.fixed { color: var(--text-muted, #9b9b9b); }
+  .ot-read {
+    position: absolute; bottom: 12px; right: 16px;
+    font: 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums; color: var(--text-tertiary);
+  }
+  .intro .who { color: var(--text-primary); }
+  .intro .what { color: var(--text-secondary); }
+  .hidden { display: none !important; }
+</style>
+
+<div class="page col g8" id="view-feed">
+  <header class="row" style="align-items:flex-start">
+    <div class="col" style="gap:4px;min-width:0">
+      <h1 style="text-wrap:pretty">I'm a product designer who likes to experiment with code and design engineering.</h1>
+      <p class="what" style="color:var(--text-secondary);text-wrap:pretty">These are some of the skills and small projects that I've been developing recently.</p>
+    </div>
+    <a class="close-x" href="#/" aria-label="Home">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+    </a>
+  </header>
+
+  <div class="col" style="gap:16px">
+    <a class="card" href="#/micro-buttons">
+      <div class="media" id="bt-feed"></div>
+      <div class="caption"><span class="t">Micro buttons</span><span class="d">Jul 14, 2026</span></div>
+    </a>
+
+    <a class="card" href="#/materials">
+      <div class="media" id="mt-feed"></div>
+      <div class="caption"><span class="t">Frosted materials</span><span class="d">Jul 13, 2026</span></div>
+    </a>
+
+    <a class="card" href="#/bottom-sheet">
+      <div class="media" id="sh-feed"></div>
+      <div class="caption"><span class="t">The sheet</span><span class="d">Jul 12, 2026</span></div>
+    </a>
+
+    <a class="card" href="#/fluid-springs">
+      <div class="media" id="fs-feed"></div>
+      <div class="caption"><span class="t">Fluid springs</span><span class="d">Jul 12, 2026</span></div>
+    </a>
+
+    <a class="card" href="#/meeting-overlay">
+      <div class="media"><canvas id="cv-feed"></canvas></div>
+      <div class="caption"><span class="t">Meeting overlay</span><span class="d">Jul 8, 2026</span></div>
+    </a>
+
+    <div class="teaser" aria-hidden="true">
+      <div class="card"><div class="ph">More soon</div><span class="sp"></span></div>
+      <div class="card"><div class="ph">More soon</div><span class="sp"></span></div>
+      <div class="fade"></div>
+    </div>
+  </div>
+
+  <section class="col g3">
+    <header class="row sec-h"><h2>Contact</h2></header>
+    <div>
+      <div class="hr-row"><span class="k">Email</span><a class="v" href="mailto:julio@uni.minerva.edu">julio@uni.minerva.edu</a></div>
+      <div class="hr-row"><span class="k">Location</span><span class="v">Cupertino, California</span></div>
+      <div class="hr-row"><span class="k">Media</span><span class="v" style="display:flex;gap:12px"><a href="#">LinkedIn</a><a href="#">Portfolio</a></span></div>
+    </div>
+    <p class="foot">© 2026 CAGGIANO</p>
+  </section>
+</div>
+
+<div class="page col g10 hidden" id="view-detail">
+  <header class="row">
+    <h1>Meeting overlay</h1>
+    <a class="close-x" href="#/" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </a>
+  </header>
+
+  <div class="media"><canvas id="cv-hero"></canvas></div>
+
+  <div class="col g14">
+    <div class="prose">
+      <p>Five minutes before a meeting, a pixel detective walks in along the bottom of the screen. He stops, a speech bubble snaps open with the meeting name and time, he raises his magnifying glass at it, and after ten seconds he walks back out. The window is transparent, always on top, and click-through — it floats over whatever you're doing and never blocks the mouse.</p>
+      <p>Below you can change the meeting, how long he holds, how fast he walks, and his size. The desktop app reads your real calendar from one iCal URL; the copy button gives you the full build prompt for your own setup.</p>
+    </div>
+
+    <div class="col g4">
+      <header class="row sec-h">
+        <h2>Implementation</h2>
+        <div style="display:flex;gap:8px">
+          <button class="chip" id="btn-remix" type="button">Remix</button>
+          <button class="chip" id="btn-replay" type="button">Replay</button>
+        </div>
+      </header>
+      <div class="play"><canvas id="cv-play"></canvas></div>
+      <div class="panel">
+        <div class="inputs">
+          <input class="main" id="in-title" type="text" spellcheck="false" placeholder="Meeting name…" value="Work Session: New Portfolio">
+          <input class="small" id="in-time" type="text" spellcheck="false" placeholder="Time…" value="Tomorrow 06:00">
+        </div>
+        <div class="sliders">
+          <div class="slider" id="sl-hold" role="slider" tabindex="0" aria-label="Hold" aria-valuemin="1500" aria-valuemax="10000"><span class="fill"></span><span class="thumb"></span><span class="lbl">Hold</span><span class="val"></span></div>
+          <div class="slider" id="sl-speed" role="slider" tabindex="0" aria-label="Speed" aria-valuemin="60" aria-valuemax="320"><span class="fill"></span><span class="thumb"></span><span class="lbl">Speed</span><span class="val"></span></div>
+          <div class="slider" id="sl-sprite" role="slider" tabindex="0" aria-label="Sprite" aria-valuemin="34" aria-valuemax="90"><span class="fill"></span><span class="thumb"></span><span class="lbl">Sprite</span><span class="val"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="col g3">
+      <header class="row sec-h">
+        <h2>Code</h2>
+        <button class="chip" id="btn-copy" type="button" aria-live="polite"><span class="swap"><span class="a">Copy prompt</span><span class="b">Copied</span></span></button>
+      </header>
+      <div class="codebox">
+        <div class="tabs" role="tablist"><span class="pill" id="tab-pill"></span></div>
+        <pre id="code-pre"></pre>
+      </div>
+    </section>
+
+    <section class="col g3">
+      <header class="row sec-h"><h2>Credits</h2></header>
+      <div>
+        <div class="hr-row"><span class="k">Company</span><span class="v">CAGGIANO</span></div>
+        <div class="hr-row"><span class="k">Date</span><span class="v">Jul 8, 2026</span></div>
+        <div class="hr-row"><span class="k">Tags</span><span class="v">Python, PySide6, macOS</span></div>
+      </div>
+    </section>
+
+    <p class="foot"><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT</a> → free to copy</p>
+  </div>
+  <div style="height:64px" aria-hidden="true"></div>
+</div>
+
+<div class="page col g10 hidden" id="view-springs">
+  <header class="row">
+    <h1>Fluid springs</h1>
+    <a class="close-x" href="#/" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </a>
+  </header>
+
+  <div class="media" id="fs-hero"></div>
+
+  <div class="col g14">
+    <div class="prose">
+      <p>Apple's fluid-interface motion, rebuilt with no animation library. The card above is a real physical object: grab it — even mid-flight — and it tracks your cursor 1:1 from the exact point you grabbed. Flick it and the spring inherits your release velocity, projects the momentum forward, and lands on the corner the flick was heading to. Drag past the edges and it rubber-bands instead of stopping.</p>
+      <p>The recipes come from the apple-design skill — WWDC's "Designing Fluid Interfaces," translated to pointer events and requestAnimationFrame. Below you can tune the two parameters Apple designs with: damping (overshoot) and response (speed), plus the deceleration rate that decides how far a flick throws.</p>
+    </div>
+
+    <div class="col g4">
+      <header class="row sec-h">
+        <h2>Implementation</h2>
+        <div style="display:flex;gap:8px">
+          <button class="chip" id="fs-flick" type="button">Flick</button>
+          <button class="chip" id="fs-reset" type="button">Reset</button>
+        </div>
+      </header>
+      <div class="play" id="fs-play"></div>
+      <div class="panel">
+        <div class="sliders">
+          <div class="slider" id="fs-sl-damping" role="slider" tabindex="0" aria-label="Damping" aria-valuemin="0.5" aria-valuemax="1"><span class="fill"></span><span class="thumb"></span><span class="lbl">Damping</span><span class="val"></span></div>
+          <div class="slider" id="fs-sl-response" role="slider" tabindex="0" aria-label="Response" aria-valuemin="0.15" aria-valuemax="0.6"><span class="fill"></span><span class="thumb"></span><span class="lbl">Response</span><span class="val"></span></div>
+          <div class="slider" id="fs-sl-decel" role="slider" tabindex="0" aria-label="Decel" aria-valuemin="0.99" aria-valuemax="0.999"><span class="fill"></span><span class="thumb"></span><span class="lbl">Decel</span><span class="val"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="col g3">
+      <header class="row sec-h">
+        <h2>Code</h2>
+        <button class="chip" id="fs-copy" type="button" aria-live="polite"><span class="swap"><span class="a">Copy prompt</span><span class="b">Copied</span></span></button>
+      </header>
+      <div class="codebox">
+        <div class="tabs" id="fs-tabs" role="tablist"><span class="pill" id="fs-pill"></span></div>
+        <pre id="fs-pre"></pre>
+      </div>
+    </section>
+
+    <section class="col g3">
+      <header class="row sec-h"><h2>Credits</h2></header>
+      <div>
+        <div class="hr-row"><span class="k">Company</span><span class="v">CAGGIANO</span></div>
+        <div class="hr-row"><span class="k">Date</span><span class="v">Jul 12, 2026</span></div>
+        <div class="hr-row"><span class="k">Tags</span><span class="v">Springs, Gestures, Motion</span></div>
+      </div>
+    </section>
+
+    <p class="foot"><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT</a> → free to copy</p>
+  </div>
+  <div style="height:64px" aria-hidden="true"></div>
+</div>
+
+<div class="page col g10 hidden" id="view-sheet">
+  <header class="row">
+    <h1>The sheet</h1>
+    <a class="close-x" href="#/" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </a>
+  </header>
+
+  <div class="media" id="sh-hero"></div>
+
+  <div class="col g14">
+    <div class="prose">
+      <p>The interaction everyone knows from iOS, rebuilt from the apple-design skill's drawer recipe. Drag the sheet and it tracks your cursor 1:1; release, and the <em>speed</em> of your gesture decides what happens — a fast downward flick dismisses it even from near the top, while a slow drag to the same spot springs back to the nearest resting point. As the sheet rises, the content behind it dims and pushes back, all derived from one position so the three layers move as a single object. Past the top it rubber-bands.</p>
+      <p>Below you can tune Apple's shipped drawer values — damping 0.8, response 0.3s — and how hard the background dims. Grab the sheet mid-flight anytime; it never locks you out.</p>
+    </div>
+
+    <div class="col g4">
+      <header class="row sec-h">
+        <h2>Implementation</h2>
+        <div style="display:flex;gap:8px">
+          <button class="chip" id="sh-open" type="button">Open</button>
+          <button class="chip" id="sh-dismiss" type="button">Dismiss</button>
+        </div>
+      </header>
+      <div class="play" id="sh-play"></div>
+      <div class="panel">
+        <div class="sliders">
+          <div class="slider" id="sh-sl-damping" role="slider" tabindex="0" aria-label="Damping" aria-valuemin="0.5" aria-valuemax="1"><span class="fill"></span><span class="thumb"></span><span class="lbl">Damping</span><span class="val"></span></div>
+          <div class="slider" id="sh-sl-response" role="slider" tabindex="0" aria-label="Response" aria-valuemin="0.15" aria-valuemax="0.6"><span class="fill"></span><span class="thumb"></span><span class="lbl">Response</span><span class="val"></span></div>
+          <div class="slider" id="sh-sl-dim" role="slider" tabindex="0" aria-label="Dim" aria-valuemin="0" aria-valuemax="0.4"><span class="fill"></span><span class="thumb"></span><span class="lbl">Dim</span><span class="val"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="col g3">
+      <header class="row sec-h">
+        <h2>Code</h2>
+        <button class="chip" id="sh-copy" type="button" aria-live="polite"><span class="swap"><span class="a">Copy prompt</span><span class="b">Copied</span></span></button>
+      </header>
+      <div class="codebox">
+        <div class="tabs" id="sh-tabs" role="tablist"><span class="pill" id="sh-pill"></span></div>
+        <pre id="sh-pre"></pre>
+      </div>
+    </section>
+
+    <section class="col g3">
+      <header class="row sec-h"><h2>Credits</h2></header>
+      <div>
+        <div class="hr-row"><span class="k">Company</span><span class="v">CAGGIANO</span></div>
+        <div class="hr-row"><span class="k">Date</span><span class="v">Jul 12, 2026</span></div>
+        <div class="hr-row"><span class="k">Tags</span><span class="v">Sheet, Gestures, Springs</span></div>
+      </div>
+    </section>
+
+    <p class="foot"><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT</a> → free to copy</p>
+  </div>
+  <div style="height:64px" aria-hidden="true"></div>
+</div>
+
+<div class="page col g10 hidden" id="view-materials">
+  <header class="row">
+    <h1>Frosted materials</h1>
+    <a class="close-x" href="#/" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </a>
+  </header>
+
+  <div class="media" id="mt-hero"></div>
+
+  <div class="col g14">
+    <div class="prose">
+      <p>The minimal register of the materials chapter: one control, cropped close, on a surface that's almost nothing — a gray ground, a hairline divider, the white corner of a card. All the design lives in the pill: a sky-blue gradient that reads curved because of two soft white blooms, a bright rim ring where the glass edge catches light, and a sheen that follows your pointer. Press it and it gives; drag it anywhere and it springs back to center at the speed you threw it.</p>
+      <p>Below you can retune the three qualities that define the look — how vivid the blue is, how hard the edge catches light, and how strong the hover sheen glows. Everything else is restraint.</p>
+    </div>
+
+    <div class="col g4">
+      <header class="row sec-h">
+        <h2>Implementation</h2>
+        <div style="display:flex;gap:8px">
+          <button class="chip" id="mt-open" type="button">Pulse</button>
+          <button class="chip" id="mt-close" type="button">Reset</button>
+        </div>
+      </header>
+      <div class="play" id="mt-play"></div>
+      <div class="panel">
+        <div class="sliders">
+          <div class="slider" id="mt-sl-blue" role="slider" tabindex="0" aria-label="Blue" aria-valuemin="0" aria-valuemax="1"><span class="fill"></span><span class="thumb"></span><span class="lbl">Blue</span><span class="val"></span></div>
+          <div class="slider" id="mt-sl-edge" role="slider" tabindex="0" aria-label="Edge" aria-valuemin="0" aria-valuemax="1"><span class="fill"></span><span class="thumb"></span><span class="lbl">Edge</span><span class="val"></span></div>
+          <div class="slider" id="mt-sl-gloss" role="slider" tabindex="0" aria-label="Gloss" aria-valuemin="0" aria-valuemax="1"><span class="fill"></span><span class="thumb"></span><span class="lbl">Gloss</span><span class="val"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="col g3">
+      <header class="row sec-h">
+        <h2>Code</h2>
+        <button class="chip" id="mt-copy" type="button" aria-live="polite"><span class="swap"><span class="a">Copy prompt</span><span class="b">Copied</span></span></button>
+      </header>
+      <div class="codebox">
+        <div class="tabs" id="mt-tabs" role="tablist"><span class="pill" id="mt-pill"></span></div>
+        <pre id="mt-pre"></pre>
+      </div>
+    </section>
+
+    <section class="col g3">
+      <header class="row sec-h"><h2>Credits</h2></header>
+      <div>
+        <div class="hr-row"><span class="k">Company</span><span class="v">CAGGIANO</span></div>
+        <div class="hr-row"><span class="k">Date</span><span class="v">Jul 13, 2026</span></div>
+        <div class="hr-row"><span class="k">Tags</span><span class="v">Materials, Glass, Springs</span></div>
+      </div>
+    </section>
+
+    <p class="foot"><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT</a> → free to copy</p>
+  </div>
+  <div style="height:64px" aria-hidden="true"></div>
+</div>
+
+<div class="page col g10 hidden" id="view-buttons">
+  <header class="row">
+    <h1>Micro buttons</h1>
+    <a class="close-x" href="#/" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </a>
+  </header>
+
+  <div class="media" id="bt-hero"></div>
+
+  <div class="col g14">
+    <div class="prose">
+      <p>The nine ways a button can talk back, one pill each: an arrow that slides in to say "this goes somewhere," a star that bursts, a label that morphs through busy into done, a copy that confirms itself, a heart that beats, a gear that turns, a delete that shakes and asks "Sure?", a bell that rings, and a sun that becomes a moon. Every one is plain CSS and a few lines of state — no animation library.</p>
+      <p>The taxonomy comes from Amicro, Syed Subhan's catalogue of micro-transitions, rebuilt from scratch in the vault's light language. Two variables drive the whole set's feel — try the sliders: Speed divides every duration at once, and Pop sets how far the click overshoots. Left alone, the set demos itself.</p>
+    </div>
+
+    <div class="col g4">
+      <header class="row sec-h">
+        <h2>Implementation</h2>
+        <div style="display:flex;gap:8px">
+          <button class="chip" id="bt-playall" type="button">Play all</button>
+          <button class="chip" id="bt-reset" type="button">Reset</button>
+        </div>
+      </header>
+      <div class="play" id="bt-play"></div>
+      <div class="panel">
+        <div class="sliders" style="grid-template-columns:1fr 1fr">
+          <div class="slider" id="bt-sl-speed" role="slider" tabindex="0" aria-label="Speed" aria-valuemin="0.4" aria-valuemax="2"><span class="fill"></span><span class="thumb"></span><span class="lbl">Speed</span><span class="val"></span></div>
+          <div class="slider" id="bt-sl-pop" role="slider" tabindex="0" aria-label="Pop" aria-valuemin="0" aria-valuemax="0.3"><span class="fill"></span><span class="thumb"></span><span class="lbl">Pop</span><span class="val"></span></div>
+        </div>
+      </div>
+    </div>
+
+    <section class="col g3">
+      <header class="row sec-h">
+        <h2>Code</h2>
+        <button class="chip" id="bt-copy" type="button" aria-live="polite"><span class="swap"><span class="a">Copy prompt</span><span class="b">Copied</span></span></button>
+      </header>
+      <div class="codebox">
+        <div class="tabs" id="bt-tabs" role="tablist"><span class="pill" id="bt-pill"></span></div>
+        <pre id="bt-pre"></pre>
+      </div>
+    </section>
+
+    <section class="col g3">
+      <header class="row sec-h"><h2>Credits</h2></header>
+      <div>
+        <div class="hr-row"><span class="k">Company</span><span class="v">CAGGIANO</span></div>
+        <div class="hr-row"><span class="k">Date</span><span class="v">Jul 14, 2026</span></div>
+        <div class="hr-row"><span class="k">Tags</span><span class="v">Buttons, Micro-interactions, CSS</span></div>
+        <div class="hr-row"><span class="k">Reference</span><span class="v">amicro.vercel.app — Syed Subhan</span></div>
+      </div>
+    </section>
+
+    <p class="foot"><a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT</a> → free to copy</p>
+  </div>
+  <div style="height:64px" aria-hidden="true"></div>
+</div>
+
+<script>
+/* ---------- assets ---------- */
+var WALK = new Image(); WALK.src = 'data:image/png;base64,__WALK_B64__';
+var IDLE = new Image(); IDLE.src = 'data:image/png;base64,__IDLE_B64__';
+
+/* ---------- overlay engine: WALK_IN → POP → HOLD → DISMISS → WALK_OUT ---------- */
+var FRAME_W = 410, FRAME_H = 414, STEP_MS = 160, BLINK_EVERY = 3000, BLINK_MS = 150;
+var POP_MS = 220, DISMISS_MS = 160, GRID = 3, STOP_FRAC = 0.1;
+var POP_STEPS = [[0, 0.45], [0.45, 0.75], [0.85, 1]];
+var U = 3, INK = '#111', WHITE = '#fff', SHADOW = '#c9c9c9', TIME_INK = '#555';
+var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function OverlayAnim(canvas, opts) {
+  var ctx = canvas.getContext('2d');
+  var dpr = Math.min(devicePixelRatio || 1, 2);
+  var phase = REDUCED ? 'hold' : 'walkIn', phaseStart = performance.now();
+  var o = Object.assign({ title: '', time: '', holdMs: 3800, speed: 150, spriteH: 50, loop: true }, opts);
+
+  function resize() {
+    canvas.width = canvas.clientWidth * dpr;
+    canvas.height = canvas.clientHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  new ResizeObserver(resize).observe(canvas);
+  var grid = function (v) { return Math.round(v / GRID) * GRID; };
+
+  function wrapTitle(text, maxW) {
+    ctx.font = '10px "Press Start 2P", monospace';
+    var words = text.split(' '), lines = [], cur = '';
+    for (var i = 0; i < words.length; i++) {
+      var probe = cur ? cur + ' ' + words[i] : words[i];
+      if (ctx.measureText(probe).width <= maxW || !cur) cur = probe;
+      else { lines.push(cur); cur = words[i]; }
+    }
+    if (cur) lines.push(cur);
+    if (lines.length > 2) {
+      lines.length = 2;
+      var last = lines[1];
+      while (ctx.measureText(last + '…').width > maxW && last.length > 1) last = last.slice(0, -1);
+      lines[1] = last + '…';
+    }
+    return lines;
+  }
+  function sil(x, y, w, h, c) {
+    ctx.fillStyle = c;
+    ctx.fillRect(x + U, y, w - 2 * U, h);
+    ctx.fillRect(x, y + U, w, h - 2 * U);
+  }
+  function drawBubble(headX, headY, scale) {
+    ctx.font = '10px "Press Start 2P", monospace';
+    var lines = wrapTitle(o.title, 210 - 4 * U);
+    var titleW = 0;
+    for (var i = 0; i < lines.length; i++) titleW = Math.max(titleW, ctx.measureText(lines[i]).width);
+    ctx.font = '8px "Press Start 2P", monospace';
+    var bodyW = Math.min(210, Math.max(90, Math.max(titleW, ctx.measureText(o.time).width) + 4 * U));
+    var lineH = 14, bodyH = 3 * U + lines.length * lineH + 12 + U;
+    var w = Math.round(bodyW * scale), h = Math.round(bodyH * scale);
+    var bx = Math.max(U, Math.min(headX - w * 0.28, canvas.clientWidth - w - U));
+    var by = headY - 6 - 3 * U - h;
+    sil(bx + U, by + U, w + 2 * U, h + 2 * U, SHADOW);
+    sil(bx - U, by - U, w + 2 * U, h + 2 * U, INK);
+    sil(bx, by, w, h, WHITE);
+    var tx = grid(headX - 2 * U);
+    ctx.fillStyle = INK;
+    ctx.fillRect(tx - U, by + h, 5 * U, U);
+    ctx.fillRect(tx, by + h + U, 3 * U, U);
+    ctx.fillRect(tx + U, by + h + 2 * U, U, U);
+    ctx.fillStyle = WHITE;
+    ctx.fillRect(tx, by + h - U, 3 * U, U);
+    ctx.fillRect(tx, by + h, U, U);
+    ctx.fillRect(tx + U, by + h + U, U, U);
+    if (scale === 1) {
+      ctx.fillStyle = INK;
+      ctx.font = '10px "Press Start 2P", monospace';
+      ctx.textBaseline = 'top'; ctx.textAlign = 'left';
+      for (var j = 0; j < lines.length; j++) ctx.fillText(lines[j], bx + 2 * U, by + 2 * U + j * lineH);
+      ctx.fillStyle = TIME_INK;
+      ctx.font = '8px "Press Start 2P", monospace';
+      ctx.fillText(o.time, bx + 2 * U, by + 2 * U + lines.length * lineH + 4);
+    }
+  }
+  function drawSprite(sheet, frame, x, y, h, flip) {
+    var w = h * (FRAME_W / FRAME_H);
+    ctx.imageSmoothingEnabled = false;
+    ctx.save();
+    if (flip) { ctx.translate(Math.round(x + w / 2), 0); ctx.scale(-1, 1); ctx.translate(-Math.round(x + w / 2), 0); }
+    ctx.drawImage(sheet, frame * FRAME_W, 0, FRAME_W, FRAME_H, Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+    ctx.restore();
+  }
+  function render(t) {
+    requestAnimationFrame(render);
+    var w = canvas.clientWidth, h = canvas.clientHeight;
+    ctx.clearRect(0, 0, w, h);
+    if (!WALK.naturalWidth || !IDLE.naturalWidth) return;
+    var sh = o.spriteH, sw = sh * (FRAME_W / FRAME_H);
+    var stopX = Math.max(U, w * STOP_FRAC), groundY = h - sh;
+    var walkDist = stopX + sw, walkMs = walkDist / o.speed * 1000;
+    var el = t - phaseStart;
+    function next(p) { phase = p; phaseStart = t; }
+    var x = stopX, sheet = WALK, frame = 0, flip = false, scale = -1;
+    if (phase === 'walkIn') {
+      x = grid(-sw + Math.min(1, el / walkMs) * walkDist);
+      frame = Math.floor(t / STEP_MS) % 4;
+      if (t % BLINK_EVERY < BLINK_MS) frame += 4;
+      if (el >= walkMs) next('pop');
+    } else if (phase === 'pop') {
+      var p = Math.min(1, el / POP_MS);
+      for (var i = 0; i < POP_STEPS.length; i++) if (p >= POP_STEPS[i][0]) scale = POP_STEPS[i][1];
+      sheet = IDLE;
+      if (el >= POP_MS) next('hold');
+    } else if (phase === 'hold') {
+      scale = 1; sheet = IDLE;
+      var beat = REDUCED ? 0 : el % 2400;
+      frame = beat < 1600 ? 0 : beat < 1800 ? 1 : beat < 2200 ? 2 : 1;
+      if (!REDUCED && el >= o.holdMs) next('dismiss');
+    } else if (phase === 'dismiss') {
+      var q = Math.min(1, el / DISMISS_MS);
+      scale = -1;
+      for (var k = 0; k < POP_STEPS.length; k++) if (1 - q >= POP_STEPS[k][0]) scale = POP_STEPS[k][1];
+      sheet = IDLE;
+      if (el >= DISMISS_MS) next('walkOut');
+    } else if (phase === 'walkOut') {
+      x = grid(stopX - Math.min(1, el / walkMs) * walkDist);
+      frame = Math.floor(t / STEP_MS) % 4;
+      flip = true;
+      if (el >= walkMs) next('pause');
+    } else {
+      if (o.loop && el >= 1400) next('walkIn');
+      return;
+    }
+    var bob = (phase === 'walkIn' || phase === 'walkOut') ? (Math.floor(t / STEP_MS) % 2) * -2 : 0;
+    drawSprite(sheet, frame, x, groundY + bob, sh, flip);
+    if (scale > 0) drawBubble(x + sw * 0.5, groundY, scale);
+  }
+  requestAnimationFrame(render);
+  return {
+    set: function (patch) { Object.assign(o, patch); },
+    replay: function () { phase = REDUCED ? 'hold' : 'walkIn'; phaseStart = performance.now(); },
+  };
+}
+
+/* ---------- instances ---------- */
+var feedAnim = OverlayAnim(document.getElementById('cv-feed'), { title: 'Work Session: New Portfolio', time: 'Tomorrow 06:00', holdMs: 3200 });
+var heroAnim = OverlayAnim(document.getElementById('cv-hero'), { title: 'Work Session: New Portfolio', time: 'Tomorrow 06:00', holdMs: 3800 });
+var playAnim = OverlayAnim(document.getElementById('cv-play'), { title: 'Work Session: New Portfolio', time: 'Tomorrow 06:00', holdMs: 4000 });
+
+/* ---------- playground controls ---------- */
+var SAMPLES = [
+  ['Work Session: New Portfolio', 'Tomorrow 06:00'],
+  ['Design Crit — Tokyo Studio', 'Today 14:30'],
+  ['CP192 Mini-Capstone Check-in', 'Today 09:00'],
+  ['SP Invisível — Content Review', 'Fri 11:00'],
+];
+var inTitle = document.getElementById('in-title'), inTime = document.getElementById('in-time');
+inTitle.addEventListener('input', function () { playAnim.set({ title: inTitle.value }); });
+inTime.addEventListener('input', function () { playAnim.set({ time: inTime.value }); });
+document.getElementById('btn-replay').addEventListener('click', function () { playAnim.replay(); });
+document.getElementById('btn-remix').addEventListener('click', function () {
+  var s = SAMPLES[Math.floor(Math.random() * SAMPLES.length)];
+  inTitle.value = s[0]; inTime.value = s[1];
+  playAnim.set({ title: s[0], time: s[1] });
+  playAnim.replay();
+});
+
+function makeSlider(id, min, max, initial, fmt, apply) {
+  var el = document.getElementById(id);
+  var fill = el.querySelector('.fill'), thumb = el.querySelector('.thumb'), val = el.querySelector('.val');
+  var v = initial;
+  function renderS() {
+    var pct = (v - min) / (max - min) * 100;
+    fill.style.width = pct + '%';
+    thumb.style.left = 'max(3px, calc(' + pct + '% - 1.5px))';
+    val.textContent = fmt(v);
+    el.setAttribute('aria-valuenow', Math.round(v));
+  }
+  function fromEvent(e) {
+    var r = el.getBoundingClientRect();
+    var k = Math.min(1, Math.max(0, (e.clientX - r.left) / r.width));
+    v = min + k * (max - min);
+    renderS(); apply(v);
+  }
+  el.addEventListener('pointerdown', function (e) { el.setPointerCapture(e.pointerId); fromEvent(e); });
+  el.addEventListener('pointermove', function (e) { if (e.buttons) fromEvent(e); });
+  renderS();
+}
+makeSlider('sl-hold', 1500, 10000, 4000, function (v) { return (v / 1000).toFixed(1) + 's'; }, function (v) { playAnim.set({ holdMs: v }); });
+makeSlider('sl-speed', 60, 320, 150, function (v) { return Math.round(v) + ' px/s'; }, function (v) { playAnim.set({ speed: Math.round(v) }); });
+makeSlider('sl-sprite', 34, 90, 50, function (v) { return Math.round(v) + ' px'; }, function (v) { playAnim.set({ spriteH: Math.round(v) }); });
+
+/* ---------- code tabs ---------- */
+var TABS = __CODE_TABS__;
+var tabsEl = document.querySelector('.tabs'), pre = document.getElementById('code-pre'), pill = document.getElementById('tab-pill');
+TABS.forEach(function (t, i) {
+  var b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = t.file;
+  b.addEventListener('click', function () { selectTab(i); });
+  tabsEl.appendChild(b);
+});
+function selectTab(i) {
+  var btns = tabsEl.querySelectorAll('button');
+  btns.forEach(function (b, j) { b.classList.toggle('on', i === j); });
+  var b = btns[i];
+  pill.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  pill.style.width = b.offsetWidth + 'px';
+  pre.textContent = TABS[i].code;
+}
+selectTab(0);
+
+/* ---------- copy prompt ---------- */
+var PROMPT = __PROMPT__;
+var copyBtn = document.getElementById('btn-copy'), copyTimer;
+copyBtn.addEventListener('click', function () {
+  if (navigator.clipboard) navigator.clipboard.writeText(PROMPT).catch(function () {});
+  copyBtn.classList.add('ok');
+  clearTimeout(copyTimer);
+  copyTimer = setTimeout(function () { copyBtn.classList.remove('ok'); }, 1600);
+});
+
+/* ---------- fluid springs: drag + spring + projection + rubber-band ---------- */
+function FluidSpring(container, opts) {
+  var o = Object.assign({ damping: 0.8, response: 0.4, decel: 0.998, ambient: true }, opts);
+  var CW = 96, CH = 64, PADS = 18;
+  var chip = document.createElement('div');
+  chip.className = 'fs-chip';
+  chip.innerHTML = '<div class="inner"><span class="dot"></span><span><span class="ln a"></span><span class="ln b"></span></span></div>';
+  container.appendChild(chip);
+  var sx = { x: PADS, v: 0, target: PADS }, sy = { x: PADS, v: 0, target: PADS };
+  var dragging = false, grabDX = 0, grabDY = 0, dragDist = 0, hist = [];
+  var lastInteraction = -1e9, lastAmbient = 0, last = performance.now();
+
+  function stepAxis(s, dt, zeta, response) {
+    var w = 2 * Math.PI / response;
+    var a = -(w * w) * (s.x - s.target) - zeta * 2 * w * s.v;
+    s.v += a * dt; s.x += s.v * dt;
+  }
+  function project(v, d) { return (v / 1000) * d / (1 - d); }
+  function rubberband(over, dim, c) { c = c || 0.55; return (over * dim * c) / (dim + c * Math.abs(over)); }
+  function corners() {
+    var w = container.clientWidth - CW - PADS, h = container.clientHeight - CH - PADS;
+    return [[PADS, PADS], [w, PADS], [PADS, h], [w, h]];
+  }
+  function nearest(x, y) {
+    var cs = corners(), best = cs[0], bd = Infinity;
+    for (var i = 0; i < cs.length; i++) {
+      var d = Math.pow(cs[i][0] - x, 2) + Math.pow(cs[i][1] - y, 2);
+      if (d < bd) { bd = d; best = cs[i]; }
+    }
+    return best;
+  }
+  function flick(speed) {
+    var from = nearest(sx.x, sy.x);
+    var others = corners().filter(function (c) { return c[0] !== from[0] || c[1] !== from[1]; });
+    var to = others[(Math.random() * others.length) | 0];
+    var d = Math.hypot(to[0] - sx.x, to[1] - sy.x) || 1;
+    sx.v = (to[0] - sx.x) / d * speed; sy.v = (to[1] - sy.x) / d * speed;
+    sx.target = to[0]; sy.target = to[1];
+  }
+  function render(t) {
+    requestAnimationFrame(render);
+    var dt = Math.min(0.032, (t - last) / 1000);
+    last = t;
+    if (!container.clientWidth) return; // hidden view: corners would be garbage
+    if (!dragging) {
+      if (REDUCED) { sx.x = sx.target; sy.x = sy.target; sx.v = 0; sy.v = 0; }
+      else { stepAxis(sx, dt, o.damping, o.response); stepAxis(sy, dt, o.damping, o.response); }
+      if (o.ambient && !REDUCED && t - lastInteraction > 6000 && t - lastAmbient > 2800) {
+        lastAmbient = t; flick(520 + Math.random() * 480);
+      }
+    }
+    chip.style.transform = 'translate3d(' + sx.x.toFixed(2) + 'px,' + sy.x.toFixed(2) + 'px,0)';
+  }
+  requestAnimationFrame(render);
+
+  chip.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    chip.setPointerCapture(e.pointerId);
+    dragging = true; dragDist = 0;
+    lastInteraction = performance.now();
+    var br = container.getBoundingClientRect();
+    grabDX = e.clientX - br.left - sx.x;  // respect where they grabbed it
+    grabDY = e.clientY - br.top - sy.x;
+    hist = [{ t: performance.now(), x: sx.x, y: sy.x }];
+    sx.v = 0; sy.v = 0;
+    chip.style.cursor = 'grabbing';
+  });
+  chip.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var br = container.getBoundingClientRect();
+    var maxX = container.clientWidth - CW - PADS, maxY = container.clientHeight - CH - PADS;
+    var x = e.clientX - br.left - grabDX, y = e.clientY - br.top - grabDY;
+    if (x < PADS) x = PADS + rubberband(x - PADS, container.clientWidth);
+    if (x > maxX) x = maxX + rubberband(x - maxX, container.clientWidth);
+    if (y < PADS) y = PADS + rubberband(y - PADS, container.clientHeight);
+    if (y > maxY) y = maxY + rubberband(y - maxY, container.clientHeight);
+    var prev = hist[hist.length - 1];
+    dragDist += Math.hypot(x - prev.x, y - prev.y);
+    sx.x = x; sy.x = y;
+    var now = performance.now();
+    hist.push({ t: now, x: x, y: y });
+    while (hist.length > 2 && now - hist[0].t > 100) hist.shift();
+  });
+  function release() {
+    if (!dragging) return;
+    dragging = false;
+    lastInteraction = performance.now();
+    chip.style.cursor = 'grab';
+    var a = hist[0], b = hist[hist.length - 1];
+    var dt = Math.max(0.008, (b.t - a.t) / 1000);
+    var vx = (b.x - a.x) / dt, vy = (b.y - a.y) / dt;
+    var to = nearest(sx.x + project(vx, o.decel), sy.x + project(vy, o.decel));
+    sx.target = to[0]; sy.target = to[1];
+    sx.v = vx; sy.v = vy;  // velocity handoff — no seam between drag and spring
+  }
+  chip.addEventListener('pointerup', release);
+  chip.addEventListener('pointercancel', release);
+  chip.addEventListener('click', function (e) {
+    if (dragDist > 6) { e.preventDefault(); e.stopPropagation(); }  // a drag is not a click
+  });
+  return {
+    set: function (patch) { Object.assign(o, patch); },
+    flick: function () { lastInteraction = performance.now(); flick(750 + Math.random() * 350); },
+    reset: function () { lastInteraction = performance.now(); sx.target = PADS; sy.target = PADS; },
+  };
+}
+
+var fsFeed = FluidSpring(document.getElementById('fs-feed'));
+var fsHero = FluidSpring(document.getElementById('fs-hero'));
+var fsPlay = FluidSpring(document.getElementById('fs-play'));
+document.getElementById('fs-flick').addEventListener('click', function () { fsPlay.flick(); });
+document.getElementById('fs-reset').addEventListener('click', function () { fsPlay.reset(); });
+makeSlider('fs-sl-damping', 0.5, 1, 0.8, function (v) { return v.toFixed(2); }, function (v) { fsPlay.set({ damping: Math.round(v * 100) / 100 }); });
+makeSlider('fs-sl-response', 0.15, 0.6, 0.4, function (v) { return v.toFixed(2) + 's'; }, function (v) { fsPlay.set({ response: Math.round(v * 100) / 100 }); });
+makeSlider('fs-sl-decel', 0.99, 0.999, 0.998, function (v) { return v.toFixed(3); }, function (v) { fsPlay.set({ decel: Math.round(v * 1000) / 1000 }); });
+
+/* ---------- fluid springs: code tabs + copy prompt ---------- */
+var FS_TABS = __CODE_TABS2__;
+var fsTabsEl = document.getElementById('fs-tabs'), fsPre = document.getElementById('fs-pre'), fsPill = document.getElementById('fs-pill');
+FS_TABS.forEach(function (t, i) {
+  var b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = t.file;
+  b.addEventListener('click', function () { selectFsTab(i); });
+  fsTabsEl.appendChild(b);
+});
+function selectFsTab(i) {
+  var btns = fsTabsEl.querySelectorAll('button');
+  btns.forEach(function (b, j) { b.classList.toggle('on', i === j); });
+  var b = btns[i];
+  fsPill.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  fsPill.style.width = b.offsetWidth + 'px';
+  fsPre.textContent = FS_TABS[i].code;
+}
+selectFsTab(0);
+
+var FS_PROMPT = __PROMPT2__;
+var fsCopyBtn = document.getElementById('fs-copy'), fsCopyTimer;
+fsCopyBtn.addEventListener('click', function () {
+  if (navigator.clipboard) navigator.clipboard.writeText(FS_PROMPT).catch(function () {});
+  fsCopyBtn.classList.add('ok');
+  clearTimeout(fsCopyTimer);
+  fsCopyTimer = setTimeout(function () { fsCopyBtn.classList.remove('ok'); }, 1600);
+});
+
+/* ---------- bottom sheet: snap points + velocity-sign commit ---------- */
+function SheetAnim(container, opts) {
+  var o = Object.assign({ damping: 0.8, response: 0.3, dim: 0.18, ambient: true }, opts);
+  container.innerHTML =
+    '<div class="sh-bg">' +
+      [0.9, 0.65, 0.8, 0.5].map(function (w) {
+        return '<div class="sh-row"><span class="av"></span><span class="lns"><span class="ln" style="width:' + w * 100 + '%"></span><span class="ln sub"></span></span></div>';
+      }).join('') +
+    '</div>' +
+    '<div class="sh-scrim"></div>' +
+    '<div class="sh-sheet"><div class="surface"><div class="grab"></div><div class="body"><span class="t"></span><span class="l" style="width:75%"></span><span class="l" style="width:66%"></span><span class="l" style="width:50%"></span></div></div></div>';
+  var bg = container.querySelector('.sh-bg');
+  var scrim = container.querySelector('.sh-scrim');
+  var sheet = container.querySelector('.sh-sheet');
+  var VELOCITY_COMMIT = 260;
+
+  function snaps() {
+    var H = container.clientHeight;
+    return { full: H * 0.14, half: H * 0.48, peek: H - 56, closed: H + 12 };
+  }
+  // rests at half, always — but a hidden view measures 0 height, so the
+  // real position is set on the first frame the demo is actually visible
+  var sy = { x: 0, v: 0, target: 0 };
+  var initialized = false;
+  var dragging = false, grabDY = 0, dragDist = 0, hist = [];
+  var lastInteraction = -1e9, last = performance.now();
+
+  function stepAxis(s, dt, zeta, response) {
+    var w = 2 * Math.PI / response;
+    var a = -(w * w) * (s.x - s.target) - zeta * 2 * w * s.v;
+    s.v += a * dt; s.x += s.v * dt;
+  }
+  function project(v, d) { d = d || 0.998; return (v / 1000) * d / (1 - d); }
+  function rubberband(over, dim, c) { c = c || 0.55; return (over * dim * c) / (dim + c * Math.abs(over)); }
+
+  function render(t) {
+    requestAnimationFrame(render);
+    var dt = Math.min(0.032, (t - last) / 1000);
+    last = t;
+    if (!container.clientHeight) return; // hidden view: no valid geometry yet
+    var s = snaps();
+    if (!initialized) {
+      initialized = true;
+      sy.x = s.half; sy.v = 0; sy.target = s.half;
+    }
+    if (!dragging) {
+      if (REDUCED) { sy.x = sy.target; sy.v = 0; }
+      else { stepAxis(sy, dt, o.damping, o.response); }
+    }
+    // scrim + push-back derive from the LIVE position — one motion, three layers
+    var p = Math.max(0, Math.min(1, (s.peek - sy.x) / (s.peek - s.full)));
+    sheet.style.transform = 'translate3d(0,' + sy.x.toFixed(2) + 'px,0)';
+    scrim.style.opacity = String(o.dim * p);
+    bg.style.transform = 'scale(' + (1 - 0.05 * p).toFixed(4) + ')';
+  }
+  requestAnimationFrame(render);
+
+  sheet.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    sheet.setPointerCapture(e.pointerId);
+    dragging = true; dragDist = 0;
+    lastInteraction = performance.now();
+    grabDY = e.clientY - sy.x;
+    hist = [{ t: performance.now(), y: sy.x }];
+    sy.v = 0;
+    sheet.style.cursor = 'grabbing';
+  });
+  sheet.addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    var s = snaps();
+    var y = e.clientY - grabDY;
+    if (y < s.full) y = s.full + rubberband(y - s.full, container.clientHeight);
+    var prev = hist[hist.length - 1];
+    dragDist += Math.abs(y - prev.y);
+    sy.x = y;
+    var now = performance.now();
+    hist.push({ t: now, y: y });
+    while (hist.length > 2 && now - hist[0].t > 100) hist.shift();
+  });
+  function release() {
+    if (!dragging) return;
+    dragging = false;
+    lastInteraction = performance.now();
+    sheet.style.cursor = 'grab';
+    var s = snaps();
+    var a = hist[0], b = hist[hist.length - 1];
+    var dt = Math.max(0.008, (b.t - a.t) / 1000);
+    var v = (b.y - a.y) / dt;
+    var order = [s.full, s.half, s.peek];
+    var target;
+    if (Math.abs(v) > VELOCITY_COMMIT) {
+      // the SIGN of the velocity decides, not the position
+      if (v > 0) {
+        var below = order.filter(function (sn) { return sn > sy.x + 1; });
+        target = below.length ? below[0] : s.closed; // flick past peek = dismiss
+      } else {
+        var above = order.filter(function (sn) { return sn < sy.x - 1; });
+        target = above.length ? above[above.length - 1] : s.full;
+      }
+    } else {
+      var proj = sy.x + project(v);
+      target = order.reduce(function (best, sn) { return Math.abs(sn - proj) < Math.abs(best - proj) ? sn : best; }, order[0]);
+    }
+    sy.target = target;
+    sy.v = v; // velocity handoff
+  }
+  sheet.addEventListener('pointerup', release);
+  sheet.addEventListener('pointercancel', release);
+  sheet.addEventListener('click', function (e) {
+    if (dragDist > 6) { e.preventDefault(); e.stopPropagation(); }
+  });
+  // tapping a background row summons the sheet back (and never navigates)
+  bg.addEventListener('click', function (e) {
+    var row = e.target.closest ? e.target.closest('.sh-row') : null;
+    if (!row) return;
+    e.preventDefault();
+    e.stopPropagation();
+    lastInteraction = performance.now();
+    sy.target = snaps().half;
+  });
+  return {
+    set: function (patch) { Object.assign(o, patch); },
+    open: function () { lastInteraction = performance.now(); sy.target = snaps().half; },
+    dismiss: function () { lastInteraction = performance.now(); sy.target = snaps().closed; },
+  };
+}
+
+var shFeed = SheetAnim(document.getElementById('sh-feed'));
+var shHero = SheetAnim(document.getElementById('sh-hero'));
+var shPlay = SheetAnim(document.getElementById('sh-play'));
+document.getElementById('sh-open').addEventListener('click', function () { shPlay.open(); });
+document.getElementById('sh-dismiss').addEventListener('click', function () { shPlay.dismiss(); });
+makeSlider('sh-sl-damping', 0.5, 1, 0.8, function (v) { return v.toFixed(2); }, function (v) { shPlay.set({ damping: Math.round(v * 100) / 100 }); });
+makeSlider('sh-sl-response', 0.15, 0.6, 0.3, function (v) { return v.toFixed(2) + 's'; }, function (v) { shPlay.set({ response: Math.round(v * 100) / 100 }); });
+makeSlider('sh-sl-dim', 0, 0.4, 0.18, function (v) { return v.toFixed(2); }, function (v) { shPlay.set({ dim: Math.round(v * 100) / 100 }); });
+
+/* ---------- sheet: code tabs + copy prompt ---------- */
+var SH_TABS = __CODE_TABS3__;
+var shTabsEl = document.getElementById('sh-tabs'), shPre = document.getElementById('sh-pre'), shPill = document.getElementById('sh-pill');
+SH_TABS.forEach(function (t, i) {
+  var b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = t.file;
+  b.addEventListener('click', function () { selectShTab(i); });
+  shTabsEl.appendChild(b);
+});
+function selectShTab(i) {
+  var btns = shTabsEl.querySelectorAll('button');
+  btns.forEach(function (b, j) { b.classList.toggle('on', i === j); });
+  var b = btns[i];
+  shPill.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  shPill.style.width = b.offsetWidth + 'px';
+  shPre.textContent = SH_TABS[i].code;
+}
+selectShTab(0);
+
+var SH_PROMPT = __PROMPT3__;
+var shCopyBtn = document.getElementById('sh-copy'), shCopyTimer;
+shCopyBtn.addEventListener('click', function () {
+  if (navigator.clipboard) navigator.clipboard.writeText(SH_PROMPT).catch(function () {});
+  shCopyBtn.classList.add('ok');
+  clearTimeout(shCopyTimer);
+  shCopyTimer = setTimeout(function () { shCopyBtn.classList.remove('ok'); }, 1600);
+});
+
+/* ---------- frosted materials: the glass pill ---------- */
+function MaterialsAnim(container, opts) {
+  var o = Object.assign({ blue: 0.75, edge: 0.9, gloss: 0.8, ambient: true }, opts);
+  var box = document.createElement('div');
+  box.className = 'gl-box';
+  box.innerHTML =
+    '<div class="gl-card" aria-hidden="true"><div class="gl-topband"></div></div>' +
+    '<button type="button" class="gl-btn" aria-label="Scroll to top">' +
+      '<span class="gl-spec" aria-hidden="true"></span>' +
+      '<span class="gl-rim" aria-hidden="true"></span>' +
+      '<svg class="gl-arrow" width="38" height="38" viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 27V8"/><path d="M8.5 16 17 7.5 25.5 16"/></svg>' +
+    '</button>';
+  container.appendChild(box);
+  var btn = box.querySelector('.gl-btn');
+  var spec = box.querySelector('.gl-spec');
+  // three springs: x/y bring a dragged pill home; ss is the press give
+  var sx = { x: 0, v: 0, target: 0 }, sy = { x: 0, v: 0, target: 0 }, ss = { x: 1, v: 0, target: 1 };
+  var dragging = false, grabDX = 0, grabDY = 0, dragDist = 0, hist = [];
+  var lastInteraction = -1e9, lastAmbient = 0, last = performance.now();
+
+  function stepAxis(s, dt, zeta, response) {
+    var w = 2 * Math.PI / response;
+    var a = -(w * w) * (s.x - s.target) - zeta * 2 * w * s.v;
+    s.v += a * dt; s.x += s.v * dt;
+  }
+  function applyVars() {
+    box.style.setProperty('--gl-blue', o.blue);
+    box.style.setProperty('--gl-edge', o.edge);
+    box.style.setProperty('--gl-gloss', o.gloss);
+  }
+  applyVars();
+
+  function render(t) {
+    requestAnimationFrame(render);
+    var dt = Math.min(0.032, (t - last) / 1000);
+    last = t;
+    if (!REDUCED) {
+      if (!dragging) { stepAxis(sx, dt, 0.75, 0.45); stepAxis(sy, dt, 0.75, 0.45); }
+      stepAxis(ss, dt, 0.6, 0.22);
+      if (o.ambient && t - lastInteraction > 6000 && t - lastAmbient > 3600) {
+        lastAmbient = t; ss.x = 0.95; ss.v = 0.5; // idle press pulse
+      }
+    } else {
+      sx.x = sx.target; sy.x = sy.target; ss.x = ss.target;
+      sx.v = 0; sy.v = 0; ss.v = 0;
+    }
+    btn.style.transform = 'translate3d(' + sx.x.toFixed(2) + 'px,' + sy.x.toFixed(2) + 'px,0) scale(' + ss.x.toFixed(4) + ')';
+  }
+  requestAnimationFrame(render);
+
+  btn.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    btn.setPointerCapture(e.pointerId);
+    dragging = true; dragDist = 0;
+    lastInteraction = performance.now();
+    grabDX = e.clientX - sx.x; // respect where they grabbed
+    grabDY = e.clientY - sy.x;
+    hist = [{ t: performance.now(), x: sx.x, y: sy.x }];
+    sx.v = 0; sy.v = 0;
+    ss.target = 0.94; // the glass gives under the finger
+    btn.style.cursor = 'grabbing';
+  });
+  box.addEventListener('pointermove', function (e) {
+    var br = btn.getBoundingClientRect();
+    spec.style.left = (e.clientX - br.left) + 'px';
+    spec.style.top = (e.clientY - br.top) + 'px';
+    if (!dragging) return;
+    var x = e.clientX - grabDX, y = e.clientY - grabDY;
+    var prev = hist[hist.length - 1];
+    dragDist += Math.hypot(x - prev.x, y - prev.y);
+    sx.x = x; sy.x = y;
+    var now = performance.now();
+    hist.push({ t: now, x: x, y: y });
+    while (hist.length > 2 && now - hist[0].t > 100) hist.shift();
+  });
+  function glUp() {
+    if (!dragging) return;
+    dragging = false;
+    lastInteraction = performance.now();
+    ss.target = 1;
+    btn.style.cursor = 'grab';
+    var a = hist[0], b = hist[hist.length - 1];
+    var dt = Math.max(0.008, (b.t - a.t) / 1000);
+    sx.target = 0; sy.target = 0;
+    sx.v = (b.x - a.x) / dt; // velocity handoff — a throw overshoots home
+    sy.v = (b.y - a.y) / dt;
+  }
+  btn.addEventListener('pointerup', glUp);
+  btn.addEventListener('pointercancel', glUp);
+  btn.addEventListener('click', function (e) {
+    if (dragDist > 6) { e.preventDefault(); e.stopPropagation(); } // a drag is not a click
+  });
+  return {
+    set: function (patch) { Object.assign(o, patch); applyVars(); },
+    pulse: function () { lastInteraction = performance.now(); ss.x = 0.92; ss.v = 0.8; },
+    reset: function () { lastInteraction = performance.now(); sx.target = 0; sy.target = 0; },
+  };
+}
+
+var mtFeed = MaterialsAnim(document.getElementById('mt-feed'));
+var mtHero = MaterialsAnim(document.getElementById('mt-hero'));
+var mtPlay = MaterialsAnim(document.getElementById('mt-play'));
+document.getElementById('mt-open').addEventListener('click', function () { mtPlay.pulse(); });
+document.getElementById('mt-close').addEventListener('click', function () { mtPlay.reset(); });
+makeSlider('mt-sl-blue', 0, 1, 0.75, function (v) { return v.toFixed(2); }, function (v) { mtPlay.set({ blue: Math.round(v * 100) / 100 }); });
+makeSlider('mt-sl-edge', 0, 1, 0.9, function (v) { return v.toFixed(2); }, function (v) { mtPlay.set({ edge: Math.round(v * 100) / 100 }); });
+makeSlider('mt-sl-gloss', 0, 1, 0.8, function (v) { return v.toFixed(2); }, function (v) { mtPlay.set({ gloss: Math.round(v * 100) / 100 }); });
+
+/* ---------- materials: code tabs + copy prompt ---------- */
+var MT_TABS = __CODE_TABS4__;
+var mtTabsEl = document.getElementById('mt-tabs'), mtPre = document.getElementById('mt-pre'), mtPill = document.getElementById('mt-pill');
+MT_TABS.forEach(function (t, i) {
+  var b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = t.file;
+  b.addEventListener('click', function () { selectMtTab(i); });
+  mtTabsEl.appendChild(b);
+});
+function selectMtTab(i) {
+  var btns = mtTabsEl.querySelectorAll('button');
+  btns.forEach(function (b, j) { b.classList.toggle('on', i === j); });
+  var b = btns[i];
+  mtPill.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  mtPill.style.width = b.offsetWidth + 'px';
+  mtPre.textContent = MT_TABS[i].code;
+}
+selectMtTab(0);
+
+var MT_PROMPT = __PROMPT4__;
+var mtCopyBtn = document.getElementById('mt-copy'), mtCopyTimer;
+mtCopyBtn.addEventListener('click', function () {
+  if (navigator.clipboard) navigator.clipboard.writeText(MT_PROMPT).catch(function () {});
+  mtCopyBtn.classList.add('ok');
+  clearTimeout(mtCopyTimer);
+  mtCopyTimer = setTimeout(function () { mtCopyBtn.classList.remove('ok'); }, 1600);
+});
+
+/* ---------- micro buttons: hover-driven, matching Amicro 1:1 ---------- */
+function MicroButtonsAnim(container, opts) {
+  var o = Object.assign({ speed: 1, pop: 0.12, ambient: true }, opts);
+  var box = document.createElement('div');
+  box.className = 'bt-box';
+  var S = function (attrs, inner) { return '<svg ' + attrs + '>' + inner + '</svg>'; };
+  var st = 'width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"';
+  var ic = {
+    user: S(st, '<circle cx="8" cy="5" r="2.6"/><path d="M2.8 13.6a5.2 5.2 0 0110.4 0"/>'),
+    userCheck: S(st, '<circle cx="6" cy="5" r="2.4"/><path d="M1.6 13.6a4.6 4.6 0 019 0"/><path d="M10.3 8.7l1.8 1.8L15 7.2"/>'),
+    branch: S(st, '<circle cx="4.5" cy="3.5" r="1.7"/><circle cx="4.5" cy="12.5" r="1.7"/><circle cx="11.5" cy="4.5" r="1.7"/><path d="M4.5 5.2v5.6M11.5 6.2c0 3.3-7 2.2-7 4.8"/>'),
+    star: '<svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round"><path d="M8 1.8l1.9 3.9 4.3.6-3.1 3 .7 4.2L8 11.5l-3.8 2 .7-4.2-3.1-3 4.3-.6z"/></svg>',
+    mini1: '<svg class="bt-mini m1" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6-6.2-4.5-6.2 4.5 2.4-7.6L2 9.6h7.6z"/></svg>',
+    mini2: '<svg class="bt-mini m2" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6H22l-6.2 4.5 2.4 7.6-6.2-4.5-6.2 4.5 2.4-7.6L2 9.6h7.6z"/></svg>',
+    cloud: S(st, '<path d="M4.5 12.5a3.5 3.5 0 01-.6-6.95 4.5 4.5 0 018.8 1.1 3 3 0 01-.7 5.85z"/>'),
+    cloudUp: S(st, '<path d="M4.5 11.5a3.5 3.5 0 01-.6-6.95 4.5 4.5 0 018.8 1.1 3 3 0 01-.7 5.85"/><path d="M8 14v-4.5M6 11l2-2 2 2"/>'),
+    copy: S(st, '<rect x="5.5" y="5.5" width="8" height="8" rx="1.5"/><path d="M3 10.5A1.5 1.5 0 011.8 9V3.3A1.5 1.5 0 013.3 1.8H9a1.5 1.5 0 011.4 1.2"/>'),
+    check: '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.5 3.5L13 4.5"/></svg>',
+    heart: S(st, '<path d="M8 13.6S2 9.9 2 5.9a3.1 3.1 0 016-1.2 3.1 3.1 0 016 1.2c0 4-6 7.7-6 7.7z"/>'),
+    gear: S(st, '<circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4"/>'),
+    trash: S(st, '<path d="M2.5 4h11M6.5 4V2.8a.8.8 0 01.8-.8h1.4a.8.8 0 01.8.8V4M4 4l.7 9a1.3 1.3 0 001.3 1.2h4a1.3 1.3 0 001.3-1.2L12 4"/>'),
+    bell: S(st, '<path d="M8 2a4 4 0 00-4 4c0 3.2-1.2 4.2-1.2 4.2h10.4S12 9.2 12 6a4 4 0 00-4-4zM6.7 13.5a1.4 1.4 0 002.6 0"/>'),
+    bellRing: S(st, '<path d="M8 2a4 4 0 00-4 4c0 3.2-1.2 4.2-1.2 4.2h10.4S12 9.2 12 6a4 4 0 00-4-4zM6.7 13.5a1.4 1.4 0 002.6 0"/><path d="M13.6 2.2c.7.8 1.1 1.7 1.2 2.8M2.4 2.2c-.7.8-1.1 1.7-1.2 2.8"/>'),
+    moon: S(st, '<path d="M13.5 9.5A5.5 5.5 0 116.5 2.5a4.3 4.3 0 007 7z"/>'),
+    sun: S(st, '<circle cx="8" cy="8" r="3"/><path d="M8 1v1.6M8 13.4V15M1 8h1.6M13.4 8H15M3 3l1.1 1.1M11.9 11.9L13 13M13 3l-1.1 1.1M4.1 11.9L3 13"/>'),
+  };
+  function slot(i1, i2, extra) {
+    return '<span class="bt-ic"><span class="i1">' + i1 + '</span><span class="i2"' + (extra && extra.color ? ' style="color:' + extra.color + '"' : '') + '>' + (i2 || '') + (extra && extra.append ? extra.append : '') + '</span></span>';
+  }
+  box.innerHTML = '<div class="bt-grid">' +
+    '<button type="button" class="bt bt-morph" data-k="account">' + slot(ic.user, ic.userCheck, { color: '#10b981' }) + '<span class="bt-label">Account</span></button>' +
+    '<button type="button" class="bt bt-sparkle" data-k="sparkle">' + slot(ic.branch, ic.star, { append: ic.mini1 + ic.mini2 }) + '<span class="bt-label">Star on GitHub</span></button>' +
+    '<button type="button" class="bt bt-morph" data-k="deploy">' + slot(ic.cloud, ic.cloudUp, { color: '#60a5fa' }) + '<span class="bt-label">Deploy App</span></button>' +
+    '<button type="button" class="bt bt-morph" data-k="copy">' + slot(ic.copy, ic.check, { color: '#10b981' }) + '<span class="bt-lswap"><span class="bt-label l1">Copy Hash</span><span class="bt-label l2">Copied</span></span></button>' +
+    '<button type="button" class="bt bt-pulse" data-k="pulse">' + slot(ic.heart, '') + '<span class="bt-label">Sponsor</span></button>' +
+    '<button type="button" class="bt bt-rotate" data-k="rotate">' + slot(ic.gear, '') + '<span class="bt-label">Settings</span></button>' +
+    '<button type="button" class="bt bt-shake" data-k="shake">' + slot(ic.trash, '') + '<span class="bt-label">Delete</span></button>' +
+    '<button type="button" class="bt bt-ring" data-k="ring">' + slot(ic.bell, ic.bellRing, { append: '<span class="bt-dot"></span>' }) + '<span class="bt-label">Subscribe</span></button>' +
+    '<button type="button" class="bt bt-morph" data-k="theme">' + slot(ic.moon, ic.sun, { color: '#eab308' }) + '<span class="bt-label">Theme</span></button>' +
+  '</div>';
+  container.appendChild(box);
+
+  var lastInteraction = -1e9;
+  var timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms / o.speed)); }
+  function applyVars() {
+    box.style.setProperty('--bt-speed', o.speed);
+    box.style.setProperty('--bt-pop', o.pop);
+  }
+  applyVars();
+  var btns = Array.prototype.slice.call(box.querySelectorAll('[data-k]'));
+  function enter(el) { lastInteraction = performance.now(); el.classList.add('hot'); }
+  function leave(el) {
+    lastInteraction = performance.now();
+    // Copy's "Copied" state lingers half a second after the pointer leaves
+    if (el.getAttribute('data-k') === 'copy') later(function () { el.classList.remove('hot'); }, 500);
+    else el.classList.remove('hot');
+  }
+  btns.forEach(function (el) {
+    el.addEventListener('mouseenter', function () { if (matchMedia('(hover: hover)').matches) enter(el); });
+    el.addEventListener('mouseleave', function () { if (matchMedia('(hover: hover)').matches) leave(el); });
+    el.addEventListener('focus', function () { enter(el); });
+    el.addEventListener('blur', function () { leave(el); });
+    el.addEventListener('touchstart', function () { enter(el); later(function () { leave(el); }, 700); }, { passive: true });
+    el.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); });
+  });
+
+  // idle: ghost-hover one button at a time so the card reads alive
+  var ai = 0;
+  setInterval(function () {
+    if (!o.ambient || REDUCED) return;
+    if (performance.now() - lastInteraction < 6000) return;
+    var el = btns[ai % btns.length];
+    ai += 1;
+    el.classList.add('hot');
+    later(function () { el.classList.remove('hot'); }, 1400);
+  }, 2600);
+
+  return {
+    set: function (patch) { Object.assign(o, patch); applyVars(); },
+    playAll: function () {
+      lastInteraction = performance.now();
+      btns.forEach(function (el) { el.classList.add('hot'); });
+      later(function () { btns.forEach(function (el) { el.classList.remove('hot'); }); }, 1400);
+    },
+    reset: function () {
+      lastInteraction = performance.now();
+      timers.forEach(clearTimeout); timers = [];
+      btns.forEach(function (el) { el.classList.remove('hot'); });
+    },
+  };
+}
+
+var btFeed = MicroButtonsAnim(document.getElementById('bt-feed'));
+var btHero = MicroButtonsAnim(document.getElementById('bt-hero'));
+var btPlay = MicroButtonsAnim(document.getElementById('bt-play'));
+document.getElementById('bt-playall').addEventListener('click', function () { btPlay.playAll(); });
+document.getElementById('bt-reset').addEventListener('click', function () { btPlay.reset(); });
+makeSlider('bt-sl-speed', 0.4, 2, 1, function (v) { return v.toFixed(1) + '×'; }, function (v) { btPlay.set({ speed: Math.round(v * 10) / 10 }); });
+makeSlider('bt-sl-pop', 0, 0.3, 0.12, function (v) { return v.toFixed(2); }, function (v) { btPlay.set({ pop: Math.round(v * 100) / 100 }); });
+
+/* ---------- micro buttons: code tabs + copy prompt ---------- */
+var BT_TABS = __CODE_TABS5__;
+var btTabsEl = document.getElementById('bt-tabs'), btPre = document.getElementById('bt-pre'), btPill = document.getElementById('bt-pill');
+BT_TABS.forEach(function (t, i) {
+  var b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'tab'); b.textContent = t.file;
+  b.addEventListener('click', function () { selectBtTab(i); });
+  btTabsEl.appendChild(b);
+});
+function selectBtTab(i) {
+  var btns = btTabsEl.querySelectorAll('button');
+  btns.forEach(function (b, j) { b.classList.toggle('on', i === j); });
+  var b = btns[i];
+  btPill.style.transform = 'translateX(' + b.offsetLeft + 'px)';
+  btPill.style.width = b.offsetWidth + 'px';
+  btPre.textContent = BT_TABS[i].code;
+}
+selectBtTab(0);
+
+var BT_PROMPT = __PROMPT5__;
+var btCopyBtn = document.getElementById('bt-copy'), btCopyTimer;
+btCopyBtn.addEventListener('click', function () {
+  if (navigator.clipboard) navigator.clipboard.writeText(BT_PROMPT).catch(function () {});
+  btCopyBtn.classList.add('ok');
+  clearTimeout(btCopyTimer);
+  btCopyTimer = setTimeout(function () { btCopyBtn.classList.remove('ok'); }, 1600);
+});
+
+/* ---------- hash router: #/ = feed, #/meeting-overlay, #/fluid-springs ---------- */
+var views = {
+  feed: document.getElementById('view-feed'),
+  overlay: document.getElementById('view-detail'),
+  springs: document.getElementById('view-springs'),
+  sheet: document.getElementById('view-sheet'),
+  materials: document.getElementById('view-materials'),
+  buttons: document.getElementById('view-buttons'),
+};
+function route() {
+  var which = location.hash === '#/meeting-overlay' ? 'overlay'
+    : location.hash === '#/fluid-springs' ? 'springs'
+    : location.hash === '#/bottom-sheet' ? 'sheet'
+    : location.hash === '#/materials' ? 'materials'
+    : location.hash === '#/micro-buttons' ? 'buttons' : 'feed';
+  for (var k in views) views[k].classList.toggle('hidden', k !== which);
+  scrollTo(0, 0);
+  if (which === 'overlay') { heroAnim.replay(); playAnim.replay(); }
+  else if (which === 'feed') { feedAnim.replay(); }
+  else if (which === 'springs') { selectFsTab(0); }
+  else if (which === 'sheet') { selectShTab(0); }
+  else if (which === 'materials') { selectMtTab(0); }
+  else if (which === 'buttons') { selectBtTab(0); }
+}
+addEventListener('hashchange', route);
+route();
+</script>

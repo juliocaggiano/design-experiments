@@ -1,0 +1,266 @@
+[
+  {
+    "url": "https://www.arlan.me/vault/typer",
+    "method": "GET",
+    "status": 200,
+    "type": "document",
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0_-6rpp3fty1h.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3rdqn8rx95pw7.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/05-c3ty_6dwfk.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueMontreal_Regular-s.p.27e8_0-jh6uhl.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/turbopack-1qm3b4r6b6tgs.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/342af42ui4xfu.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1l-wq2m1gsto6.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/412xmsx1r01xv.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0531ltoir7vc1.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/310vm2bl3xxpt.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1c9m13fcc_a52.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3auk871gdz9vl.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/00p-im9tf1iuq.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0wj_p476zol7t.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3zhl2a-z6fktf.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3s9gec3eg78oc.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0lihmb2wbmp9v.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0mk1g55o6kl1e.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1p8ew0ald5z7v.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueMontreal_Semibold-s.p.21-mvfyq346aq.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3z5_lkbx_neea.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueMontrealMono_Book-s.2pi6_nqd6yfj5.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_vercel/insights/script.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault?_rsc=aFUtcw6Eb4C-8jcW",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 708
+  },
+  {
+    "url": "https://www.arlan.me/vault?_rsc=yNWksg6FAImpNq81",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault?_rsc=Hd06vg3uD1_URkC2",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault?_rsc=s5kmzhb_p7bJM4H6",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/vault?_rsc=JyjhHxlnfSf-4gAS",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/22fnsbrhsnawr.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0sor-44h_88du.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3g7hjf7u7pd94.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/2rln0773edsh5.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  }
+]

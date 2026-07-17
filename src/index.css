@@ -1,0 +1,537 @@
+@import "tailwindcss";
+
+/* ── Fonts (captured from the live page; licensed faces — local study only) ── */
+@font-face {
+  font-family: "neueMontreal";
+  src: url("/fonts/NeueMontreal-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "neueMontreal";
+  src: url("/fonts/NeueMontreal-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "neueMono";
+  src: url("/fonts/NeueMontrealMono-Book.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "writer";
+  src: url("/fonts/Writer-RegularText.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "pangram";
+  src: url("/fonts/PangramSansRounded-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+/* pixel font for the overlay speech bubble (SIL OFL) */
+@font-face {
+  font-family: "Press Start 2P";
+  src: url("/vault/overlay/PressStart2P.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ── Design tokens measured from the live page (tokens.json cssVars) ── */
+:root {
+  --bg-page: #fcfcfc;
+  --bg-surface: #ffffff;
+  --bg-hover: #f7f7f7;
+  --text-primary: #1b1b1b;
+  --text-body: #2f2f2f;
+  --text-secondary: #6b6b6b;
+  --text-muted: #9b9b9b;
+  --text-tertiary: #b5b5b5;
+  --border-line: #f0f0f0;
+  --border-subtle: #0000000d;
+  --border-ring: #0000001a;
+  --selection-bg: #d9d6d0;
+  --scrollbar-thumb: #d4d2cc;
+  --scrollbar-thumb-hover: #b8b5ad;
+  --copy-ok: #1aa251;
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-amo: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+html {
+  background: var(--bg-page);
+}
+
+body {
+  font-family: "neueMontreal", ui-sans-serif, system-ui, sans-serif;
+  color: var(--text-body);
+  background: var(--bg-page);
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--text-primary);
+}
+
+/* page entrance, matching the original .page-fade-in */
+.page-fade-in {
+  animation: page-fade-in 0.5s var(--ease-out) both;
+}
+@keyframes page-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+.vault-filter-results {
+  animation: vault-filter-results-in 0.24s var(--ease-out) both;
+}
+
+@keyframes vault-filter-results-in {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* bottom teaser fade — dashed "More soon" cards dissolve into the page bg */
+.vault-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, var(--bg-page) 92%);
+  pointer-events: none;
+}
+
+/* Better Colors feed preview: cycle hue while preserving every swatch's
+   perceptual lightness and chroma relationship. */
+@property --palette-hue-shift {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.better-colors-cycle {
+  animation: better-colors-hue-cycle 12s linear infinite;
+}
+
+@keyframes better-colors-hue-cycle {
+  from { --palette-hue-shift: 0; }
+  to { --palette-hue-shift: 360; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .better-colors-cycle,
+  .vault-filter-results { animation: none; }
+}
+
+/* Paged knockout bracket: every piece shares the same reflow timing. */
+.kb-stage {
+  transition: height 0.5s var(--ease-expo);
+}
+
+.kb-move,
+.kb-line {
+  transition:
+    left 0.5s var(--ease-expo),
+    top 0.5s var(--ease-expo),
+    width 0.5s var(--ease-expo),
+    height 0.5s var(--ease-expo),
+    opacity 0.35s var(--ease-out),
+    transform 0.5s var(--ease-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kb-stage,
+  .kb-move,
+  .kb-line {
+    transition: none;
+  }
+}
+
+/* graph-paper grid behind the pixel-select card (values measured from the
+   live page: 8px fine grid + 32px major grid + 16px checker, faint blue) */
+.pixel-select {
+  background-color: #fdfeff;
+  background-image:
+    linear-gradient(to right, rgba(59, 111, 214, 0.016) 1px, transparent 1px),
+    linear-gradient(rgba(59, 111, 214, 0.016) 1px, transparent 1px),
+    linear-gradient(to right, rgba(59, 111, 214, 0.024) 1px, transparent 1px),
+    linear-gradient(rgba(59, 111, 214, 0.024) 1px, transparent 1px),
+    conic-gradient(
+      from 90deg,
+      rgba(74, 140, 255, 0.016) 0deg 25%,
+      transparent 0deg 50%,
+      rgba(74, 140, 255, 0.016) 0deg 75%,
+      transparent 0deg
+    );
+  background-size: 8px 8px, 8px 8px, 32px 32px, 32px 32px, 16px 16px;
+}
+
+/* ── Typer card: character reveal with pill highlight states ──
+   Each revealed char carries a state class; adjacent same-state chars merge
+   into one continuous pill by rounding only the run's outer corners. */
+.typer {
+  font-weight: 600;
+  font-size: clamp(22px, 4.9vw, 34px);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--typer-fg, #1b1b1b);
+  white-space: pre;
+}
+.typer .ch {
+  display: inline-block;
+  padding: 0.06em 0;
+  visibility: hidden;
+}
+.typer .ch.on { visibility: visible; }
+.typer .ch.accent {
+  background: var(--typer-accent, #12a150);
+  color: var(--typer-accent-ink, #fcfcfc);
+}
+.typer .ch.ink {
+  background: var(--typer-fg, #1b1b1b);
+  color: var(--typer-bg, #fcfcfc);
+}
+.typer .ch.run-start { border-radius: 0.22em 0 0 0.22em; padding-left: 0.08em; }
+.typer .ch.run-end { border-radius: 0 0.22em 0.22em 0; padding-right: 0.08em; }
+.typer .ch.run-start.run-end { border-radius: 0.22em; }
+.typer .caret {
+  display: inline-block;
+  width: 0.5em;
+  height: 1em;
+  margin-left: 0.05em;
+  background: var(--typer-fg, #1b1b1b);
+  vertical-align: -0.12em;
+  animation: typer-caret 1s steps(2) infinite;
+}
+@keyframes typer-caret { 50% { opacity: 0; } }
+
+/* ── Color-depth buttons: depth from stacked layers, not one drop shadow ── */
+.depth-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 999px;
+  font: 500 15px/1 "neueMontreal", ui-sans-serif, system-ui, sans-serif;
+  letter-spacing: 0.01em;
+  color: #fff;
+  cursor: pointer;
+  isolation: isolate;
+}
+.depth-btn .depth-label {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.25);
+}
+.depth-orange {
+  background: linear-gradient(180deg, #f6a13c 0%, #ee7c17 55%, #e06a0a 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -2px 4px rgba(150, 60, 0, 0.45),
+    0 2px 5px rgba(224, 106, 10, 0.45),
+    0 6px 14px rgba(224, 106, 10, 0.28);
+}
+.depth-purple {
+  background: linear-gradient(180deg, #a02fd6 0%, #7d13b8 60%, #6a0aa6 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -3px 6px rgba(40, 0, 70, 0.5),
+    0 0 0 1px rgba(106, 10, 166, 0.6),
+    0 3px 8px rgba(125, 19, 184, 0.4);
+}
+
+/* ── Frosted materials demo — the glass pill ──
+   Minimal light scene: a gray surface with a hairline divider and the white
+   corner of a card, and one glossy sky-blue capsule centered on it. The
+   material is layered — a soft blue gradient fill, a bright rim ring where
+   the glass edge catches light, and a sheen that follows the pointer.
+   Blue/edge/gloss come in as CSS vars so the playground retunes it live. */
+.gl-box {
+  --gl-blue: 0.75;
+  --gl-edge: 0.9;
+  --gl-gloss: 0.8;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  touch-action: none;
+  background: #e2e3e6; /* the strip outside the card corner */
+}
+/* the card whose corner is visible bottom-right, like the reference crop */
+.gl-card {
+  position: absolute;
+  inset: -24px 44px 40px -24px;
+  border-radius: 0 0 72px 0;
+  border: 4px solid #fff;
+  background: #eceded;
+}
+/* hairline divider near the top; above it reads a touch cooler */
+.gl-topband {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 21%;
+  background: #eff0f1;
+  border-bottom: 3px solid #fff;
+}
+.gl-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 100px;
+  margin: -50px 0 0 -80px;
+  border: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(70% 120% at 16% 90%, rgba(255, 255, 255, 0.42), transparent 52%),
+    radial-gradient(70% 120% at 86% 10%, rgba(255, 255, 255, 0.36), transparent 52%),
+    radial-gradient(125% 165% at 50% 42%, #6cbdf0 0%, #54ade2 48%, #7fc6f1 82%, #a9dcf7 100%);
+  box-shadow:
+    0 0 0 1px rgba(110, 175, 220, 0.4),
+    0 12px 28px rgba(120, 170, 210, 0.25);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  will-change: transform;
+  overflow: hidden;
+}
+/* desaturating veil — the Blue slider fades the fill toward powder */
+.gl-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: #eaf4fb;
+  opacity: calc((1 - var(--gl-blue)) * 0.6);
+  pointer-events: none;
+}
+/* the rim: a bright ring where the glass edge catches light —
+   white arcs at the top-left and bottom-right curves */
+.gl-rim {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 3.5px;
+  background: conic-gradient(
+    from 210deg,
+    rgba(255, 255, 255, 1) 0deg,
+    rgba(160, 210, 245, 0.22) 85deg,
+    rgba(255, 255, 255, 0.98) 175deg,
+    rgba(160, 210, 245, 0.2) 265deg,
+    rgba(255, 255, 255, 1) 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: var(--gl-edge);
+  pointer-events: none;
+  z-index: 3;
+}
+/* the sheen that lives under the pointer */
+.gl-spec {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  margin: -60px 0 0 -60px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 255, 255, 0.5), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+.gl-btn:hover .gl-spec { opacity: var(--gl-gloss); }
+.gl-arrow {
+  position: relative;
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(0 1px 2px rgba(70, 140, 190, 0.3));
+}
+@media (prefers-reduced-transparency: reduce) {
+  .gl-btn { background: #5cb1e6; }
+  .gl-btn::after { display: none; }
+}
+@media (prefers-contrast: more) {
+  .gl-btn { box-shadow: 0 0 0 2px currentColor, 0 12px 28px rgba(120, 170, 210, 0.25); }
+}
+
+/* ── Micro buttons demo — one pill per interaction family ──
+   Behavior matched 1:1 to Amicro's catalogue (hover-driven; icon swaps on a
+   stiff spring ≈ stiffness 600 / damping 25), surfaces in the vault's light
+   language. A `.hot` class stands in for hover so touch, the idle loop, and
+   Play-all can drive the same states. --bt-speed divides every duration;
+   --bt-pop adds to the pulse peak. */
+.bt-box {
+  --bt-speed: 1;
+  --bt-pop: 0.12;
+  /* overshoot curve approximating the spring(600, 25) feel */
+  --bt-spring: cubic-bezier(0.3, 1.25, 0.5, 1);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bt-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(96px, 148px));
+  gap: 12px 14px;
+  justify-content: center;
+  width: 100%;
+  padding: 0 16px;
+}
+.bt {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--border-line);
+  border-radius: 40px;
+  background: #fff;
+  font: 500 13px/1 inherit;
+  font-family: inherit;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  cursor: pointer;
+  overflow: visible;
+  transition:
+    border-color calc(0.15s / var(--bt-speed)) var(--ease-out),
+    background-color calc(0.15s / var(--bt-speed)) var(--ease-out),
+    transform calc(0.15s / var(--bt-speed)) var(--ease-out);
+  will-change: transform;
+}
+.bt.hot { border-color: var(--border-ring); background: #fafafa; transform: scale(1.02); }
+.bt:active { transform: scale(0.96); }
+.bt .bt-label { white-space: nowrap; }
+
+/* fixed 16px icon slot; two icons stacked, swapped by .hot */
+.bt-ic { position: relative; width: 16px; height: 16px; flex-shrink: 0; margin-right: 10px; }
+.bt-ic .i1, .bt-ic .i2 {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity calc(0.3s / var(--bt-speed)) var(--bt-spring),
+    transform calc(0.3s / var(--bt-speed)) var(--bt-spring),
+    color calc(0.3s / var(--bt-speed)) var(--ease-out);
+}
+.bt svg { display: block; }
+
+/* morph: icons crossfade with a 0.5 → 1 scale */
+.bt-morph .i2 { opacity: 0; transform: scale(0.5); }
+.bt-morph.hot .i1 { opacity: 0; transform: scale(0.5); }
+.bt-morph.hot .i2 { opacity: 1; transform: scale(1); }
+
+/* copy: same morph, plus the label swaps to "Copied" while hot */
+.bt-lswap { position: relative; display: inline-flex; justify-content: center; }
+.bt-lswap .l2 { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; opacity: 0; }
+.bt-lswap .l1, .bt-lswap .l2 { transition: opacity calc(0.2s / var(--bt-speed)) var(--ease-out); }
+.bt.hot .bt-lswap .l1 { opacity: 0; }
+.bt.hot .bt-lswap .l2 { opacity: 1; }
+
+
+/* sparkle: the star drops in from below while the old icon lifts away,
+   then two mini stars pop at offset delays */
+.bt-sparkle .i1 { transform: translateY(0); }
+.bt-sparkle .i2 { opacity: 0; transform: translateY(15px) scale(0.8); }
+.bt-sparkle.hot .i1 { opacity: 0; transform: translateY(-15px) scale(0.8); }
+.bt-sparkle.hot .i2 { opacity: 1; transform: translateY(0) scale(1); color: #eab308; }
+.bt-mini {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg) translateY(10px);
+  transition:
+    opacity calc(0.3s / var(--bt-speed)) var(--bt-spring),
+    transform calc(0.3s / var(--bt-speed)) var(--bt-spring);
+  color: #facc15;
+  pointer-events: none;
+}
+.bt-mini.m1 { top: -12px; right: -8px; width: 10px; height: 10px; transition-delay: calc(0.05s / var(--bt-speed)); }
+.bt-mini.m2 { top: -4px; left: -12px; width: 6px; height: 6px; transform: scale(0) rotate(45deg) translateX(10px); transition-delay: calc(0.1s / var(--bt-speed)); }
+.bt-sparkle.hot .bt-mini { opacity: 1; transform: scale(1) rotate(0) translate(0, 0); }
+
+/* pulse: one heartbeat on hover; the heart fills pink while hot */
+@keyframes bt-beat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(calc(1.13 + var(--bt-pop))); }
+}
+.bt-pulse.hot .i1 { animation: bt-beat calc(0.4s / var(--bt-speed)) ease-in-out; color: #ec4899; }
+.bt-pulse.hot .i1 svg { fill: currentColor; }
+
+/* rotate: half turn while hot, springs back on leave */
+.bt-rotate .bt-ic { transition: transform calc(0.4s / var(--bt-speed)) var(--bt-spring); }
+.bt-rotate.hot .bt-ic { transform: rotate(180deg); }
+
+/* shake: the icon bobs and wiggles once; icon and label read red while hot */
+@keyframes bt-jiggle {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  20% { transform: translateY(-2px) rotate(-10deg); }
+  45% { transform: translateY(0) rotate(10deg); }
+  70% { transform: translateY(-2px) rotate(-10deg); }
+}
+.bt-shake .i1, .bt-shake .bt-label { transition: color calc(0.3s / var(--bt-speed)) var(--ease-out); }
+.bt-shake.hot .i1 { animation: bt-jiggle calc(0.4s / var(--bt-speed)); color: #ef4444; }
+.bt-shake.hot .bt-label { color: #ef4444; }
+
+/* ring: bell swaps to a ringing bell with a rotate-in, plus a red dot */
+.bt-ring .i1 { transform: rotate(0) scale(1); }
+.bt-ring .i2 { opacity: 0; transform: rotate(-15deg) scale(0.8); }
+.bt-ring.hot .i1 { opacity: 0; transform: rotate(15deg) scale(0.8); }
+.bt-ring.hot .i2 { opacity: 1; transform: rotate(0) scale(1); color: #f97316; }
+.bt-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #ef4444;
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    opacity calc(0.2s / var(--bt-speed)) var(--ease-out),
+    transform calc(0.35s / var(--bt-speed)) cubic-bezier(0.2, 1.6, 0.4, 1);
+  transition-delay: calc(0.1s / var(--bt-speed));
+}
+.bt-ring.hot .bt-dot { opacity: 1; transform: scale(1); }
+
+.bt-box { container-type: size; }
+@container (max-height: 150px) {
+  .bt-grid { gap: 7px 8px; padding: 0 10px; grid-template-columns: repeat(3, minmax(84px, 118px)); }
+  .bt { height: 29px; font-size: 11px; padding: 0 6px; }
+  .bt-ic { margin-right: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bt, .bt-ic .i1, .bt-ic .i2, .bt-mini, .bt-dot, .bt-rotate .bt-ic, .bt-lswap .l1, .bt-lswap .l2 { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}
+
+/* Figma-style vector editor card */
+.vec-node {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 1px solid #0d99ff;
+}

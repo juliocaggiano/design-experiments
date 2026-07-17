@@ -1,0 +1,45 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto('http://localhost:5173/vault/bottom-sheet', { waitUntil: 'networkidle' });
+await page.waitForTimeout(1200);
+// SHEET REOPEN: dismiss via chip, then click a background row → sheet returns
+const play = page.locator('div.relative.z-10.overflow-hidden');
+await play.scrollIntoViewIfNeeded();
+await page.waitForTimeout(300);
+const sheet = play.locator('.cursor-grab');
+const y = async () => sheet.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m42);
+await page.getByRole('button', { name: 'Dismiss', exact: true }).click();
+await page.waitForTimeout(900);
+const yClosed = await y();
+await play.locator('.cursor-pointer').first().click();
+await page.waitForTimeout(900);
+const yReopened = await y();
+console.log('dismissed y:', Math.round(yClosed), '→ after row click:', Math.round(yReopened), '| reopened:', yReopened < yClosed - 40);
+// OPTICAL TYPE: breathing changes size; scrub drives it; copy has full code
+await page.goto('http://localhost:5173/vault/optical-type', { waitUntil: 'networkidle' });
+await page.waitForTimeout(800);
+const hero = page.locator('div[aria-label*="tracking"]');
+const opt = hero.locator('div.font-semibold').first();
+const s1 = await opt.evaluate((el) => el.style.fontSize);
+await page.waitForTimeout(1500);
+const s2 = await opt.evaluate((el) => el.style.fontSize);
+console.log('breathing:', s1, '→', s2, '| animating:', s1 !== s2);
+// tracking differs between lines at large size
+const box = await hero.boundingBox();
+await page.mouse.move(box.x + box.width * 0.95, box.y + box.height / 2);
+await page.mouse.down();
+await page.mouse.move(box.x + box.width * 0.95, box.y + box.height / 2 + 1, { steps: 2 });
+await page.mouse.up();
+await page.waitForTimeout(300);
+const optTrack = await opt.evaluate((el) => el.style.letterSpacing);
+const fixTrack = await hero.locator('div.font-semibold').nth(1).evaluate((el) => el.style.letterSpacing);
+console.log('at max size — optical track:', optTrack, '| fixed track:', fixTrack, '| diverged:', optTrack !== fixTrack);
+await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+await page.locator('button:has-text("Copy prompt")').click();
+await page.waitForTimeout(300);
+const clip = await page.evaluate(() => navigator.clipboard.readText());
+console.log('copy:', (clip.length / 1000).toFixed(1) + 'k | full code:', clip.includes('export function OpticalTypeDemo'));
+await page.screenshot({ path: './diff/type-detail.png', fullPage: true });
+await browser.close();
+console.log('done');

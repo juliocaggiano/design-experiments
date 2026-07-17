@@ -1,0 +1,65 @@
+[
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/media/PPNeueMontreal_Regular-s.p.27e8_0-jh6uhl.otf",
+    "localPath": "assets/001-PPNeueMontreal_Regular-s.p.27e8_0-jh6uhl.otf",
+    "type": "font",
+    "contentType": "font/otf",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  },
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/chunks/412xmsx1r01xv.css",
+    "localPath": "assets/002-412xmsx1r01xv.css",
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  },
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/chunks/0531ltoir7vc1.css",
+    "localPath": "assets/003-0531ltoir7vc1.css",
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  },
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/chunks/3auk871gdz9vl.css",
+    "localPath": "assets/004-3auk871gdz9vl.css",
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  },
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/chunks/1p8ew0ald5z7v.css",
+    "localPath": "assets/005-1p8ew0ald5z7v.css",
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  },
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/media/PPNeueMontreal_Semibold-s.p.21-mvfyq346aq.otf",
+    "localPath": "assets/006-PPNeueMontreal_Semibold-s.p.21-mvfyq346aq.otf",
+    "type": "font",
+    "contentType": "font/otf",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  },
+  {
+    "sourceUrl": "https://www.arlan.me/_next/static/media/PPNeueMontrealMono_Book-s.2pi6_nqd6yfj5.otf",
+    "localPath": "assets/007-PPNeueMontrealMono_Book-s.2pi6_nqd6yfj5.otf",
+    "type": "font",
+    "contentType": "font/otf",
+    "sameOrigin": true,
+    "downloaded": true,
+    "note": ""
+  }
+]

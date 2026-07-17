@@ -1,0 +1,452 @@
+.pw-demo {
+  position: relative;
+  container-type: size;
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: clamp(12px, 5cqh, 32px) clamp(12px, 5cqi, 38px);
+  color: var(--text-body);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0) 48%),
+    var(--bg-page);
+  font-family: inherit;
+}
+
+.pw-session {
+  width: min(100%, 620px);
+  overflow: hidden;
+  border: 1px solid var(--border-line);
+  border-radius: 18px;
+  background: var(--bg-surface);
+  box-shadow: 0 16px 48px rgba(28, 28, 28, 0.055), 0 2px 8px rgba(28, 28, 28, 0.025);
+  corner-shape: squircle;
+}
+
+.pw-session-header,
+.pw-session-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.pw-session-header {
+  padding: 14px 16px 10px;
+}
+
+.pw-session-title {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 9px;
+}
+
+.pw-session-title > span:last-child {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pw-session-title strong {
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.pw-session-title small,
+.pw-session-footer,
+.pw-ready {
+  color: var(--text-tertiary);
+  font-size: 10px;
+  line-height: 1.2;
+}
+
+.pw-session-icon {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #e8e8e8;
+  border-radius: 9px;
+  color: #4c4c4c;
+  background: #f6f6f6;
+  corner-shape: squircle;
+}
+
+.pw-ready {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.pw-ready i {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #62ad75;
+  box-shadow: 0 0 0 3px rgba(98, 173, 117, 0.11);
+}
+
+.pw-address {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  margin: 0 16px;
+  border: 1px solid #e8e8e8;
+  border-radius: 10px;
+  padding: 3px 4px 3px 10px;
+  color: var(--text-tertiary);
+  background: #f8f8f8;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+}
+
+.pw-address:focus-within {
+  border-color: #c9c9c9;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(29, 29, 29, 0.045);
+}
+
+.pw-address input {
+  min-width: 0;
+  height: 28px;
+  border: 0;
+  outline: 0;
+  color: var(--text-body);
+  background: transparent;
+  font: inherit;
+  font-size: 11px;
+}
+
+.pw-address button {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: #fff;
+  background: #2c2c2c;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 150ms ease;
+}
+
+.pw-address button:hover,
+.pw-run:hover {
+  background: #444;
+}
+
+.pw-address button:active,
+.pw-run:active,
+.pw-reset:active,
+.pw-workflow button:active {
+  transform: scale(0.97);
+}
+
+.pw-address button:focus-visible,
+.pw-workflow button:focus-visible,
+.pw-session-footer button:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 2px;
+}
+
+.pw-workflow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 5px;
+  padding: 10px 16px;
+}
+
+.pw-workflow button {
+  display: flex;
+  min-width: 0;
+  height: 30px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-tertiary);
+  background: transparent;
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  transition: color 150ms ease, background-color 150ms ease, border-color 150ms ease, transform 120ms ease;
+}
+
+.pw-workflow button:hover {
+  color: var(--text-body);
+  background: var(--bg-hover);
+}
+
+.pw-workflow button[aria-selected='true'] {
+  border-color: #e7e7e7;
+  color: var(--text-primary);
+  background: #f5f5f5;
+}
+
+.pw-workflow button[data-complete='true'] {
+  color: #50815d;
+}
+
+.pw-workflow button span {
+  display: grid;
+  place-items: center;
+}
+
+.pw-terminal {
+  min-height: 74px;
+  margin: 0 16px;
+  border: 1px solid #ebebeb;
+  border-radius: 10px;
+  padding: 11px 12px;
+  background: #fafafa;
+  font-family: 'Neue Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.pw-command {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 8px;
+  color: #474747;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+.pw-command > span {
+  color: #9b9b9b;
+}
+
+.pw-command code {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pw-terminal p {
+  display: flex;
+  min-height: 17px;
+  align-items: center;
+  gap: 7px;
+  margin: 7px 0 0 17px;
+  color: #6f8d76;
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.pw-terminal p[data-running='true'] {
+  color: var(--text-tertiary);
+}
+
+.pw-running-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  background: currentColor;
+  animation: pw-pulse 780ms ease-in-out infinite alternate;
+}
+
+.pw-session-footer {
+  padding: 10px 16px 14px;
+}
+
+.pw-session-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pw-session-actions button {
+  display: inline-flex;
+  height: 27px;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  border-radius: 8px;
+  padding: 0 9px;
+  font: inherit;
+  font-size: 9px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 120ms ease, background-color 150ms ease, color 150ms ease;
+}
+
+.pw-reset {
+  border: 1px solid #e6e6e6;
+  color: var(--text-secondary);
+  background: #fff;
+}
+
+.pw-reset:hover {
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.pw-run {
+  border: 1px solid #2c2c2c;
+  color: #fff;
+  background: #2c2c2c;
+}
+
+.pw-run:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.pw-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+@keyframes pw-pulse {
+  from { opacity: 0.32; transform: scale(0.84); }
+  to { opacity: 0.9; transform: scale(1); }
+}
+
+@container (max-height: 310px) {
+  .pw-demo {
+    padding: 12px 22px;
+  }
+
+  .pw-session {
+    border-radius: 15px;
+  }
+
+  .pw-session-header {
+    padding: 10px 12px 7px;
+  }
+
+  .pw-session-icon {
+    width: 26px;
+    height: 26px;
+  }
+
+  .pw-address {
+    margin-inline: 12px;
+  }
+
+  .pw-workflow {
+    padding: 7px 12px;
+  }
+
+  .pw-terminal {
+    min-height: 58px;
+    margin-inline: 12px;
+    padding: 8px 10px;
+  }
+
+  .pw-terminal p {
+    margin-top: 4px;
+  }
+
+  .pw-session-footer {
+    padding: 7px 12px 10px;
+  }
+
+  .pw-session-footer > span:first-child {
+    display: none;
+  }
+
+  .pw-session-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@container (max-width: 430px) {
+  .pw-demo {
+    padding-inline: 10px;
+  }
+
+  .pw-session-title small,
+  .pw-ready,
+  .pw-workflow button {
+    font-size: 9px;
+  }
+
+  .pw-workflow button {
+    gap: 3px;
+  }
+
+  .pw-session-footer > span:first-child {
+    display: none;
+  }
+}
+
+@container (max-width: 340px) {
+  .pw-session-header {
+    padding-inline: 10px;
+  }
+
+  .pw-address,
+  .pw-terminal {
+    margin-inline: 10px;
+  }
+
+  .pw-workflow {
+    padding-inline: 10px;
+  }
+
+  .pw-workflow button {
+    font-size: 0;
+  }
+
+  .pw-workflow button span {
+    font-size: initial;
+  }
+
+  .pw-session-footer {
+    padding-inline: 10px;
+  }
+}
+
+@container (max-height: 160px) {
+  .pw-demo {
+    padding: 0;
+  }
+
+  .pw-session {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 620px;
+    max-width: none;
+    translate: -50% -50%;
+    scale: 0.48;
+  }
+}
+
+@media (max-width: 350px) {
+  .pw-demo[data-compact='true'] .pw-session {
+    scale: 0.38;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pw-running-dot {
+    animation: none;
+  }
+
+  .pw-address button,
+  .pw-run,
+  .pw-reset,
+  .pw-workflow button {
+    transition: none;
+  }
+}

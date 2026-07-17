@@ -1,0 +1,35 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+const errors = [];
+page.on('pageerror', (e) => errors.push(e.message));
+await page.goto('http://localhost:5173/vault/materials', { waitUntil: 'networkidle' });
+await page.waitForTimeout(1200);
+const hero = page.locator('div[aria-label*="sky-blue"]').first();
+await hero.screenshot({ path: './diff/pill-hero.png' });
+// interactions still hold: drag tracks + springs home, press gives
+const btn = hero.locator('.gl-btn');
+const bb = await btn.boundingBox();
+const cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2;
+await page.mouse.move(cx, cy);
+await page.mouse.down();
+await page.mouse.move(cx + 100, cy - 30, { steps: 4 });
+const during = await btn.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+await page.mouse.up();
+await page.waitForTimeout(1400);
+const settled = await btn.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+console.log('drag tracks:', Math.abs(during - 100) < 8, '| springs home:', Math.abs(settled) < 3);
+await page.mouse.move(cx, cy);
+await page.mouse.down();
+await page.waitForTimeout(280);
+const pressScale = await btn.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).a);
+await page.mouse.up();
+console.log('press gives:', pressScale < 0.97, `(${pressScale.toFixed(3)})`);
+// copy ships new implementation
+await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+await page.locator('button:has-text("Copy prompt")').click();
+await page.waitForTimeout(300);
+const clip = await page.evaluate(() => navigator.clipboard.readText());
+console.log('copy:', (clip.length / 1000).toFixed(1) + 'k | new impl:', clip.includes('gl-rim') && clip.includes('glass pill'));
+console.log('errors:', errors.length ? errors.join(' | ') : 'none');
+await browser.close();

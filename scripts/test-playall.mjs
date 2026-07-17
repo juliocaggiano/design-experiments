@@ -1,0 +1,15 @@
+import { chromium } from 'playwright';
+const file = process.argv[2];
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto('file://' + file + '#/micro-buttons', { waitUntil: 'load' });
+await page.waitForTimeout(800);
+await page.locator('#bt-play').scrollIntoViewIfNeeded();
+await page.locator('#bt-playall').click();
+await page.waitForTimeout(300);
+const hot = await page.locator('#bt-play .bt.hot').count();
+console.log('play-all in the playground:', hot + '/9', hot === 9);
+await page.waitForTimeout(1500);
+const after = await page.locator('#bt-play .bt.hot').count();
+console.log('all released after 1.4s:', after === 0);
+await browser.close();

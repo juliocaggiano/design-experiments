@@ -1,0 +1,1983 @@
+{
+ "header": {
+  "html": "<header class=\"flex items-center justify-between gap-4\"><h1 class=\"font-semibold text-[var(--text-primary)]\">Vault</h1><a aria-label=\"Close\" class=\"relative flex items-center justify-center rounded-md p-1 transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] text-[var(--text-secondary)] after:absolute after:left-1/2 after:top-1/2 after:size-10 after:-translate-x-1/2 after:-translate-y-1/2 after:content-['']\" href=\"/\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M18 6 6 18M6 6l12 12\"></path></svg></a></header>",
+  "styles": null
+ },
+ "cards": [
+  {
+   "tag": "div",
+   "cls": "relative",
+   "h": 5129,
+   "w": 688,
+   "children": [
+    {
+     "d": 0,
+     "tag": "div",
+     "cls": "grid grid-cols-1 gap-y-4",
+     "h": 5129,
+     "w": 688
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 315,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] px-4 transition-colors duration-500 ease-[var(-",
+     "h": 259,
+     "w": 670,
+     "bg": "rgb(20, 10, 8)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "flex flex-col items-center gap-1 text-center",
+     "h": 47,
+     "w": 491
+    },
+    {
+     "d": 4,
+     "tag": "style",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": "/* Typer — the styling for the character reveal. The engine (typer.ts) swaps eac"
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "text-[clamp(1.15rem,4.4vw,2.6rem)] font-semibold leading-[1.12] tracking-[-0.01em]",
+     "h": 47,
+     "w": 491
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "word",
+     "h": 50,
+     "w": 124
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char",
+     "h": 47,
+     "w": 24,
+     "text": "d"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 23,
+     "bg": "rgb(255, 87, 34)",
+     "radius": "5px 0px 0px 5px",
+     "text": "e"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 21,
+     "bg": "rgb(255, 87, 34)",
+     "text": "s"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 9,
+     "bg": "rgb(255, 87, 34)",
+     "text": "i"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 24,
+     "bg": "rgb(255, 87, 34)",
+     "text": "g"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 23,
+     "bg": "rgb(255, 87, 34)",
+     "radius": "0px 5px 5px 0px",
+     "text": "n"
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "word",
+     "h": 50,
+     "w": 211
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 23,
+     "bg": "rgb(255, 87, 34)",
+     "radius": "5px 0px 0px 5px",
+     "text": "e"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 23,
+     "bg": "rgb(255, 87, 34)",
+     "text": "n"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 24,
+     "bg": "rgb(255, 87, 34)",
+     "text": "g"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 9,
+     "bg": "rgb(255, 87, 34)",
+     "text": "i"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccentInverse",
+     "h": 47,
+     "w": 23,
+     "bg": "rgb(255, 87, 34)",
+     "radius": "0px 5px 5px 0px",
+     "text": "n"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 23,
+     "text": "e"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 23,
+     "text": "e"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 15,
+     "text": "r"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 23,
+     "text": "e"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 24,
+     "text": "d"
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "word",
+     "h": 50,
+     "w": 46
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 24,
+     "text": "b"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charAccent",
+     "h": 47,
+     "w": 22,
+     "text": "y"
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "word",
+     "h": 50,
+     "w": 58
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charFill",
+     "h": 47,
+     "w": 35,
+     "bg": "rgb(255, 217, 179)",
+     "radius": "5px 0px 0px 5px",
+     "text": "m"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charFill",
+     "h": 47,
+     "w": 23,
+     "bg": "rgb(255, 217, 179)",
+     "radius": "0px 5px 5px 0px",
+     "text": "e"
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "word",
+     "h": 50,
+     "w": 21
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charInverse",
+     "h": 47,
+     "w": 9,
+     "bg": "rgb(255, 217, 179)",
+     "text": ":"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "char charInverse",
+     "h": 47,
+     "w": 12,
+     "bg": "rgb(255, 217, 179)",
+     "text": ")"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 57,
+     "text": "The typer"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 63,
+     "text": "Jul 7, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2",
+     "h": 327,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "galaxy-card relative mx-auto aspect-[1344/620] w-full touch-pan-y select-none overflow-hidden rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-page)]",
+     "h": 309,
+     "w": 670,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "10px"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-x-0 top-[-25%] h-[150%] [perspective:800px]",
+     "h": 461,
+     "w": 668
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 77,
+     "w": 77
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 77,
+     "w": 77,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-1.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 77,
+     "w": 77,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 50,
+     "w": 50
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 50,
+     "w": 50,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-2.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 50,
+     "w": 50,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 95,
+     "w": 95
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 95,
+     "w": 95,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-3.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 95,
+     "w": 95,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 62,
+     "w": 62
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 62,
+     "w": 62,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-4.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 62,
+     "w": 62,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 72,
+     "w": 72
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 72,
+     "w": 72,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-5.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 72,
+     "w": 72,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 130,
+     "w": 130
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 130,
+     "w": 130,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-6.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 130,
+     "w": 130,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 149,
+     "w": 149
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 149,
+     "w": 149,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-7.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 149,
+     "w": 149,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 71,
+     "w": 71
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 71,
+     "w": 71,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-8.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 71,
+     "w": 71,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 102,
+     "w": 102
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 102,
+     "w": 102,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-9.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 102,
+     "w": 102,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 98,
+     "w": 98
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 98,
+     "w": 98,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-10.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 98,
+     "w": 98,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 114,
+     "w": 114
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 114,
+     "w": 114,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-11.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 114,
+     "w": 114,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "absolute aspect-square w-[64px] overflow-hidden will-change-transform sm:w-[112px]",
+     "h": 56,
+     "w": 56
+    },
+    {
+     "d": 5,
+     "tag": "img",
+     "cls": "h-full w-full object-cover",
+     "h": 56,
+     "w": 56,
+     "text": "",
+     "src": "https://www.arlan.me/vault/grid/grid-12.webp"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0 bg-[var(--bg-page)]",
+     "h": 56,
+     "w": 56,
+     "bg": "rgb(252, 252, 252)",
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "absolute right-4 top-4 z-20",
+     "h": 29,
+     "w": 105
+    },
+    {
+     "d": 3,
+     "tag": "button",
+     "cls": "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150",
+     "h": 28,
+     "w": 105,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "6px"
+    },
+    {
+     "d": 4,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 13,
+     "w": 13
+    },
+    {
+     "d": 5,
+     "tag": "rect",
+     "cls": "[object SVGAnimatedString]",
+     "h": 6,
+     "w": 6,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 7,
+     "w": 7,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "hidden sm:inline-flex",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "relative inline-flex h-[1.2em] items-center whitespace-nowrap align-middle ease-[var(--ease-out)] transition-[width] duration-200",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-100 blur-0",
+     "h": 20,
+     "w": 67,
+     "text": "Copy prompt"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-0 blur-[3px]",
+     "h": 20,
+     "w": 38,
+     "text": "Copied"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 188,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative flex h-[132px] w-full items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[#f8f9fb] px-4",
+     "h": 132,
+     "w": 670,
+     "bg": "rgb(248, 249, 251)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "style",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": "/* The Art of Color Depth — button depth by technique, not by color.\n *\n * Six w"
+    },
+    {
+     "d": 3,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0
+    },
+    {
+     "d": 4,
+     "tag": "defs",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0
+    },
+    {
+     "d": 5,
+     "tag": "filter",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0
+    },
+    {
+     "d": 6,
+     "tag": "feimage",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fedisplacementmap",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fecolormatrix",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fedisplacementmap",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fecolormatrix",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fedisplacementmap",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fecolormatrix",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "feblend",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "feblend",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 6,
+     "tag": "fegaussianblur",
+     "cls": "[object SVGAnimatedString]",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "flex origin-center scale-[0.82] items-center gap-2 sm:scale-100 sm:gap-3",
+     "h": 44,
+     "w": 265
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "depth-btn depth-glossy  ",
+     "h": 44,
+     "w": 127,
+     "radius": "999px"
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "depth-label",
+     "h": 15,
+     "w": 83,
+     "text": "Get Started"
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "depth-btn depth-glow  ",
+     "h": 44,
+     "w": 127,
+     "radius": "999px"
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "depth-label",
+     "h": 15,
+     "w": 83,
+     "text": "Get Started"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 127,
+     "text": "The art of color depth"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 63,
+     "text": "Jul 2, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2",
+     "h": 277,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]",
+     "h": 259,
+     "w": 670,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "canvas",
+     "cls": "",
+     "h": 257,
+     "w": 668,
+     "text": "",
+     "canvas": true
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "absolute right-4 top-4 z-20",
+     "h": 29,
+     "w": 105
+    },
+    {
+     "d": 3,
+     "tag": "button",
+     "cls": "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150",
+     "h": 28,
+     "w": 105,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "6px"
+    },
+    {
+     "d": 4,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 13,
+     "w": 13
+    },
+    {
+     "d": 5,
+     "tag": "rect",
+     "cls": "[object SVGAnimatedString]",
+     "h": 6,
+     "w": 6,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 7,
+     "w": 7,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "hidden sm:inline-flex",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "relative inline-flex h-[1.2em] items-center whitespace-nowrap align-middle ease-[var(--ease-out)] transition-[width] duration-200",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-100 blur-0",
+     "h": 20,
+     "w": 67,
+     "text": "Copy prompt"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-0 blur-[3px]",
+     "h": 20,
+     "w": 38,
+     "text": "Copied"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2",
+     "h": 278,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "pixel-select relative flex items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] px-4 py-4 sm:py-6 select-none",
+     "h": 260,
+     "w": 670,
+     "bg": "color(srgb 0.994322 0.996392 1)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "relative z-10 my-[-1.25rem] aspect-[.8] w-full max-w-[150px] sm:max-w-[200px]",
+     "h": 250,
+     "w": 200
+    },
+    {
+     "d": 4,
+     "tag": "canvas",
+     "cls": "ll-block--canvas-2d",
+     "h": 250,
+     "w": 200,
+     "text": "",
+     "canvas": true
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "absolute right-4 top-4 z-20",
+     "h": 29,
+     "w": 105
+    },
+    {
+     "d": 3,
+     "tag": "button",
+     "cls": "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150",
+     "h": 28,
+     "w": 105,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "6px"
+    },
+    {
+     "d": 4,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 13,
+     "w": 13
+    },
+    {
+     "d": 5,
+     "tag": "rect",
+     "cls": "[object SVGAnimatedString]",
+     "h": 6,
+     "w": 6,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 7,
+     "w": 7,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "hidden sm:inline-flex",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "relative inline-flex h-[1.2em] items-center whitespace-nowrap align-middle ease-[var(--ease-out)] transition-[width] duration-200",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-100 blur-0",
+     "h": 20,
+     "w": 67,
+     "text": "Copy prompt"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-0 blur-[3px]",
+     "h": 20,
+     "w": 38,
+     "text": "Copied"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 433,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative aspect-video overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-white",
+     "h": 377,
+     "w": 670,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "video",
+     "cls": "h-full w-full object-cover",
+     "h": 375,
+     "w": 668,
+     "videoSources": [
+      "https://www.arlan.me/vault/ghosty/grid-card.webm",
+      "https://www.arlan.me/vault/ghosty/grid-card.mp4"
+     ],
+     "poster": "https://www.arlan.me/vault/ghosty/grid-card.poster.jpg",
+     "autoplay": true,
+     "loop": true
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 82,
+     "text": "Ghosty reveal"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 75,
+     "text": "Jun 29, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 433,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "aspect-video w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-white",
+     "h": 377,
+     "w": 670,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "canvas",
+     "cls": "h-full w-full",
+     "h": 375,
+     "w": 668,
+     "text": "",
+     "canvas": true
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 89,
+     "text": "Symbols effect"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 75,
+     "text": "Jun 28, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2",
+     "h": 227,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative mx-auto flex aspect-[1344/420] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[#fafdff]",
+     "h": 209,
+     "w": 670,
+     "bg": "rgb(250, 253, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "canvas",
+     "cls": "absolute inset-0 h-full w-full",
+     "h": 207,
+     "w": 668,
+     "text": "",
+     "canvas": true
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "absolute right-4 top-4 z-20",
+     "h": 29,
+     "w": 105
+    },
+    {
+     "d": 3,
+     "tag": "button",
+     "cls": "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150",
+     "h": 28,
+     "w": 105,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "6px"
+    },
+    {
+     "d": 4,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 13,
+     "w": 13
+    },
+    {
+     "d": 5,
+     "tag": "rect",
+     "cls": "[object SVGAnimatedString]",
+     "h": 6,
+     "w": 6,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 7,
+     "w": 7,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "hidden sm:inline-flex",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "relative inline-flex h-[1.2em] items-center whitespace-nowrap align-middle ease-[var(--ease-out)] transition-[width] duration-200",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-100 blur-0",
+     "h": 20,
+     "w": 67,
+     "text": "Copy prompt"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-0 blur-[3px]",
+     "h": 20,
+     "w": 38,
+     "text": "Copied"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 433,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative aspect-video overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-black",
+     "h": 377,
+     "w": 670,
+     "bg": "rgb(0, 0, 0)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "video",
+     "cls": "h-full w-full object-cover",
+     "h": 382,
+     "w": 681,
+     "videoSources": [
+      "https://www.arlan.me/vault/dia.av1.webm",
+      "https://www.arlan.me/vault/dia.vp9.webm",
+      "https://www.arlan.me/vault/dia.mp4"
+     ],
+     "poster": "https://www.arlan.me/vault/dia.webp",
+     "autoplay": true,
+     "loop": true
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 134,
+     "text": "Dia Browser's gradient"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 75,
+     "text": "Jun 26, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2",
+     "h": 277,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[#f0f7ee]",
+     "h": 259,
+     "w": 670,
+     "bg": "rgb(240, 247, 238)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "canvas",
+     "cls": "pointer-events-none absolute inset-0 block h-full w-full",
+     "h": 257,
+     "w": 668,
+     "text": "",
+     "canvas": true
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "absolute right-4 top-4 z-20",
+     "h": 29,
+     "w": 105
+    },
+    {
+     "d": 3,
+     "tag": "button",
+     "cls": "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150",
+     "h": 28,
+     "w": 105,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "6px"
+    },
+    {
+     "d": 4,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 13,
+     "w": 13
+    },
+    {
+     "d": 5,
+     "tag": "rect",
+     "cls": "[object SVGAnimatedString]",
+     "h": 6,
+     "w": 6,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 7,
+     "w": 7,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "hidden sm:inline-flex",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "relative inline-flex h-[1.2em] items-center whitespace-nowrap align-middle ease-[var(--ease-out)] transition-[width] duration-200",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-100 blur-0",
+     "h": 20,
+     "w": 67,
+     "text": "Copy prompt"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-0 blur-[3px]",
+     "h": 20,
+     "w": 38,
+     "text": "Copied"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 433,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative flex aspect-video items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-hover)]",
+     "h": 377,
+     "w": 670,
+     "bg": "rgb(247, 247, 247)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "",
+     "h": 179,
+     "w": 380
+    },
+    {
+     "d": 4,
+     "tag": "div",
+     "cls": "relative inline-block",
+     "h": 179,
+     "w": 380
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "pointer-events-none absolute inset-0",
+     "h": 179,
+     "w": 380,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "",
+     "h": 8,
+     "w": 8,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "1px",
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "",
+     "h": 8,
+     "w": 8,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "1px",
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "",
+     "h": 8,
+     "w": 8,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "1px",
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "",
+     "h": 8,
+     "w": 8,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "1px",
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "pointer-events-none absolute left-1/2 z-10 whitespace-nowrap rounded-[4px] px-2 py-0.5 text-[11px] tabular-nums",
+     "h": 23,
+     "w": 66,
+     "bg": "rgb(13, 153, 255)",
+     "radius": "4px",
+     "text": "380 × 179"
+    },
+    {
+     "d": 5,
+     "tag": "div",
+     "cls": "flex items-center justify-center pointer-events-none",
+     "h": 179,
+     "w": 380
+    },
+    {
+     "d": 6,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 99,
+     "w": 300
+    },
+    {
+     "d": 7,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 86,
+     "w": 278,
+     "text": ""
+    },
+    {
+     "d": 7,
+     "tag": "g",
+     "cls": "[object SVGAnimatedString]",
+     "h": 99,
+     "w": 291
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 115,
+     "text": "Figma vector editor"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 75,
+     "text": "Jun 25, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2",
+     "h": 227,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative mx-auto aspect-[1344/420] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]",
+     "h": 209,
+     "w": 670,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "canvas",
+     "cls": "pointer-events-none absolute inset-0 block h-full w-full",
+     "h": 209,
+     "w": 670,
+     "text": "",
+     "canvas": true
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "absolute right-4 top-4 z-20",
+     "h": 29,
+     "w": 105
+    },
+    {
+     "d": 3,
+     "tag": "button",
+     "cls": "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150",
+     "h": 28,
+     "w": 105,
+     "bg": "rgb(252, 252, 252)",
+     "radius": "6px"
+    },
+    {
+     "d": 4,
+     "tag": "svg",
+     "cls": "[object SVGAnimatedString]",
+     "h": 13,
+     "w": 13
+    },
+    {
+     "d": 5,
+     "tag": "rect",
+     "cls": "[object SVGAnimatedString]",
+     "h": 6,
+     "w": 6,
+     "text": ""
+    },
+    {
+     "d": 5,
+     "tag": "path",
+     "cls": "[object SVGAnimatedString]",
+     "h": 7,
+     "w": 7,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "hidden sm:inline-flex",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 5,
+     "tag": "span",
+     "cls": "relative inline-flex h-[1.2em] items-center whitespace-nowrap align-middle ease-[var(--ease-out)] transition-[width] duration-200",
+     "h": 14,
+     "w": 68
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-100 blur-0",
+     "h": 20,
+     "w": 67,
+     "text": "Copy prompt"
+    },
+    {
+     "d": 6,
+     "tag": "span",
+     "cls": "absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] motion-reduce:transition-none opacity-0 blur-[3px]",
+     "h": 20,
+     "w": 38,
+     "text": "Copied"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 433,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative aspect-video overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-black",
+     "h": 377,
+     "w": 670,
+     "bg": "rgb(0, 0, 0)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "video",
+     "cls": "h-full w-full object-cover",
+     "h": 382,
+     "w": 681,
+     "videoSources": [
+      "https://www.arlan.me/vault/amo.av1.webm",
+      "https://www.arlan.me/vault/amo.vp9.webm",
+      "https://www.arlan.me/vault/amo.mp4"
+     ],
+     "poster": "https://www.arlan.me/vault/amo.webp",
+     "autoplay": true,
+     "loop": true
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 106,
+     "text": "Amo hover button"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 75,
+     "text": "Jun 23, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "a",
+     "cls": "group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]",
+     "h": 433,
+     "w": 688,
+     "bg": "rgb(255, 255, 255)",
+     "radius": "12px"
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "relative aspect-video overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-black",
+     "h": 377,
+     "w": 670,
+     "bg": "rgb(0, 0, 0)",
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "video",
+     "cls": "h-full w-full object-cover",
+     "h": 382,
+     "w": 681,
+     "videoSources": [
+      "https://www.arlan.me/vault/midjourney.av1.webm",
+      "https://www.arlan.me/vault/midjourney.vp9.webm",
+      "https://www.arlan.me/vault/midjourney.mp4"
+     ],
+     "poster": "https://www.arlan.me/vault/midjourney.webp",
+     "autoplay": true,
+     "loop": true
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 4,
+     "tag": "source",
+     "cls": "",
+     "h": 0,
+     "w": 0,
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "flex items-center justify-between gap-3 px-1 pt-2.5 pb-1",
+     "h": 38,
+     "w": 670
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "truncate text-[14px] text-[var(--text-primary)]",
+     "h": 24,
+     "w": 162,
+     "text": "Midjourney Medical's ASCII"
+    },
+    {
+     "d": 3,
+     "tag": "span",
+     "cls": "shrink-0 text-[13px] tabular-nums text-[var(--text-tertiary)]",
+     "h": 22,
+     "w": 75,
+     "text": "Jun 19, 2026"
+    },
+    {
+     "d": 1,
+     "tag": "div",
+     "cls": "relative grid max-h-[12rem] grid-cols-1 gap-y-4 overflow-hidden",
+     "h": 192,
+     "w": 688
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "block rounded-xl border border-dashed border-[var(--border-line)] p-2 text-left",
+     "h": 430,
+     "w": 688,
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "flex aspect-video items-center justify-center rounded-[12px] border border-dashed border-[var(--border-line)]",
+     "h": 377,
+     "w": 670,
+     "radius": "12px"
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "text-[12px] text-[var(--text-tertiary)]",
+     "h": 20,
+     "w": 55,
+     "text": "More soon"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "px-1 pt-2.5 pb-1",
+     "h": 35,
+     "w": 670
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "block h-[1.4em]",
+     "h": 21,
+     "w": 662,
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "block rounded-xl border border-dashed border-[var(--border-line)] p-2 text-left",
+     "h": 430,
+     "w": 688,
+     "radius": "12px"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "flex aspect-video items-center justify-center rounded-[12px] border border-dashed border-[var(--border-line)]",
+     "h": 377,
+     "w": 670,
+     "radius": "12px"
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "text-[12px] text-[var(--text-tertiary)]",
+     "h": 20,
+     "w": 55,
+     "text": "More soon"
+    },
+    {
+     "d": 3,
+     "tag": "div",
+     "cls": "px-1 pt-2.5 pb-1",
+     "h": 35,
+     "w": 670
+    },
+    {
+     "d": 4,
+     "tag": "span",
+     "cls": "block h-[1.4em]",
+     "h": 21,
+     "w": 662,
+     "text": ""
+    },
+    {
+     "d": 2,
+     "tag": "div",
+     "cls": "vault-fade",
+     "h": 106,
+     "w": 688,
+     "text": ""
+    }
+   ]
+  }
+ ]
+}

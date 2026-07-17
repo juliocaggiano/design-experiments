@@ -1,0 +1,18 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto('http://localhost:5173/vault/materials', { waitUntil: 'networkidle' });
+await page.waitForTimeout(1200);
+const btn = page.locator('div[aria-label*="liquid-glass"] .gl-btn');
+const bb = await btn.boundingBox();
+const cx = bb.x + bb.width / 2, cy = bb.y + bb.height / 2;
+await page.mouse.move(cx, cy);
+await page.mouse.down();
+await page.mouse.move(cx + 120, cy - 40, { steps: 4 });
+const during = await btn.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+await page.mouse.up();
+console.log('x during drag:', Math.round(during), '| tracks 1:1:', Math.abs(during - 120) < 8);
+await page.waitForTimeout(150);
+const early = await btn.evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
+console.log('x 150ms after release:', Math.round(early), '(springing home)');
+await browser.close();

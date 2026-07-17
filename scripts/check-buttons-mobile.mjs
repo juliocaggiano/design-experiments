@@ -1,0 +1,17 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+await page.goto('http://localhost:5173/', { waitUntil: 'networkidle' });
+await page.waitForTimeout(900);
+const card = page.locator('a[href="/vault/micro-buttons"]');
+await card.scrollIntoViewIfNeeded();
+const media = card.locator('div.relative').first();
+const m = await media.boundingBox();
+const grid = card.locator('.bt-grid');
+const g = await grid.boundingBox();
+const fits = g.y >= m.y - 1 && g.y + g.height <= m.y + m.height + 1 && g.x >= m.x - 1 && g.x + g.width <= m.x + m.width + 1;
+console.log('feed@390 media', Math.round(m.width) + 'x' + Math.round(m.height), '| grid', Math.round(g.width) + 'x' + Math.round(g.height), '| grid fits inside card:', fits);
+const btnH = await card.locator('.bt').first().evaluate((el) => el.getBoundingClientRect().height);
+console.log('compact buttons active (h≈29):', Math.round(btnH));
+await media.screenshot({ path: './diff/buttons-390.png' });
+await browser.close();

@@ -1,0 +1,1416 @@
+@import "@fontsource-variable/geist/index.css";
+@import "@fontsource-variable/inter/index.css";
+
+.sh-demo {
+  --sx-background: #fff;
+  --sx-foreground: #171717;
+  --sx-muted: #f5f5f5;
+  --sx-muted-foreground: #737373;
+  --sx-border: #e5e5e5;
+  --sx-ring: #a3a3a3;
+  --sx-destructive: #e7000b;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  color: var(--sx-foreground);
+  background: var(--sx-background);
+}
+
+.sh-demo *,
+.sh-demo *::before,
+.sh-demo *::after {
+  box-sizing: border-box;
+}
+
+.sh-demo button,
+.sh-demo input,
+.sh-demo select {
+  font: inherit;
+}
+
+.sh-demo button,
+.sh-demo a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sh-demo button {
+  color: inherit;
+}
+
+.sh-demo button:focus-visible,
+.sh-demo a:focus-visible,
+.sh-demo input:focus-visible,
+.sh-demo select:focus-visible,
+.sh-demo [tabindex]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(163 163 163 / 50%);
+}
+
+.sx-preview {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  overflow: hidden;
+  padding: 16px;
+  background: #fff;
+}
+
+.sx-native {
+  position: relative;
+  flex: none;
+  transform-origin: center;
+}
+
+.sx-nova {
+  font-family: "Geist Variable", "Geist", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+.sx-rhea {
+  font-family: "Inter Variable", "Inter", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "cv02" 1, "cv03" 1, "cv04" 1, "cv11" 1;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Shared base-nova buttons */
+.sx-button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+
+.sx-button svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  pointer-events: none;
+  stroke-width: 2;
+}
+
+.sx-button:active:not(:disabled):not([aria-haspopup="menu"]) {
+  transform: translateY(1px);
+}
+
+.sx-button:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.sx-button-default {
+  color: #fafafa;
+  background: #171717;
+}
+
+.sx-button-default:hover {
+  background: rgb(23 23 23 / 80%);
+}
+
+.sx-button-outline {
+  border-color: var(--sx-border);
+  background: #fff;
+}
+
+.sx-button-outline:hover,
+.sx-button-outline[aria-expanded="true"] {
+  background: var(--sx-muted);
+}
+
+.sx-button-ghost {
+  background: transparent;
+}
+
+.sx-button-ghost:hover,
+.sx-button-ghost[aria-expanded="true"] {
+  background: var(--sx-muted);
+}
+
+.sx-button-link {
+  color: #171717;
+  background: transparent;
+  text-underline-offset: 4px;
+}
+
+.sx-button-link:hover {
+  text-decoration: underline;
+}
+
+.sx-button-size-default {
+  height: 32px;
+  gap: 6px;
+}
+
+.sx-button-size-icon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.sx-button-size-icon-sm {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  padding: 0;
+}
+
+.sx-button-size-icon-xs {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  padding: 0;
+}
+
+.sx-button-size-icon-xs svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Attachment — official base-rhea primary demo */
+.sx-attachment-demo {
+  display: flex;
+  width: min(384px, calc(100cqw - 32px));
+  max-width: 384px;
+  flex-direction: column;
+  gap: 12px;
+  padding: 48px 0;
+}
+
+.sx-attachment-group {
+  display: flex;
+  min-width: 0;
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: 4px 0;
+  scroll-padding-inline: 4px;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+}
+
+.sx-attachment-group::-webkit-scrollbar {
+  display: none;
+}
+
+.sx-attachment {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  border: 1px solid var(--sx-border);
+  border-radius: 16px;
+  padding: 8px 10px;
+  color: var(--sx-foreground);
+  background: #fff;
+  font-size: 14px;
+  transition: background-color 120ms ease;
+}
+
+.sx-attachment:focus-within {
+  box-shadow: 0 0 0 1px rgb(163 163 163 / 30%);
+}
+
+.sx-attachment-horizontal {
+  width: 100%;
+  min-width: 160px;
+  align-items: center;
+}
+
+.sx-attachment-vertical {
+  width: 120px;
+  flex-direction: column;
+  scroll-snap-align: start;
+}
+
+.sx-attachment-media {
+  position: relative;
+  display: flex;
+  width: 40px;
+  aspect-ratio: 1;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  color: #171717;
+  background: var(--sx-muted);
+}
+
+.sx-attachment-media svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sx-attachment-vertical .sx-attachment-media {
+  width: 100%;
+}
+
+.sx-attachment-image img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.sx-attachment-content {
+  min-width: 0;
+  max-width: 100%;
+  flex: 1;
+  line-height: 1.25;
+}
+
+.sx-attachment-vertical .sx-attachment-content {
+  width: 100%;
+  padding-inline: 4px;
+}
+
+.sx-attachment-title,
+.sx-attachment-description {
+  display: block;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sx-attachment-title {
+  font-weight: 500;
+}
+
+.sx-attachment-description {
+  margin-top: 2px;
+  color: var(--sx-muted-foreground);
+  font-size: 12px;
+}
+
+.sx-attachment-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: none;
+  align-items: center;
+}
+
+.sx-attachment-actions .sx-button {
+  border-radius: 16px;
+}
+
+.sx-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #d4d4d4;
+  border-top-color: #171717;
+  border-radius: 999px;
+  animation: sx-spin 900ms linear infinite;
+}
+
+.sx-shimmer {
+  color: transparent;
+  background: linear-gradient(90deg, #737373 20%, #d4d4d4 45%, #737373 70%);
+  background-size: 220% 100%;
+  background-clip: text;
+  animation: sx-shimmer 2s linear infinite;
+}
+
+@keyframes sx-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes sx-shimmer {
+  to { background-position: -220% 0; }
+}
+
+/* Calendar — official base-nova primary demo */
+.sx-calendar-frame {
+  width: fit-content;
+  color: #171717;
+}
+
+.sx-calendar {
+  --cell-size: 28px;
+  --cell-radius: 8px;
+  position: relative;
+  width: fit-content;
+  border: 1px solid var(--sx-border);
+  border-radius: 8px;
+  padding: 8px;
+  background: #fff;
+  font-size: 14px;
+}
+
+.sx-calendar-months,
+.sx-calendar-month {
+  display: flex;
+  flex-direction: column;
+}
+
+.sx-calendar-months {
+  position: relative;
+  gap: 16px;
+}
+
+.sx-calendar-month {
+  width: 100%;
+  gap: 16px;
+}
+
+.sx-calendar-nav {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.sx-calendar-nav-button {
+  display: inline-flex;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sx-calendar-nav-button:hover {
+  background: var(--sx-muted);
+}
+
+.sx-calendar-chevron {
+  width: 16px;
+  height: 16px;
+}
+
+.sx-calendar-caption {
+  display: flex;
+  width: 100%;
+  height: var(--cell-size);
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--cell-size);
+}
+
+.sx-calendar-dropdowns {
+  display: flex;
+  width: 100%;
+  height: var(--cell-size);
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.sx-calendar-dropdown-root {
+  position: relative;
+  display: inline-flex;
+  height: 24px;
+  align-items: center;
+  border: 1px solid var(--sx-border);
+  border-radius: var(--cell-radius);
+}
+
+.sx-calendar-dropdown-root:focus-within {
+  border-color: var(--sx-ring);
+  box-shadow: 0 0 0 3px rgb(163 163 163 / 50%);
+}
+
+.sx-calendar-dropdown {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.sx-calendar-caption-label {
+  display: flex;
+  height: 24px;
+  align-items: center;
+  gap: 4px;
+  border-radius: var(--cell-radius);
+  padding: 0 4px 0 6px;
+  font-size: 14px;
+  font-weight: 500;
+  user-select: none;
+}
+
+.sx-calendar-caption-label svg {
+  width: 14px;
+  height: 14px;
+  color: var(--sx-muted-foreground);
+}
+
+.sx-calendar-grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.sx-calendar-weekdays,
+.sx-calendar-week {
+  display: flex;
+  width: 100%;
+}
+
+.sx-calendar-week {
+  margin-top: 8px;
+}
+
+.sx-calendar-weekday {
+  width: var(--cell-size);
+  flex: 1;
+  border-radius: var(--cell-radius);
+  color: var(--sx-muted-foreground);
+  font-size: 12.8px;
+  font-weight: 400;
+  text-align: center;
+  user-select: none;
+}
+
+.sx-calendar-day {
+  position: relative;
+  width: var(--cell-size);
+  height: var(--cell-size);
+  padding: 0;
+  border-radius: var(--cell-radius);
+  text-align: center;
+}
+
+.sx-calendar-day-button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  min-width: var(--cell-size);
+  height: 100%;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: var(--cell-radius);
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sx-calendar-day-button:hover {
+  background: var(--sx-muted);
+}
+
+.sx-calendar-day-button[data-selected-single="true"] {
+  color: #fafafa;
+  background: #171717;
+}
+
+.sx-calendar-today:not(:has(.sx-calendar-day-button[data-selected-single="true"])) {
+  background: var(--sx-muted);
+}
+
+.sx-calendar-outside {
+  color: var(--sx-muted-foreground);
+}
+
+.sx-calendar-disabled {
+  color: var(--sx-muted-foreground);
+  opacity: 0.5;
+}
+
+.sx-calendar-hidden {
+  visibility: hidden;
+}
+
+/* Card — official base-nova primary demo */
+.sx-card-demo {
+  width: min(384px, calc(100cqw - 32px));
+}
+
+.sx-card {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+  border-radius: 12px;
+  padding-top: 16px;
+  color: #171717;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(23 23 23 / 10%);
+  font-size: 14px;
+}
+
+.sx-card-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  align-items: start;
+  gap: 4px;
+  padding-inline: 16px;
+}
+
+.sx-card-title {
+  grid-column: 1;
+  grid-row: 1;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.375;
+}
+
+.sx-card-description {
+  grid-column: 1;
+  grid-row: 2;
+  color: var(--sx-muted-foreground);
+  font-size: 14px;
+}
+
+.sx-card-action {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: start;
+  justify-self: end;
+}
+
+.sx-card-content {
+  padding-inline: 16px;
+}
+
+.sx-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sx-field {
+  display: grid;
+  gap: 8px;
+}
+
+.sx-field label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  user-select: none;
+}
+
+.sx-field input {
+  width: 100%;
+  min-width: 0;
+  height: 32px;
+  border: 1px solid var(--sx-border);
+  border-radius: 8px;
+  padding: 4px 10px;
+  color: #171717;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.sx-field input::placeholder {
+  color: var(--sx-muted-foreground);
+}
+
+.sx-field input:focus-visible {
+  border-color: var(--sx-ring);
+}
+
+.sx-password-label {
+  display: flex;
+  align-items: center;
+}
+
+.sx-password-label a {
+  margin-left: auto;
+  color: #171717;
+  font-size: 14px;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+
+.sx-password-label a:hover {
+  text-decoration: underline;
+}
+
+.sx-card-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--sx-border);
+  border-radius: 0 0 12px 12px;
+  padding: 16px;
+  background: rgb(245 245 245 / 50%);
+}
+
+.sx-full-button {
+  width: 100%;
+}
+
+/* Carousel — official base-nova primary demo */
+.sx-carousel {
+  position: relative;
+  width: 320px;
+}
+
+.sx-carousel-viewport {
+  overflow: hidden;
+}
+
+.sx-carousel-content {
+  display: flex;
+  margin-left: -16px;
+  touch-action: pan-y pinch-zoom;
+}
+
+.sx-carousel-item {
+  min-width: 0;
+  flex: 0 0 100%;
+  padding-left: 16px;
+}
+
+.sx-carousel-item-pad {
+  padding: 4px;
+}
+
+.sx-carousel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+  border-radius: 12px;
+  padding-block: 16px;
+  color: #171717;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(23 23 23 / 10%);
+}
+
+.sx-carousel-card-content {
+  display: flex;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.sx-carousel-card-content span {
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.sx-carousel-previous,
+.sx-carousel-next {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin-block: auto;
+  border-radius: 999px;
+  touch-action: manipulation;
+}
+
+.sx-carousel-previous {
+  left: -48px;
+}
+
+.sx-carousel-next {
+  right: -48px;
+}
+
+/* Chart — official interactive primary demo */
+.sx-chart-card {
+  display: flex;
+  width: min(720px, calc(100cqw - 32px));
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+  border: 1px solid var(--sx-border);
+  border-radius: 12px;
+  padding-bottom: 16px;
+  color: #171717;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 10%), 0 1px 2px rgb(0 0 0 / 6%);
+}
+
+.sx-chart-header {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--sx-border);
+}
+
+.sx-chart-heading {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px;
+}
+
+.sx-chart-heading strong {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.sx-chart-heading span {
+  color: var(--sx-muted-foreground);
+  font-size: 14px;
+}
+
+.sx-chart-totals {
+  display: flex;
+}
+
+.sx-chart-totals button {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 144px;
+  flex: 1;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  border: 0;
+  border-left: 1px solid var(--sx-border);
+  padding: 24px 32px;
+  color: #171717;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sx-chart-totals button[data-active="true"] {
+  background: rgb(245 245 245 / 50%);
+}
+
+.sx-chart-totals span {
+  color: var(--sx-muted-foreground);
+  font-size: 12px;
+}
+
+.sx-chart-totals strong {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.sx-chart-content {
+  padding: 24px;
+}
+
+.sx-chart-container {
+  width: 100%;
+  height: 250px;
+}
+
+.sx-chart-tooltip {
+  display: grid;
+  min-width: 150px;
+  gap: 6px;
+  border: 1px solid rgb(229 229 229 / 50%);
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: #fff;
+  box-shadow: 0 10px 25px rgb(0 0 0 / 12%);
+  font-size: 12px;
+}
+
+.sx-chart-tooltip > strong {
+  font-weight: 500;
+}
+
+.sx-chart-tooltip span {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  align-items: center;
+  gap: 6px;
+  color: var(--sx-muted-foreground);
+}
+
+.sx-chart-tooltip i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+.sx-chart-tooltip b {
+  color: #171717;
+  font-weight: 500;
+}
+
+/* Breadcrumb — official base-nova primary demo */
+.sx-breadcrumb {
+  position: relative;
+  font-size: 14px;
+}
+
+.sx-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  color: var(--sx-muted-foreground);
+  list-style: none;
+}
+
+.sx-breadcrumb li {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sx-breadcrumb li > svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sx-breadcrumb a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.sx-breadcrumb a:hover {
+  color: #171717;
+}
+
+.sx-breadcrumb [aria-current="page"] {
+  color: #171717;
+  font-weight: 400;
+}
+
+.sx-breadcrumb-menu {
+  position: relative;
+}
+
+.sx-breadcrumb-menu .sx-button {
+  color: var(--sx-muted-foreground);
+}
+
+.sx-breadcrumb-menu .sx-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sx-dropdown {
+  position: absolute;
+  z-index: 30;
+  top: calc(100% + 4px);
+  left: 0;
+  display: none;
+  min-width: 128px;
+  border-radius: 8px;
+  padding: 4px;
+  color: #171717;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 10%), 0 0 0 1px rgb(23 23 23 / 10%);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+
+.sx-dropdown[data-open="true"] {
+  display: block;
+}
+
+.sx-dropdown button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: transparent;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sx-dropdown button:hover,
+.sx-dropdown button:focus-visible {
+  background: rgb(23 23 23 / 10%);
+}
+
+/* Bubble — official base-rhea primary demo */
+.sx-bubble-demo {
+  display: flex;
+  width: min(384px, calc(100cqw - 32px));
+  max-width: 384px;
+  flex-direction: column;
+  gap: 32px;
+  padding: 48px 0;
+  color: #171717;
+}
+
+.sx-bubble-group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sx-bubble {
+  position: relative;
+  display: flex;
+  width: fit-content;
+  max-width: 80%;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sx-bubble[data-align="end"] {
+  align-self: flex-end;
+}
+
+.sx-bubble-content {
+  width: fit-content;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border: 1px solid transparent;
+  border-radius: 24px;
+  padding: 10px 12px;
+  color: #fafafa;
+  background: #171717;
+  font-size: 14px;
+  line-height: 1.625;
+}
+
+.sx-bubble[data-variant="muted"] .sx-bubble-content {
+  color: #171717;
+  background: var(--sx-muted);
+}
+
+.sx-bubble-reactions {
+  position: absolute;
+  z-index: 2;
+  right: 12px;
+  bottom: 0;
+  display: flex;
+  width: fit-content;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border-radius: 999px;
+  padding: 2px 6px;
+  background: var(--sx-muted);
+  box-shadow: 0 0 0 3px #fff;
+  font-size: 14px;
+  transform: translateY(75%);
+}
+
+/* Button Group — official base-nova primary demo */
+.sx-button-group-demo {
+  display: flex;
+  width: fit-content;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.sx-button-group {
+  display: flex;
+  width: fit-content;
+  align-items: stretch;
+}
+
+.sx-button-group > .sx-button {
+  border-radius: 0;
+}
+
+.sx-button-group > .sx-button:first-child {
+  border-radius: 8px 0 0 8px;
+}
+
+.sx-button-group > .sx-button:last-of-type {
+  border-radius: 0 8px 8px 0;
+}
+
+.sx-button-group > .sx-button:only-child {
+  border-radius: 8px;
+}
+
+.sx-button-group > .sx-button + .sx-button {
+  border-left: 0;
+}
+
+.sx-more-group {
+  position: relative;
+}
+
+.sx-mail-menu,
+.sx-label-menu {
+  position: absolute;
+  z-index: 40;
+  display: none;
+  width: 160px;
+  border-radius: 8px;
+  padding: 4px;
+  color: #171717;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 10%), 0 0 0 1px rgb(23 23 23 / 10%);
+  backdrop-filter: blur(20px) saturate(150%);
+}
+
+.sx-mail-menu {
+  top: calc(100% + 4px);
+  right: 0;
+}
+
+.sx-label-menu {
+  top: 149px;
+  left: calc(100% + 4px);
+  width: 112px;
+}
+
+.sx-mail-menu[data-open="true"],
+.sx-label-menu[data-open="true"] {
+  display: block;
+}
+
+.sx-mail-menu > button,
+.sx-label-menu > button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 6px;
+  padding: 4px 6px;
+  background: transparent;
+  font-size: 14px;
+  text-align: left;
+  cursor: default;
+}
+
+.sx-mail-menu > button:hover,
+.sx-mail-menu > button:focus-visible,
+.sx-label-menu > button:hover,
+.sx-label-menu > button:focus-visible {
+  background: rgb(23 23 23 / 10%);
+}
+
+.sx-mail-menu svg,
+.sx-label-menu svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.sx-mail-menu hr {
+  height: 1px;
+  margin: 4px -4px;
+  border: 0;
+  background: rgb(23 23 23 / 5%);
+}
+
+.sx-menu-caret {
+  margin-left: auto;
+}
+
+.sx-mail-menu .sx-destructive {
+  color: var(--sx-destructive);
+}
+
+.sx-label-menu > button > span {
+  display: inline-flex;
+  width: 16px;
+  height: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Command — official base-nova primary demo */
+.sx-command {
+  display: flex;
+  width: min(384px, calc(100cqw - 32px));
+  max-width: 384px;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--sx-border);
+  border-radius: 12px;
+  padding: 4px;
+  color: #171717;
+  background: #fff;
+}
+
+.sx-command-input-wrapper {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  gap: 8px;
+  margin: 4px;
+  border: 1px solid rgb(229 229 229 / 30%);
+  border-radius: 8px;
+  padding-inline: 8px;
+  color: var(--sx-muted-foreground);
+  background: rgb(245 245 245 / 50%);
+}
+
+.sx-command-input-wrapper:focus-within {
+  border-color: var(--sx-ring);
+  box-shadow: 0 0 0 3px rgb(163 163 163 / 50%);
+}
+
+.sx-command-input-wrapper svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.sx-command-input-wrapper input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  color: #171717;
+  background: transparent;
+  font-size: 14px;
+  outline: none;
+}
+
+.sx-command-input-wrapper input::placeholder {
+  color: var(--sx-muted-foreground);
+}
+
+.sx-command-list {
+  max-height: 288px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sx-command-empty {
+  padding: 24px 8px;
+  color: var(--sx-muted-foreground);
+  font-size: 14px;
+  text-align: center;
+}
+
+.sx-command-group {
+  overflow: hidden;
+  padding: 4px;
+}
+
+.sx-command-group [cmdk-group-heading] {
+  padding: 6px 8px;
+  color: var(--sx-muted-foreground);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.sx-command-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 2px;
+  padding: 6px 8px;
+  font-size: 14px;
+  cursor: default;
+  user-select: none;
+}
+
+.sx-command-item[data-selected="true"] {
+  background: var(--sx-muted);
+}
+
+.sx-command-item[data-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.sx-command-item svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.sx-command-item kbd {
+  margin-left: auto;
+  color: var(--sx-muted-foreground);
+  font-family: inherit;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+}
+
+.sx-command-separator {
+  height: 1px;
+  margin: 0 -4px;
+  background: var(--sx-border);
+}
+
+.sx-command[dir="rtl"] .sx-command-item kbd {
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.sx-command-example-trigger {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sx-command-dialog-overlay {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgb(0 0 0 / 80%);
+  animation: sx-command-overlay-in 100ms ease-out;
+}
+
+.sx-command-dialog-panel {
+  position: absolute;
+  top: 33.333%;
+  left: 50%;
+  width: min(384px, calc(100vw - 32px));
+  overflow: hidden;
+  border: 1px solid var(--sx-border);
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 22%);
+  transform: translateX(-50%);
+  animation: sx-command-dialog-in 100ms ease-out;
+}
+
+.sx-command-dialog-command {
+  width: 100%;
+  max-width: none;
+  border: 0;
+}
+
+@keyframes sx-command-overlay-in {
+  from { opacity: 0; }
+}
+
+@keyframes sx-command-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.95);
+  }
+}
+
+/* Preserve exact component geometry and only scale the canonical specimen to fit the vault frame. */
+@container (max-height: 410px) {
+  .sx-native {
+    transform: scale(0.84);
+  }
+}
+
+@container (max-height: 330px) {
+  .sx-native {
+    transform: scale(0.68);
+  }
+}
+
+@container (max-height: 260px) {
+  .sx-native {
+    transform: scale(0.54);
+  }
+}
+
+@container (max-height: 205px) {
+  .sx-native {
+    transform: scale(0.43);
+  }
+}
+
+@container (max-width: 639px) {
+  .sx-carousel {
+    width: 192px;
+  }
+
+  .sx-back-group {
+    display: none;
+  }
+
+  .sx-chart-header {
+    flex-direction: column;
+  }
+
+  .sx-chart-heading {
+    padding: 16px 24px 12px;
+  }
+
+  .sx-chart-totals {
+    width: 100%;
+  }
+
+  .sx-chart-totals button {
+    min-width: 0;
+    border-top: 1px solid var(--sx-border);
+    border-left: 0;
+    padding: 16px 24px;
+  }
+
+  .sx-chart-totals button + button {
+    border-left: 1px solid var(--sx-border);
+  }
+
+  .sx-chart-totals strong {
+    font-size: 18px;
+  }
+
+  .sx-chart-content {
+    padding: 0 8px;
+  }
+}
+
+.sh-demo[data-id^="command-"] .sx-native {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sx-spinner,
+  .sx-shimmer,
+  .sx-command-dialog-overlay,
+  .sx-command-dialog-panel {
+    animation: none;
+  }
+}

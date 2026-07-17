@@ -1,0 +1,874 @@
+[
+  {
+    "url": "https://www.arlan.me/vault",
+    "method": "GET",
+    "status": 200,
+    "type": "document",
+    "contentType": "text/html; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1p8ew0ald5z7v.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/ghosty/grid-card.poster.jpg",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/jpeg",
+    "bytes": 24586
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3auk871gdz9vl.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/dia.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 15908
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0d1j2x99wgnhc.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/412xmsx1r01xv.css",
+    "method": "GET",
+    "status": 200,
+    "type": "stylesheet",
+    "contentType": "text/css; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueMontreal_Regular-s.p.27e8_0-jh6uhl.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/amo.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 6210
+  },
+  {
+    "url": "https://www.arlan.me/vault/midjourney.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 156838
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueMontreal_Semibold-s.p.21-mvfyq346aq.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/310vm2bl3xxpt.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3s9gec3eg78oc.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0mk1g55o6kl1e.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1l-wq2m1gsto6.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/05-c3ty_6dwfk.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3z5_lkbx_neea.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/429-s3caj9_qk.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0wj_p476zol7t.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/2-svl5pqq7jhe.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/00p-im9tf1iuq.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/turbopack-1qm3b4r6b6tgs.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1ghf9fj93mz4x.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/2rln0773edsh5.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3ubj3hscfd2c9.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-8.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 105864
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-7.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 42958
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-9.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 64858
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-1.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 88754
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-10.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 22730
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/3rdqn8rx95pw7.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-6.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 22274
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-3.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 116638
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-12.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 88734
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-5.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 54688
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-11.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 27700
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-2.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 69420
+  },
+  {
+    "url": "https://www.arlan.me/vault/grid/grid-4.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 132106
+  },
+  {
+    "url": "https://www.arlan.me/pixel/minion.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 19468
+  },
+  {
+    "url": "https://www.arlan.me/pixel/draw-pin.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 39708
+  },
+  {
+    "url": "https://www.arlan.me/pixel/minecraft-steve.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 6354
+  },
+  {
+    "url": "https://www.arlan.me/vault/fire/fire_sheet.png",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/png",
+    "bytes": 12966
+  },
+  {
+    "url": "https://www.arlan.me/vault/fire/netterack.png",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/png",
+    "bytes": 5306
+  },
+  {
+    "url": "https://www.arlan.me/pixel/crafty-ideas-printable.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 15808
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPKyoto_Medium-s.1-dmiz_4ouriq.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/pixel/desenho-animado-pin.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 9620
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/40qnasqbeibdr.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_vercel/insights/script.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/3eb175def99d8bb8/script.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/pixel/noob.webp",
+    "method": "GET",
+    "status": 200,
+    "type": "image",
+    "contentType": "image/webp",
+    "bytes": 9220
+  },
+  {
+    "url": "https://www.arlan.me/vault/fire/fire.ogg",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "audio/ogg",
+    "bytes": 28689
+  },
+  {
+    "url": "https://www.arlan.me/vault/color-depth?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 820
+  },
+  {
+    "url": "https://www.arlan.me/vault/fire/fizz.ogg",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "audio/ogg",
+    "bytes": 17002
+  },
+  {
+    "url": "https://www.arlan.me/?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 639
+  },
+  {
+    "url": "https://www.arlan.me/vault/typer?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 814
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Confident%20Life%20Notes%20for%20Busy%20Days.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 2188452
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Trending%20Meal%20Prep%20Recipes.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 4486421
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Fresh%20Meal%20Prep%20Recipes%20Inspiration.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 958356
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Pattern%20Storage%20Tips.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 931042
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Creative%20Sewing%20Room%20Tips.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 641127
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Nature%20Escape%20Ideas%20for%20Fall.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 1336858
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Cat%20Enrichment%20Roundup.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 1119365
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Crochet%20Project%20Inspiration.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 54467
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Dreamy%20Wellness%20Habit%20Ideas.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 1094054
+  },
+  {
+    "url": "https://www.arlan.me/vault/color-depth?_rsc=LOThLSm0P_-SAYbR",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/color-depth?_rsc=aHMi5j7QpOizRvRU",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/vault/color-depth?_rsc=onTyAToKvThTB15K",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/vault/color-depth?_rsc=fSCsjWyh2OiImA1w",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueMontrealMono_Book-s.2pi6_nqd6yfj5.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPWoodland_Bold-s.1spmnl7tm9fgg.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPWriter_RegularText-s.0y4z-re40oy-c.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueBit_Bold-s.1suvb0d8fyrc5.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/typer?_rsc=F6CW-PYGjEpFzu6f",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/color-depth?_rsc=F6CW-PYGjEpFzu6f",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/typer?_rsc=aHMi5j7QpOizRvRU",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPNeueCorp_NormalMedium-s.2pm2a7kvsrapm.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/typer?_rsc=LOThLSm0P_-SAYbR",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPPangramSansRounded_Medium-s.39bgpb86pvtq-.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/media/PPMondwest_Regular-s.0_9ksmp-90p0c.otf",
+    "method": "GET",
+    "status": 200,
+    "type": "font",
+    "contentType": "font/otf",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/34gs_ec8iwv63.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1c9m13fcc_a52.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/?_rsc=0Hbrqp9DqROPseQD",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/?_rsc=LOThLSm0P_-SAYbR",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/31hel23e80zg8.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/1tgwjfxc_l13n.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/11llaggk2b72m.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/_next/static/chunks/0nvznna_ww0ph.js",
+    "method": "GET",
+    "status": 200,
+    "type": "script",
+    "contentType": "application/javascript; charset=utf-8",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/ghosty-reveal?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 822
+  },
+  {
+    "url": "https://www.arlan.me/vault/ghosty/grid-card.webm",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/webm",
+    "bytes": 1156491
+  },
+  {
+    "url": "https://www.arlan.me/vault/ghosty-reveal?_rsc=aHMi5j7QpOizRvRU",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/vault/ghosty-reveal?_rsc=F6CW-PYGjEpFzu6f",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/ghosty-reveal?_rsc=LOThLSm0P_-SAYbR",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/dia-gradient?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 821
+  },
+  {
+    "url": "https://www.arlan.me/vault/dia.av1.webm",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/webm",
+    "bytes": 196468
+  },
+  {
+    "url": "https://www.arlan.me/vault/sandbox?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 816
+  },
+  {
+    "url": "https://www.arlan.me/vault/dia-gradient?_rsc=LOThLSm0P_-SAYbR",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/dia-gradient?_rsc=aHMi5j7QpOizRvRU",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/vault/dia-gradient?_rsc=F6CW-PYGjEpFzu6f",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/vector-editor?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 822
+  },
+  {
+    "url": "https://www.arlan.me/vault/vector-editor?_rsc=aHMi5j7QpOizRvRU",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 445
+  },
+  {
+    "url": "https://www.arlan.me/vault/amo.av1.webm",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/webm",
+    "bytes": 110024
+  },
+  {
+    "url": "https://www.arlan.me/vault/midjourney.av1.webm",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/webm",
+    "bytes": 3203176
+  },
+  {
+    "url": "https://www.arlan.me/vault/vector-editor?_rsc=LOThLSm0P_-SAYbR",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 0
+  },
+  {
+    "url": "https://www.arlan.me/vault/amo?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 812
+  },
+  {
+    "url": "https://www.arlan.me/vault/midjourney?_rsc=w8vYoeQkuGu5Gq2p",
+    "method": "GET",
+    "status": 200,
+    "type": "fetch",
+    "contentType": "text/x-component",
+    "bytes": 819
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Dreamy%20Wellness%20Habit%20Ideas.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 1094054
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Crochet%20Project%20Inspiration.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 21699
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Pattern%20Storage%20Tips.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 931042
+  },
+  {
+    "url": "https://www.arlan.me/videos-glyph/Creative%20Sewing%20Room%20Tips.mp4",
+    "method": "GET",
+    "status": 206,
+    "type": "media",
+    "contentType": "video/mp4",
+    "bytes": 641127
+  }
+]

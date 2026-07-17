@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chief Keef index comparison</title>
+    <style>
+      * { box-sizing: border-box; }
+      body {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin: 0;
+        padding: 34px 22px 22px;
+        background: #eee;
+        font-family: system-ui, sans-serif;
+      }
+      figure { margin: 0; border: 1px solid #ccc; background: white; }
+      figcaption {
+        height: 28px;
+        padding: 6px 10px;
+        color: #555;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      img { display: block; width: 100%; height: 620px; object-fit: fill; }
+    </style>
+  </head>
+  <body>
+    <figure>
+      <figcaption>Reference</figcaption>
+      <img src="../source-default-686.png" alt="Reference implementation" />
+    </figure>
+    <figure>
+      <figcaption>Implementation</figcaption>
+      <img src="implementation-default-686.jpg" alt="Vault implementation" />
+    </figure>
+  </body>
+</html>

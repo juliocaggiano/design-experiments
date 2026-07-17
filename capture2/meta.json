@@ -1,0 +1,24 @@
+{
+  "url": "https://www.arlan.me/vault",
+  "title": "Vault",
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "framework": {
+    "next": false,
+    "nuxt": false,
+    "react": false,
+    "svelte": false,
+    "gsap": false,
+    "framerMotion": false
+  },
+  "capturedAt": "2026-07-07T16:04:34.521Z",
+  "counts": {
+    "requests": 120,
+    "assetsDownloaded": 65,
+    "assetsFailed": 0,
+    "sections": 1
+  }
+}

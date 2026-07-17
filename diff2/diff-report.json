@@ -1,0 +1,43 @@
+{
+  "rebuildUrl": "http://localhost:5173",
+  "viewports": [
+    390,
+    768,
+    1440
+  ],
+  "threshold": 0.1,
+  "results": [
+    {
+      "viewport": 390,
+      "mismatchedPixels": 679452,
+      "totalPixels": 5093400,
+      "mismatchRatio": 0.1334,
+      "heightDelta": 124,
+      "verdict": "far"
+    },
+    {
+      "viewport": 768,
+      "mismatchedPixels": 1933602,
+      "totalPixels": 16524288,
+      "mismatchRatio": 0.117,
+      "heightDelta": 0,
+      "verdict": "far"
+    },
+    {
+      "viewport": 1440,
+      "mismatchedPixels": 2002699,
+      "totalPixels": 30983040,
+      "mismatchRatio": 0.0646,
+      "heightDelta": 0,
+      "verdict": "review"
+    }
+  ],
+  "worstViewport": {
+    "viewport": 390,
+    "mismatchedPixels": 679452,
+    "totalPixels": 5093400,
+    "mismatchRatio": 0.1334,
+    "heightDelta": 124,
+    "verdict": "far"
+  }
+}

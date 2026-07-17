@@ -1,0 +1,34 @@
+body.antialiased.max-w-[720px].mx-auto.px-8.sm:px-4
+  div
+  script "(function(){try{var s=localStorage.getItem('arlan-theme');if"
+  script "{"@context":"https://schema.org","@type":"Person","name":"Ar"
+  script "{"@context":"https://schema.org","@type":"WebSite","name":"A"
+  main.flex-auto.min-w-0.flex.flex-col.isolate
+    div.page-fade-in
+      div.py-24
+        script "{"@context":"https://schema.org","@type":"CollectionPage","n"
+        section.flex.flex-col.gap-8.text-[15px].leading-[1.7]
+          header.flex.items-center.justify-between.gap-4
+          div.relative
+  script
+  script "(self.__next_f=self.__next_f||[]).push([0])"
+  script "self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[52961,[\""
+  script "self.__next_f.push([1,"0:{\"P\":null,\"c\":[\"\",\"vault\"],"
+  script "self.__next_f.push([1,"15:I[22016,[\"/_next/static/chunks/42"
+  script "self.__next_f.push([1,"21:[[\"$\",\"meta\",\"0\",{\"charSet\"
+  script "self.__next_f.push([1,"24:I[27201,[\"/_next/static/chunks/05"
+  script "self.__next_f.push([1,"23:[[\"$\",\"title\",\"0\",{\"childre"
+  script "self.__next_f.push([1,"26:I[39338,[\"/_next/static/chunks/42"
+  script "self.__next_f.push([1,"Build this: a perspective field of sm"
+  script "self.__next_f.push([1,"28:T5a86,"])"
+  script "self.__next_f.push([1,"Build this: a live ASCII particle fie"
+  script "self.__next_f.push([1,"29:T39d0,"])"
+  script "self.__next_f.push([1,"Build this: a canvas image-pixelizati"
+  script "self.__next_f.push([1,"2a:T4047,"])"
+  script "self.__next_f.push([1,"Build this: a WebGL fragment shader o"
+  script "self.__next_f.push([1,"2b:T303f,"])"
+  script "self.__next_f.push([1,"Build this: Minecraft fire on a 2D ca"
+  script "self.__next_f.push([1,"2c:T30df,"])"
+  script "self.__next_f.push([1,"Build this: a wordmark rendered as a "
+  script "self.__next_f.push([1,"1b:[\"$\",\"div\",null,{\"className\""
+  next-route-announcer

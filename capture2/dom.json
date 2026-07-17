@@ -1,0 +1,113 @@
+{
+  "sections": [
+    {
+      "index": 0,
+      "tag": "div",
+      "id": null,
+      "classes": "page-fade-in",
+      "heading": "Vault",
+      "width": 688,
+      "height": 5379,
+      "background": "rgba(0, 0, 0, 0)",
+      "backgroundImage": null,
+      "padding": "0px",
+      "display": "block",
+      "position": "static",
+      "textPreview": "{\"@context\":\"https://schema.org\",\"@type\":\"CollectionPage\",\"name\":\"Vault\",\"url\":\"https://arlan.me/vault\",\"description\":\"Visuals and interactions I love from arou"
+    }
+  ],
+  "domAssets": [
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-1.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-2.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-3.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-4.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-5.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-6.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-7.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-8.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-9.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-10.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-11.webp"
+    },
+    {
+      "tag": "img",
+      "ref": "/vault/grid/grid-12.webp"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/ghosty/grid-card.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/ghosty/grid-card.mp4"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/dia.av1.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/dia.vp9.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/dia.mp4"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/amo.av1.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/amo.vp9.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/amo.mp4"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/midjourney.av1.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/midjourney.vp9.webm"
+    },
+    {
+      "tag": "source",
+      "ref": "/vault/midjourney.mp4"
+    }
+  ]
+}
