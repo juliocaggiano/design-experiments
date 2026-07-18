@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import './ReactiveDitherDemo.css'
 
 /*
- * Reactive Dither — a rounded-square mark rendered as a field of real canvas
- * dots. An invisible circular influence field follows the pointer and pushes
+ * Reactive Dither — a shaded cube-tile mark rendered as a field of real
+ * canvas dots. An invisible circular influence field follows the pointer and pushes
  * nearby dots radially outward with a cubic falloff; a damped spring returns
  * every dot home. The same engine and defaults power the feed thumbnail, the
  * expanded hero, and the playground implementation.
@@ -19,11 +19,12 @@ type Dot = {
   y: number
   vx: number
   vy: number
+  tone: number // quantized dot-size level, 0..TONE_LEVELS-1 — indexes the sprite set
 }
 
 type DitherSettings = {
   spacing: number // grid gap between dots, CSS px
-  dotRadius: number // dot radius, CSS px
+  dotRadius: number // dot size multiplier — scales every quantized dot radius together
   interactionRadius: number // influence field radius, CSS px
   strength: number // maximum displacement at the field center, CSS px
   stiffness: number // spring pull toward the target per 60 fps frame
@@ -48,20 +49,19 @@ type DitherEngine = {
 }
 
 const DEFAULT_SETTINGS: DitherSettings = {
-  spacing: 5.8,
-  dotRadius: 1.7,
-  interactionRadius: 92,
-  strength: 30,
+  spacing: 2.4,
+  dotRadius: 0.65,
+  interactionRadius: 100,
+  strength: 16,
   stiffness: 0.11,
-  damping: 0.83,
-  falloff: 3,
+  damping: 0.85,
+  falloff: 2,
   invert: false,
 }
 
-/* The mark is drawn once into this offscreen mask and sampled by alpha. */
+/* The artwork is drawn once into this offscreen mask and sampled by tone. */
 const MARK_SOURCE_SIZE = 512
 const MARK_FILL = 0.62 // mark side as a fraction of the stage's smaller edge
-const ALPHA_THRESHOLD = 110
 const IDLE_DELAY_MS = 4500 // pointer absence before the idle drift resumes
 const IDLE_GAIN = 0.55 // the idle drift stays noticeably subtler than a pointer
 
@@ -73,8 +73,8 @@ const RANGE_CONTROLS: readonly {
   step: number
   format: (value: number) => string
 }[] = [
-  { key: 'spacing', label: 'Dot spacing', min: 3.6, max: 10, step: 0.2, format: (v) => `${v.toFixed(1)} px` },
-  { key: 'dotRadius', label: 'Dot radius', min: 0.8, max: 3.2, step: 0.1, format: (v) => `${v.toFixed(1)} px` },
+  { key: 'spacing', label: 'Dot spacing', min: 2.4, max: 10, step: 0.2, format: (v) => `${v.toFixed(1)} px` },
+  { key: 'dotRadius', label: 'Dot size', min: 0.6, max: 1.5, step: 0.05, format: (v) => `×${v.toFixed(2)}` },
   { key: 'interactionRadius', label: 'Interaction radius', min: 36, max: 200, step: 2, format: (v) => `${Math.round(v)} px` },
   { key: 'strength', label: 'Displacement strength', min: 0, max: 80, step: 1, format: (v) => `${Math.round(v)} px` },
   { key: 'stiffness', label: 'Return stiffness', min: 0.03, max: 0.26, step: 0.005, format: (v) => v.toFixed(3) },
@@ -99,21 +99,89 @@ function roundedRectPath(
   context.closePath()
 }
 
-/* Abstract mark: a rounded-square ring with a solid center dot. Drawn in
- * vector so the sampled silhouette stays crisp at every stage size. */
-function drawSourceMark(context: CanvasRenderingContext2D, size: number) {
+/* The mark is Julio's dithered cube-tile render, used directly as the tone
+ * field: drawn full-bleed into the mask, then each grid point box-averages
+ * its neighborhood to descreen the artwork's own dot grid back into smooth
+ * shade. Dot sizes come from an empirically calibrated coverage table (each
+ * sprite level is stamped on a test grid and measured), so dark regions merge
+ * into near-solid black with light specks and light regions stay sparse pin
+ * dots — the reference's exact geometry, gradients, and shading with no
+ * redrawn approximation. */
+const MASK_ARTWORK_URL = '/vault/reactive-dither/cube-tone.png'
+const MASK_SAMPLE_RADIUS = 7 // descreen window in mask px — one full dot pitch of the artwork
+const TONE_LEVELS = 16 // quantized dot sizes between empty and the merging maximum
+const MAX_RADIUS_RATIO = 1.5 // of the grid pitch — matches the render Julio approved: dark fields merge into near-solid black with light specks, like the reference
+const MIN_DOT_RADIUS = 0.3 // CSS px; smaller dots are invisible and skipped
+
+/* Fallback when the artwork cannot load: the same composition approximated
+ * with flat regions at the luminances measured from the reference. */
+const TILE = { x: 12, y: 12, size: 76, radius: 13 }
+const CUBE = {
+  apex: [50, 22.6],
+  left: [26.8, 35.7],
+  right: [73.2, 35.7],
+  center: [50, 48.3],
+  leftBottom: [26.8, 63.7],
+  rightBottom: [73.2, 63.7],
+  bottomApex: [50, 77.5],
+} as const
+const CARVE_WIDTH = 2.6
+
+function fillPolygon(
+  context: CanvasRenderingContext2D,
+  points: readonly (readonly [number, number])[],
+  u: number,
+) {
+  context.beginPath()
+  points.forEach(([x, y], index) => {
+    if (index === 0) context.moveTo(x * u, y * u)
+    else context.lineTo(x * u, y * u)
+  })
+  context.closePath()
+  context.fill()
+}
+
+function drawArtworkMask(context: CanvasRenderingContext2D, image: HTMLImageElement, size: number) {
+  context.clearRect(0, 0, size, size)
+  context.fillStyle = '#fff'
+  context.fillRect(0, 0, size, size)
+  context.drawImage(image, 0, 0, size, size)
+}
+
+function drawVectorFallback(context: CanvasRenderingContext2D, size: number) {
   const u = size / 100
   context.clearRect(0, 0, size, size)
-  context.fillStyle = '#000'
-  roundedRectPath(context, 16 * u, 16 * u, 68 * u, 68 * u, 19 * u)
+  context.fillStyle = 'rgb(13, 13, 13)'
+  roundedRectPath(context, TILE.x * u, TILE.y * u, TILE.size * u, TILE.size * u, TILE.radius * u)
   context.fill()
+  context.fillStyle = 'rgb(179, 179, 179)'
+  fillPolygon(context, [CUBE.right, CUBE.center, CUBE.bottomApex, CUBE.rightBottom], u)
+  context.fillStyle = 'rgb(38, 38, 38)'
+  fillPolygon(context, [CUBE.left, CUBE.center, CUBE.bottomApex, CUBE.leftBottom], u)
+  context.fillStyle = 'rgb(110, 110, 110)'
+  fillPolygon(context, [CUBE.apex, CUBE.left, CUBE.center, CUBE.right], u)
   context.globalCompositeOperation = 'destination-out'
-  roundedRectPath(context, 28.5 * u, 28.5 * u, 43 * u, 43 * u, 11.5 * u)
-  context.fill()
-  context.globalCompositeOperation = 'source-over'
+  const edges = [
+    [CUBE.apex, CUBE.left],
+    [CUBE.apex, CUBE.right],
+    [CUBE.left, CUBE.center],
+    [CUBE.center, CUBE.right],
+    [CUBE.left, CUBE.leftBottom],
+    [CUBE.right, CUBE.rightBottom],
+    [CUBE.center, CUBE.bottomApex],
+    [CUBE.leftBottom, CUBE.bottomApex],
+    [CUBE.rightBottom, CUBE.bottomApex],
+  ] as const
   context.beginPath()
-  context.arc(50 * u, 50 * u, 10.5 * u, 0, Math.PI * 2)
-  context.fill()
+  for (const [[fx, fy], [tx, ty]] of edges) {
+    context.moveTo(fx * u, fy * u)
+    context.lineTo(tx * u, ty * u)
+  }
+  context.lineWidth = CARVE_WIDTH * u
+  context.lineJoin = 'round'
+  context.lineCap = 'round'
+  context.stroke()
+  context.globalCompositeOperation = 'source-over'
 }
 
 function usePrefersReducedMotion() {
@@ -173,7 +241,8 @@ export function ReactiveDitherDemo({
     let height = 0
     let dpr = 1
     let dots: Dot[] = []
-    let sprite: { canvas: HTMLCanvasElement; half: number } | null = null
+    let sprites: ({ canvas: HTMLCanvasElement; half: number; size: number } | null)[] = []
+    let spriteCoverage: number[] = []
     let visible = false
     let gain = 0
     let pointer: { x: number; y: number } | null = null
@@ -185,10 +254,17 @@ export function ReactiveDitherDemo({
     source.height = MARK_SOURCE_SIZE
     const sourceContext = source.getContext('2d', { willReadFrequently: true })
     let sourcePixels: Uint8ClampedArray | null = null
-    if (sourceContext) {
-      drawSourceMark(sourceContext, MARK_SOURCE_SIZE)
+    const applyMask = (paint: (mask: CanvasRenderingContext2D) => void) => {
+      if (!sourceContext || disposed) return
+      paint(sourceContext)
       sourcePixels = sourceContext.getImageData(0, 0, MARK_SOURCE_SIZE, MARK_SOURCE_SIZE).data
+      resample()
+      if (!running) draw()
     }
+    const artwork = new Image()
+    artwork.onload = () => applyMask((mask) => drawArtworkMask(mask, artwork, MARK_SOURCE_SIZE))
+    artwork.onerror = () => applyMask((mask) => drawVectorFallback(mask, MARK_SOURCE_SIZE))
+    artwork.src = MASK_ARTWORK_URL
 
     const markMetrics = () => {
       const side = Math.min(width, height) * MARK_FILL
@@ -212,41 +288,123 @@ export function ReactiveDitherDemo({
             MARK_SOURCE_SIZE - 1,
             Math.max(0, Math.floor(((x - x0) / mark.side) * MARK_SOURCE_SIZE)),
           )
-          if (sourcePixels[(sy * MARK_SOURCE_SIZE + sx) * 4 + 3] > ALPHA_THRESHOLD) {
-            dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0 })
+          // Box-average the neighborhood: descreens the artwork's own dot
+          // grid into the local white fraction for this dot.
+          let sum = 0
+          let count = 0
+          for (let oy = -MASK_SAMPLE_RADIUS; oy <= MASK_SAMPLE_RADIUS; oy += 1) {
+            const yy = sy + oy
+            if (yy < 0 || yy >= MARK_SOURCE_SIZE) continue
+            for (let ox = -MASK_SAMPLE_RADIUS; ox <= MASK_SAMPLE_RADIUS; ox += 1) {
+              const xx = sx + ox
+              if (xx < 0 || xx >= MARK_SOURCE_SIZE) continue
+              const pixel = (yy * MARK_SOURCE_SIZE + xx) * 4
+              const alpha = sourcePixels[pixel + 3] / 255
+              sum += 1 - alpha * (1 - sourcePixels[pixel] / 255)
+              count += 1
+            }
           }
+          const white = count > 0 ? sum / count : 1
+          // Target ink coverage for this cell; pick the sprite level whose
+          // EMPIRICALLY measured coverage is closest. Theory (area law)
+          // undershoots because antialiasing and overlap bleed coverage, so
+          // the calibration table in spriteCoverage is the source of truth.
+          const target = 1 - white
+          if (target < 0.02) continue
+          let level = -1
+          let best = Number.POSITIVE_INFINITY
+          for (let candidate = 0; candidate < sprites.length; candidate += 1) {
+            if (!sprites[candidate]) continue
+            const delta = Math.abs(spriteCoverage[candidate] - target)
+            if (delta < best) {
+              best = delta
+              level = candidate
+            }
+          }
+          if (level < 0) continue
+          dots.push({ hx: x, hy: y, x, y, vx: 0, vy: 0, tone: level })
         }
       }
     }
 
-    /* Dots are stamped from one pre-rendered sprite — far cheaper than an
-     * arc() call per dot per frame. */
-    const rebuildSprite = () => {
+    /* Dots are stamped from pre-rendered sprites — one per quantized size
+     * level — far cheaper than an arc() call per dot per frame. Every level
+     * is then calibrated empirically: stamped on a test grid and measured, so
+     * sampling can pick dot sizes by the coverage the browser ACTUALLY
+     * renders — theory undersizes dark tones because antialiasing and sprite
+     * overlap always bleed coverage away. */
+    const calibration = document.createElement('canvas')
+    const measureCoverage = (sprite: { canvas: HTMLCanvasElement; half: number; size: number }, pitch: number) => {
+      // Stamp a 6×6 dot grid and measure ONLY the inner 3×3 cells: dots near
+      // the canvas edge clip ink that a real grid would spill into the next
+      // cell, and an unstamped border would dilute the average — both bias
+      // the calibration and crush every tone darker.
+      const cells = 6
+      const cssSize = pitch * cells
+      const pixels = Math.max(8, Math.ceil(cssSize * dpr))
+      calibration.width = pixels
+      calibration.height = pixels
+      const bench = calibration.getContext('2d', { willReadFrequently: true })
+      if (!bench) return 0
+      bench.setTransform(dpr, 0, 0, dpr, 0, 0)
+      bench.fillStyle = '#fff'
+      bench.fillRect(0, 0, cssSize, cssSize)
+      for (let gy = 0; gy < cells; gy += 1) {
+        for (let gx = 0; gx < cells; gx += 1) {
+          bench.drawImage(sprite.canvas, (gx + 0.5) * pitch - sprite.half, (gy + 0.5) * pitch - sprite.half, sprite.size, sprite.size)
+        }
+      }
+      const inset = Math.round(1.5 * pitch * dpr)
+      const span = Math.max(1, Math.round(3 * pitch * dpr))
+      const data = bench.getImageData(inset, inset, span, span).data
+      let sum = 0
+      for (let index = 0; index < data.length; index += 4) sum += data[index]
+      return 1 - sum / (data.length / 4) / 255
+    }
+
+    const rebuildSprites = () => {
       const current = settingsRef.current
-      const radius = Math.max(0.4, current.dotRadius)
-      const pad = 1
-      const cssSize = (radius + pad) * 2
-      const spriteCanvas = document.createElement('canvas')
-      spriteCanvas.width = Math.max(2, Math.ceil(cssSize * dpr))
-      spriteCanvas.height = spriteCanvas.width
-      const spriteContext = spriteCanvas.getContext('2d')
-      if (!spriteContext) return
-      spriteContext.scale(dpr, dpr)
-      spriteContext.fillStyle = current.invert ? '#f5f5f3' : '#26262a'
-      spriteContext.beginPath()
-      spriteContext.arc(cssSize / 2, cssSize / 2, radius, 0, Math.PI * 2)
-      spriteContext.fill()
-      sprite = { canvas: spriteCanvas, half: cssSize / 2 }
+      const step = Math.max(3, current.spacing)
+      sprites = []
+      spriteCoverage = []
+      for (let level = 0; level < TONE_LEVELS; level += 1) {
+        const radius = (level / (TONE_LEVELS - 1)) * step * MAX_RADIUS_RATIO * current.dotRadius
+        if (radius < MIN_DOT_RADIUS * 0.5) {
+          sprites.push(null)
+          spriteCoverage.push(0)
+          continue
+        }
+        const pad = 1
+        const cssSize = (radius + pad) * 2
+        const spriteCanvas = document.createElement('canvas')
+        spriteCanvas.width = Math.max(2, Math.ceil(cssSize * dpr))
+        spriteCanvas.height = spriteCanvas.width
+        const spriteContext = spriteCanvas.getContext('2d')
+        if (!spriteContext) {
+          sprites.push(null)
+          spriteCoverage.push(0)
+          continue
+        }
+        spriteContext.scale(dpr, dpr)
+        spriteContext.fillStyle = current.invert ? '#f5f5f3' : '#000'
+        spriteContext.beginPath()
+        spriteContext.arc(cssSize / 2, cssSize / 2, radius, 0, Math.PI * 2)
+        spriteContext.fill()
+        const sprite = { canvas: spriteCanvas, half: cssSize / 2, size: cssSize }
+        sprites.push(sprite)
+        spriteCoverage.push(measureCoverage(sprite, step))
+      }
     }
 
     const draw = () => {
-      if (!sprite || width < 2 || height < 2) return
+      if (width < 2 || height < 2) return
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
       context.clearRect(0, 0, width, height)
-      const { canvas: spriteCanvas, half } = sprite
       for (let index = 0; index < dots.length; index += 1) {
         const dot = dots[index]
-        context.drawImage(spriteCanvas, dot.x - half, dot.y - half)
+        const sprite = sprites[dot.tone]
+        if (!sprite) continue
+        context.drawImage(sprite.canvas, dot.x - sprite.half, dot.y - sprite.half, sprite.size, sprite.size)
       }
     }
 
@@ -378,8 +536,8 @@ export function ReactiveDitherDemo({
         canvas.width = pixelWidth
         canvas.height = pixelHeight
       }
+      rebuildSprites()
       resample()
-      rebuildSprite()
       if (!running) draw()
     }
 
@@ -411,8 +569,8 @@ export function ReactiveDitherDemo({
         lastInteraction = performance.now()
       },
       syncSettings: (request) => {
+        if (request.sprite) rebuildSprites()
         if (request.resample) resample()
-        if (request.sprite) rebuildSprite()
         if (!running) draw()
       },
     }
@@ -434,7 +592,7 @@ export function ReactiveDitherDemo({
     settingsRef.current = settings
     engineRef.current?.syncSettings({
       resample: previous.spacing !== settings.spacing,
-      sprite: previous.dotRadius !== settings.dotRadius || previous.invert !== settings.invert,
+      sprite: previous.spacing !== settings.spacing || previous.dotRadius !== settings.dotRadius || previous.invert !== settings.invert,
     })
   }, [settings])
 
@@ -461,7 +619,7 @@ export function ReactiveDitherDemo({
           ref={canvasRef}
           className="rd-canvas"
           role="img"
-          aria-label="A rounded-square mark built from thousands of small canvas dots that part around the pointer and spring back into place"
+          aria-label="A shaded app tile with a cube logo built from thousands of small canvas dots that part around the pointer and spring back into place"
         />
       </div>
 

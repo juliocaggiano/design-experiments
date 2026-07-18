@@ -10,6 +10,34 @@ export function Caption({ title, category }: { title: string; category?: string 
   )
 }
 
+/* Rich card caption: headline, a summary clamped to two lines, and a footer
+   row with a pill affordance (visual only — the whole card is the link) and
+   the category. Mirrors the reference card layout Julio supplied. */
+export function RichCaption({
+  title,
+  summary,
+  category,
+  action = 'View demo',
+}: {
+  title: string
+  summary: string
+  category?: string
+  action?: string
+}) {
+  return (
+    <div data-card-caption className="flex flex-col gap-1 px-1.5 pt-3 pb-1.5">
+      <span className="text-[14px] leading-snug tracking-[-0.01em] text-[var(--text-primary)]">{title}</span>
+      <span data-card-summary className="line-clamp-2 text-[14px] leading-snug text-[var(--text-tertiary)]">{summary}</span>
+      <div className="mt-2.5 flex items-center justify-between gap-3">
+        <span className="inline-flex items-center rounded-md border border-[var(--border-line)] bg-[var(--bg-page)] px-2.5 py-1 text-[12px] font-medium text-[var(--text-secondary)] transition-colors duration-150 ease-[var(--ease-out)] group-hover:border-[var(--border-ring)] group-hover:text-[var(--text-primary)]">
+          {action}
+        </span>
+        {category ? <span data-card-category className="shrink-0 text-[12px] text-[var(--text-tertiary)]">{category}</span> : null}
+      </div>
+    </div>
+  )
+}
+
 /* Link cards open the demo's detail page via the in-app router. */
 export function LinkCard({
   href,
@@ -22,7 +50,7 @@ export function LinkCard({
   interactive?: boolean
   label?: string
 }) {
-  const cardClassName = 'group block rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]'
+  const cardClassName = 'group block rounded-[16px] border border-[var(--border-line)] bg-[var(--bg-surface)] p-2 text-left transition-colors duration-150 ease-[var(--ease-out)] hover:border-[var(--border-ring)]'
   const open = () => {
     navigate(href)
     window.scrollTo(0, 0)

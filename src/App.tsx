@@ -1,6 +1,5 @@
-import { useLayoutEffect, useRef, useState, type ComponentType, type KeyboardEvent } from 'react'
-import { X } from '@phosphor-icons/react'
-import { LinkCard, Caption } from './components/Card'
+import { useEffect, useLayoutEffect, useRef, useState, type ComponentType, type KeyboardEvent } from 'react'
+import { LinkCard, RichCaption } from './components/Card'
 import { OverlayDemo } from './demos/OverlayDemo'
 import { FluidSpringDemo } from './demos/FluidSpring'
 import { SheetDemo } from './demos/SheetDemo'
@@ -58,22 +57,14 @@ import {
 function Header() {
   return (
     <header className="flex items-start justify-between gap-4">
-      <div className="flex min-w-0 flex-col gap-1">
-        <h1 className="font-semibold text-[var(--text-primary)] text-pretty">
-          Design Engineering Experiments
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <h1 className="text-[15px] font-semibold text-[var(--text-primary)] text-pretty">
+          Design Experiments
         </h1>
         <p className="text-pretty text-[var(--text-secondary)]">
-          These are some of the skills and small projects that I've been developing recently.
+          Here are some small projects I've been exploring lately. Feel free to remix them, btw.
         </p>
       </div>
-      <a
-        aria-label="Close"
-        href="/"
-        onClick={(e) => e.preventDefault()}
-        className="relative flex items-center justify-center rounded-md p-1 transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] text-[var(--text-secondary)] after:absolute after:left-1/2 after:top-1/2 after:size-10 after:-translate-x-1/2 after:-translate-y-1/2 after:content-['']"
-      >
-        <X size={16} weight="regular" aria-hidden="true" />
-      </a>
     </header>
   )
 }
@@ -88,30 +79,155 @@ function CategoryFilter({
   const categories: readonly (VaultCategory | 'All')[] = ['All', ...VAULT_CATEGORIES]
   const tabsRef = useRef<HTMLDivElement>(null)
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
-  const [pill, setPill] = useState({ x: 0, width: 0 })
-  const [instantPill, setInstantPill] = useState(true)
-  const visibleCount = selected === 'All'
-    ? VAULT_ITEMS.length
-    : VAULT_ITEMS.filter((item) => item.category === selected).length
+  const pillRef = useRef<HTMLSpanElement>(null)
+  const ghostRef = useRef<HTMLSpanElement>(null)
+
+  /* Liquid pill: the selection pill travels on an underdamped spring (soft
+   * overshoot), stretches and squashes with its velocity like a moving
+   * droplet, and a lighter ghost pill eases behind the hovered tab. All
+   * motion is written directly to the DOM from one rAF loop — no React state
+   * per frame — and reduced motion snaps instantly with no ghost. */
+  const motion = useRef({
+    x: 0, w: 0, vx: 0, vw: 0, tx: 0, tw: 0,
+    gx: 0, gw: 0, gtx: 0, gtw: 0, ghostShown: false, hoverIndex: -1,
+    raf: 0, running: false, last: 0, ready: false,
+  })
+
+  const reduced = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const measure = (index: number) => {
+    const tab = tabRefs.current[index]
+    return tab ? { x: tab.offsetLeft - 4, w: tab.offsetWidth } : null
+  }
 
   useLayoutEffect(() => {
-    const updatePill = () => {
-      const activeTab = tabRefs.current[categories.indexOf(selected)]
-      if (!activeTab) return
-      setPill({ x: activeTab.offsetLeft, width: activeTab.offsetWidth })
+    const m = motion.current
+    const pill = pillRef.current
+    const ghost = ghostRef.current
+    if (!pill || !ghost) return
+
+    const writePill = () => {
+      const stretch = Math.min(0.16, Math.abs(m.vx) * 0.012)
+      pill.style.width = `${m.w}px`
+      pill.style.transform = `translateX(${m.x}px) scaleX(${1 + stretch}) scaleY(${1 - stretch * 0.35})`
+    }
+    const writeGhost = () => {
+      ghost.style.width = `${m.gw}px`
+      ghost.style.transform = `translateX(${m.gx}px)`
+    }
+    const snapPill = () => {
+      m.x = m.tx; m.w = m.tw; m.vx = 0; m.vw = 0
+      writePill()
+    }
+    const snapGhost = () => {
+      m.gx = m.gtx; m.gw = m.gtw
+      writeGhost()
     }
 
-    updatePill()
-    const observer = new ResizeObserver(updatePill)
+    const loop = (now: number) => {
+      const dt = m.last === 0 ? 1 : Math.min(2.5, Math.max(0.25, (now - m.last) / 16.667))
+      m.last = now
+      m.vx = (m.vx + (m.tx - m.x) * 0.11 * dt) * Math.pow(0.76, dt)
+      m.vw = (m.vw + (m.tw - m.w) * 0.11 * dt) * Math.pow(0.76, dt)
+      m.x += m.vx * dt
+      m.w += m.vw * dt
+      m.gx += (m.gtx - m.gx) * Math.min(1, 0.2 * dt)
+      m.gw += (m.gtw - m.gw) * Math.min(1, 0.2 * dt)
+      writePill()
+      writeGhost()
+      const settled =
+        Math.abs(m.tx - m.x) < 0.1 && Math.abs(m.vx) < 0.1 &&
+        Math.abs(m.tw - m.w) < 0.1 && Math.abs(m.vw) < 0.1
+      const ghostSettled = Math.abs(m.gtx - m.gx) < 0.1 && Math.abs(m.gtw - m.gw) < 0.1
+      if (settled && ghostSettled) {
+        snapPill()
+        snapGhost()
+        m.running = false
+        m.last = 0
+        m.raf = 0
+        return
+      }
+      m.raf = window.requestAnimationFrame(loop)
+    }
+    const wake = () => {
+      if (m.running) return
+      m.running = true
+      m.last = 0
+      m.raf = window.requestAnimationFrame(loop)
+    }
+
+    const retarget = (index: number, animate: boolean) => {
+      const target = measure(index)
+      if (!target) return
+      m.tx = target.x
+      m.tw = target.w
+      if (animate && m.ready && !reduced()) wake()
+      else snapPill()
+      m.ready = true
+    }
+
+    retarget(categories.indexOf(selected), true)
+
+    const observer = new ResizeObserver(() => {
+      // ResizeObserver fires an initial delivery when observation starts —
+      // right after retarget() set m.tx/m.tw — so only snap when the measured
+      // geometry truly changed; otherwise the spring would be killed on
+      // every selection change and clicks would jump instead of travel.
+      const target = measure(categories.indexOf(selected))
+      if (!target) return
+      if (Math.abs(target.x - m.tx) > 0.5 || Math.abs(target.w - m.tw) > 0.5) {
+        m.tx = target.x
+        m.tw = target.w
+        snapPill()
+      }
+      if (m.ghostShown && m.hoverIndex >= 0) {
+        const ghostTarget = measure(m.hoverIndex)
+        if (ghostTarget && (Math.abs(ghostTarget.x - m.gtx) > 0.5 || Math.abs(ghostTarget.w - m.gtw) > 0.5)) {
+          m.gtx = ghostTarget.x
+          m.gtw = ghostTarget.w
+          snapGhost()
+        }
+      }
+    })
     if (tabsRef.current) observer.observe(tabsRef.current)
     tabRefs.current.forEach((tab) => { if (tab) observer.observe(tab) })
-    return () => observer.disconnect()
+
+    const list = tabsRef.current
+    const onHover = (event: MouseEvent) => {
+      if (reduced()) return
+      const index = tabRefs.current.findIndex((tab) => tab === event.target || tab?.contains(event.target as Node))
+      if (index < 0) return
+      const target = measure(index)
+      if (!target) return
+      m.hoverIndex = index
+      m.gtx = target.x
+      m.gtw = target.w
+      if (!m.ghostShown) {
+        snapGhost()
+        m.ghostShown = true
+        ghost.style.opacity = '1'
+      }
+      wake()
+    }
+    const onLeave = () => {
+      m.ghostShown = false
+      m.hoverIndex = -1
+      ghost.style.opacity = '0'
+    }
+    list?.addEventListener('mouseover', onHover)
+    list?.addEventListener('mouseleave', onLeave)
+
+    return () => {
+      observer.disconnect()
+      window.cancelAnimationFrame(m.raf)
+      m.running = false
+      list?.removeEventListener('mouseover', onHover)
+      list?.removeEventListener('mouseleave', onLeave)
+    }
   }, [selected])
 
   const selectAt = (index: number) => {
     const next = categories[index]
     if (!next) return
-    setInstantPill(true)
     onChange(next)
     window.requestAnimationFrame(() => {
       tabRefs.current[index]?.focus()
@@ -134,12 +250,6 @@ function CategoryFilter({
 
   return (
     <section aria-label="Filter experiments by category" className="flex min-w-0 flex-col gap-2">
-      <div className="flex items-center justify-between gap-4 px-1">
-        <span className="text-[12px] text-[var(--text-secondary)]">Browse by category</span>
-        <span aria-live="polite" className="shrink-0 text-[11px] tabular-nums text-[var(--text-tertiary)]">
-          {visibleCount} {visibleCount === 1 ? 'experiment' : 'experiments'}
-        </span>
-      </div>
       <div className="-mx-1 overflow-x-auto px-1 pb-1">
         <div
           ref={tabsRef}
@@ -149,13 +259,16 @@ function CategoryFilter({
           className="relative inline-flex min-w-max gap-1 rounded-[11px] border border-[var(--border-line)] bg-[var(--bg-surface)] p-1"
         >
           <span
+            ref={ghostRef}
+            data-category-ghost
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-1 left-1 rounded-[8px] border border-[var(--border-line)] bg-[var(--bg-hover)] shadow-[0_1px_2px_rgba(0,0,0,0.025)] motion-reduce:transition-none"
-            style={{
-              width: pill.width,
-              transform: `translateX(${pill.x - 4}px)`,
-              transition: instantPill ? 'none' : 'transform 180ms var(--ease-move), width 180ms var(--ease-move)',
-            }}
+            className="pointer-events-none absolute inset-y-1 left-1 rounded-[8px] bg-[var(--bg-hover)] opacity-0 transition-opacity duration-150"
+          />
+          <span
+            ref={pillRef}
+            data-category-pill
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-y-1 left-1 rounded-[8px] border border-[var(--border-line)] bg-[var(--bg-hover)] shadow-[0_1px_2px_rgba(0,0,0,0.025)]"
           />
           {categories.map((category, index) => {
             const count = category === 'All'
@@ -171,10 +284,7 @@ function CategoryFilter({
                 aria-selected={active}
                 aria-controls="vault-filter-results"
                 tabIndex={active ? 0 : -1}
-                onClick={() => {
-                  setInstantPill(false)
-                  onChange(category)
-                }}
+                onClick={() => onChange(category)}
                 className={`relative z-10 inline-flex h-7 items-center gap-1.5 rounded-[8px] border border-transparent bg-transparent px-2.5 text-[12px] transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] active:scale-[0.98] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-1 ${active ? 'font-medium text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'}`}
               >
                 {category}
@@ -246,7 +356,7 @@ function KnockoutBracketCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <KnockoutBracketDemo initialPage={2} compact light showNavigation={false} />
       </div>
-      <Caption title="Road Cup Knockout" category="Interfaces" />
+      <RichCaption title="Road Cup Knockout" summary="A tournament bracket that advances winners round by round until one champion remains." category="Interfaces" />
     </LinkCard>
   )
 }
@@ -257,7 +367,7 @@ function MicroButtonsCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <MicroButtonsDemo />
       </div>
-      <Caption title="Micro Interactions" category="Interactions" />
+      <RichCaption title="Micro Interactions" summary="Nine hover-driven button micro-interactions, rebuilt 1:1 from Amicro's catalogue." category="Interactions" />
     </LinkCard>
   )
 }
@@ -268,7 +378,7 @@ function ScrollgalleryCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <ScrollgalleryDemo compact thumbnail />
       </div>
-      <Caption title="Scroll Gallery" category="Interfaces" />
+      <RichCaption title="Scroll Gallery" summary="A living photo gallery you can scroll, shuffle, and search." category="Interfaces" />
     </LinkCard>
   )
 }
@@ -279,7 +389,7 @@ function BorderBeamCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <BorderBeamDemo compact />
       </div>
-      <Caption title="Gemini Button" category="Interactions" />
+      <RichCaption title="Gemini Button" summary="A button wrapped in a traveling border beam." category="Interactions" />
     </LinkCard>
   )
 }
@@ -290,7 +400,7 @@ function CuelumeCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <CuelumeDemo />
       </div>
-      <Caption title="Interaction Sounds" category="Interactions" />
+      <RichCaption title="Interaction Sounds" summary="A soundboard of interface tones played through real controls." category="Interactions" />
     </LinkCard>
   )
 }
@@ -301,7 +411,7 @@ function PlaywrightCliCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <PlaywrightCliDemo compact />
       </div>
-      <Caption title="Playwright CLI" category="Skills" />
+      <RichCaption title="Playwright CLI" summary="A terminal-style walkthrough of driving a browser with the Playwright CLI." category="Skills" />
     </LinkCard>
   )
 }
@@ -312,7 +422,7 @@ function AnimationPrinciplesCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <AnimationPrinciplesDemo compact />
       </div>
-      <Caption title="12 Principles of Animation" category="Motion" />
+      <RichCaption title="12 Principles of Animation" summary="Disney's twelve animation principles, each demonstrated live." category="Motion" />
     </LinkCard>
   )
 }
@@ -325,7 +435,7 @@ function TransitionCard({ definition }: { definition: TransitionRecord }) {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <TransitionDemo id={definition.id} compact />
       </div>
-      <Caption title={definition.title} category={definition.category} />
+      <RichCaption title={definition.title} summary={definition.summary} category={definition.category} />
     </LinkCard>
   )
 }
@@ -346,7 +456,7 @@ function AiCssCard({ definition }: { definition: AiCssRecord }) {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <AiCssDemo id={definition.id} compact />
       </div>
-      <Caption title={definition.title} category={definition.category} />
+      <RichCaption title={definition.title} summary={definition.summary} category={definition.category} />
     </LinkCard>
   )
 }
@@ -365,7 +475,7 @@ function EmilSkillCard({ definition }: { definition: EmilSkillDefinition }) {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <EmilSkillsDemo id={definition.id} compact />
       </div>
-      <Caption title={definition.title} category={definition.category} />
+      <RichCaption title={definition.title} summary={definition.summary} category={definition.category} />
     </LinkCard>
   )
 }
@@ -384,7 +494,7 @@ function SonnerCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <SonnerDemo compact />
       </div>
-      <Caption title="Toast Notifications" category="Interactions" />
+      <RichCaption title="Toast Notifications" summary="Stacked toasts that slide in, spring into place, and swipe away." category="Interactions" />
     </LinkCard>
   )
 }
@@ -395,7 +505,7 @@ function ReactiveDitherCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <ReactiveDitherDemo compact />
       </div>
-      <Caption title="Reactive Dither" category="Motion" />
+      <RichCaption title="Reactive Dither" summary="A dithered cube mark that scatters under the pointer and springs back." category="Motion" />
     </LinkCard>
   )
 }
@@ -406,7 +516,7 @@ function GradientSpinCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <GradientSpinDemo compact />
       </div>
-      <Caption title="Gradient Spin" category="Motion" />
+      <RichCaption title="Gradient Spin" summary="A silky spinning gradient you can retint with curated palettes." category="Motion" />
     </LinkCard>
   )
 }
@@ -417,7 +527,7 @@ function ShadcnCard({ definition }: { definition: ShadcnDefinition }) {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <ShadcnDemo id={definition.id} compact />
       </div>
-      <Caption title={definition.title} category={definition.category} />
+      <RichCaption title={definition.title} summary={definition.summary} category={definition.category} />
     </LinkCard>
   )
 }
@@ -436,7 +546,7 @@ function InterfaceGuidelinesCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <InterfaceGuidelinesDemo compact />
       </div>
-      <Caption title="Interface Craft Guidelines" category="Skills" />
+      <RichCaption title="Interface Craft Guidelines" summary="A living checklist of interface-craft rules, each with a tiny demo." category="Skills" />
     </LinkCard>
   )
 }
@@ -447,7 +557,7 @@ function ScribbleIndexCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <ScribbleIndexDemo compact />
       </div>
-      <Caption title="Scribble Index" category="Interactions" />
+      <RichCaption title="Scribble Index" summary="A notes index that doubles as a magenta scribble pad." category="Interactions" />
     </LinkCard>
   )
 }
@@ -456,7 +566,7 @@ function BetterColorsCard() {
   return (
     <LinkCard href="/vault/better-colors">
       <BetterColorsDemo compact />
-      <Caption title="Cohesive Color Systems" category="Skills" />
+      <RichCaption title="Cohesive Color Systems" summary="Building palettes that stay cohesive across surfaces and states." category="Skills" />
     </LinkCard>
   )
 }
@@ -465,7 +575,7 @@ function BetterTypographyCard() {
   return (
     <LinkCard href="/vault/better-typography">
       <BetterTypographyDemo compact />
-      <Caption title="Typography Skills" category="Skills" />
+      <RichCaption title="Typography Skills" summary="Type settings and tweaks that make interface text read better." category="Skills" />
     </LinkCard>
   )
 }
@@ -474,7 +584,7 @@ function BetterUiCard() {
   return (
     <LinkCard href="/vault/better-ui">
       <BetterUiDemo compact />
-      <Caption title="Better UI" category="Skills" />
+      <RichCaption title="Better UI" summary="Small interface upgrades that compound into a cleaner product." category="Skills" />
     </LinkCard>
   )
 }
@@ -485,7 +595,7 @@ function SheetCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <SheetDemo />
       </div>
-      <Caption title="Interactive Pop-Up" category="Interactions" />
+      <RichCaption title="Interactive Pop-Up" summary="A bottom sheet with spring snap points you can drag and flick." category="Interactions" />
     </LinkCard>
   )
 }
@@ -496,7 +606,7 @@ function FluidSpringsCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <FluidSpringDemo />
       </div>
-      <Caption title="Fluid Cards" category="Motion" />
+      <RichCaption title="Fluid Cards" summary="Cards you can grab, drag, and flick on interruptible fluid springs." category="Motion" />
     </LinkCard>
   )
 }
@@ -507,7 +617,11 @@ function MeetingOverlayCard() {
       <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <OverlayDemo title="Work Session: New Portfolio" time="Tomorrow 06:00" holdMs={3200} />
       </div>
-      <Caption title="Stop missing your meetings" category="Motion" />
+      <RichCaption
+        title="Stop missing your meetings"
+        summary="A desktop-pet overlay that walks on screen to remind you before every meeting."
+        category="Motion"
+      />
     </LinkCard>
   )
 }
@@ -543,16 +657,31 @@ function Feed() {
     ? FEED_CARDS
     : FEED_CARDS.filter((item) => item.category === category)
 
+  /* Feed thumbnails must never move the page: cmdk (the shadcn command demo)
+   * calls scrollIntoView on its selected item when a filtered grid mounts,
+   * which scrolled the window down into the feed. While the feed is mounted,
+   * swallow scrollIntoView calls that originate inside the results grid —
+   * thumbnails are ambient visuals, nothing inside them may scroll the page.
+   * Detail pages are unaffected (the patch is removed on unmount). */
+  useEffect(() => {
+    const original = Element.prototype.scrollIntoView
+    Element.prototype.scrollIntoView = function (this: Element, arg?: boolean | ScrollIntoViewOptions) {
+      if (this.closest('.vault-filter-results')) return
+      original.call(this, arg as never)
+    } as typeof original
+    return () => { Element.prototype.scrollIntoView = original }
+  }, [])
+
   const selectCategory = (nextCategory: VaultCategory | 'All') => {
     setCategory(nextCategory)
     window.history.replaceState({}, '', nextCategory === 'All' ? '/' : categoryHref(nextCategory))
   }
 
   return (
-    <section className="flex flex-col gap-8 text-[15px] leading-[1.7]">
+    <section className="flex flex-col gap-[26px] text-[15px] leading-[1.7]">
       <Header />
       <CategoryFilter selected={category} onChange={selectCategory} />
-      <div className="relative">
+      <div className="relative mt-1.5">
         <div id="vault-filter-results" role="tabpanel" aria-label={`${category} experiments`} key={category} className="vault-filter-results grid grid-cols-1 gap-y-4">
           {visibleCards.map(({ path, Card }) => <Card key={path} />)}
           {category === 'All' ? <Teaser /> : null}

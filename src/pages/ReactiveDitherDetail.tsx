@@ -4,10 +4,10 @@ import demoSrc from '../demos/ReactiveDitherDemo.tsx?raw'
 import demoCss from '../demos/ReactiveDitherDemo.css?raw'
 import { ChipButton, CodeTabs, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 
-const BUILD_PROMPT = `Build a light-mode React card that renders a rounded-square mark as a field of real canvas dots that react to the pointer.
+const BUILD_PROMPT = `Build a light-mode React card that renders a shaded cube-tile logo as a field of real canvas dots that react to the pointer.
 
 Core behavior:
-- Draw an abstract rounded-square mark once into an offscreen canvas, read its alpha mask, and sample it into an evenly spaced dot grid. The silhouette must read through dot density alone — no SVG filter, static image, or CSS halftone.
+- Use a grayscale artwork image as the tone field: draw it full-bleed into an offscreen canvas, and for every grid point box-average the local neighborhood to descreen the artwork's own dot texture back into smooth shade. Each dot's radius follows the coverage law r = pitch × √((1 − W)/π) from the local white fraction W, quantized to a small set of pre-rendered sprite sizes — dark regions merge into near-solid black with light specks, light regions stay sparse pin dots, and gradients reproduce exactly. No SVG filter or CSS halftone: every visible dot is a real canvas dot that can move. Fall back to a flat vector approximation if the artwork fails to load.
 - Track the pointer relative to the canvas in CSS pixels. An invisible circular influence field follows it with light smoothing.
 - Push dots radially away from the field center: push = strength × (1 − d / R)^3, so displacement is strongest beside the pointer and decays to exactly zero at the boundary.
 - Return every dot home with a damped spring (v = (v + (target − p) × stiffness) × damping) — soft, direct, and stable, never noisy or elastic.
@@ -18,17 +18,17 @@ Behavior rules:
 - The thumbnail idles with an extremely subtle drifting influence field, starts only when at least 35% visible, pauses offscreen, and yields immediately to the pointer.
 - Support mouse, touch, and pen through pointer events; keep vertical page scrolling intact.
 - With prefers-reduced-motion, render the settled mark once and skip the loop entirely.
-- Expose dot spacing, dot radius, interaction radius, displacement strength, return stiffness, damping, falloff intensity, invert, and reset as live light-mode controls.
+- Expose dot spacing, a dot-size multiplier, interaction radius, displacement strength, return stiffness, damping, falloff intensity, invert, and reset as live light-mode controls.
 - Clean up animation frames, observers, listeners, and timers on unmount, and namespace every class.`
 
 const GUIDE_SECTIONS: readonly { title: string; body: string }[] = [
   {
     title: 'Sampling the source image',
-    body: 'The mark is drawn once as vector shapes into an offscreen 512 px canvas — a rounded-square ring with a solid center dot — then read back with getImageData. The alpha channel becomes a monochrome mask: no image asset, and the silhouette stays crisp at any stage size.',
+    body: 'The mark is not redrawn — the dithered artwork itself becomes the tone field. It is drawn full-bleed into an offscreen 512 px canvas and read back with getImageData, so the implementation keeps the reference’s exact geometry, gradients, and shading instead of a vector approximation. A flat vector fallback renders only if the artwork cannot load.',
   },
   {
     title: 'Generating dot positions',
-    body: 'An evenly spaced grid walks the mark’s bounding square at the chosen dot spacing. Every grid point whose mask alpha passes the threshold becomes a dot with a fixed home position. Density comes from spacing alone, so the recognizable silhouette is carried entirely by where dots exist.',
+    body: 'An evenly spaced grid walks the mark’s bounding square at the chosen dot spacing. Each point box-averages its mask neighborhood — descreening the artwork’s own dot grid into a smooth local white fraction W — and takes the radius p·√((1−W)/π), quantized to one of sixteen sprite sizes. Dark regions merge into near-solid black with light specks; light regions stay sparse pin dots.',
   },
   {
     title: 'Normalizing pointer coordinates',
@@ -52,7 +52,7 @@ const GUIDE_SECTIONS: readonly { title: string; body: string }[] = [
   },
   {
     title: 'Performance safeguards',
-    body: 'Dots are stamped with drawImage from one pre-rendered sprite rather than thousands of arc() calls. The loop sleeps once every dot settles, an IntersectionObserver pauses it offscreen (35% visibility gate for thumbnails), integration is delta-time normalized, and no React state is touched per frame.',
+    body: 'Dots are stamped with drawImage from a small set of pre-rendered sprites — one per quantized size — rather than thousands of arc() calls. The loop sleeps once every dot settles, an IntersectionObserver pauses it offscreen (35% visibility gate for thumbnails), integration is delta-time normalized, and no React state is touched per frame.',
   },
   {
     title: 'Reduced-motion behavior',
@@ -60,7 +60,7 @@ const GUIDE_SECTIONS: readonly { title: string; body: string }[] = [
   },
   {
     title: 'Reusable implementation example',
-    body: 'The minimal engine below fits any mark: sample a mask into home positions, displace targets with the cubic falloff, then integrate the spring. Swap drawSourceMark for your own logo path and tune the constants to taste.',
+    body: 'The minimal engine below fits any mark: sample a mask into home positions, displace targets with the cubic falloff, then integrate the spring. Swap the artwork for your own image and tune the constants to taste.',
   },
 ]
 
@@ -113,7 +113,7 @@ export function ReactiveDitherDetail() {
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             A mark made of thousands of individual dots feels alive when it reacts to you. Move the pointer across the
-            rounded square and the field parts around it — fast beside the pointer, gentle at the edges — then every
+            tile and the field parts around it — fast beside the pointer, gentle at the edges — then every
             dot springs home without a wobble.
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
@@ -184,6 +184,7 @@ export function ReactiveDitherDetail() {
             ['Company', 'CAGGIANO'],
             ['Date', 'Jul 18, 2026'],
             ['Tags', 'Canvas, Particles, Motion'],
+            ['Mark artwork', 'Julio Caggiano — dithered cube render'],
             ['Reference', 'Emil Kowalski — x.com/emilkowalski'],
           ]}
         />

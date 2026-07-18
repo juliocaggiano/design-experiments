@@ -105,7 +105,7 @@ const browser = await chromium.launch()
   await page.waitForTimeout(300)
   const resetSpacing = await spacingOutput.textContent()
   const resetInvert = await page.locator('.rd-demo--playground').getAttribute('data-invert')
-  check('reset restores defaults', resetSpacing === '5.8 px' && resetInvert === 'false', `${resetSpacing}, invert=${resetInvert}`)
+  check('reset restores defaults', resetSpacing === '2.4 px' && resetInvert === 'false', `${resetSpacing}, invert=${resetInvert}`)
 
   const fullBox = await page.locator(FULL_CANVAS).boundingBox()
   await page.mouse.move(fullBox.x + fullBox.width * 0.5, fullBox.y + fullBox.height * 0.5, { steps: 6 })

@@ -110,6 +110,83 @@ node node_modules/vite/bin/vite.js build
 
 ## Update log
 
+### 2026-07-17 — Liquid-on-click fix and RichCaption feed-wide rollout (Kimi)
+
+- Fixed the pill jumping instantly on click: the `CategoryFilter` ResizeObserver's initial delivery (fired on every selection change, right after `wake()`) snapped the pill before the spring's first frame. The observer now snaps only on real geometry changes (±0.5 px), so clicks travel with overshoot (probe-verified `209 → 277 peak → 230 settle`); spring retuned softer (0.11/0.76) for a more material feel.
+- Rolled the approved RichCaption design out to all 66 feed cards: the four catalog families (transitions 22, AI-CSS 12, Emil skills 6, shadcn 9) reuse the `summary` fields their catalogs already had, and the 17 standalone cards got hand-written one-line summaries. Legacy `Caption` is no longer used anywhere.
+- `scripts/verify-feed-card-design.mjs` gained a 66/66 coverage assertion and a liquid-on-click travel assertion; 18/18 pass. TypeScript and the production build pass. Evidence in `artifacts/design-qa/card-design-2026-07-17/`.
+
+### 2026-07-17 — Liquid category pill and spacing revert pass (Kimi)
+
+- Built Julio's liquid category tabs: the selection pill travels on an underdamped spring (soft overshoot) and stretches/squashes with velocity like a droplet; a lighter ghost pill eases behind hovered tabs and fades on leave. One rAF loop writes transforms/widths directly to the DOM (no React state per frame) and sleeps when settled; `prefers-reduced-motion` snaps instantly and disables the ghost. Replaces the 180 ms CSS-transition pill in `CategoryFilter`.
+- Spacing after his review: reverted the rule-of-four caption normalization (back to his approved round-4 values — 6 px side/bottom padding, 10 px footer margin); title → tagline gap 4 → 2 px; tabs bar up 2 px (header → tabs 26 px) with tabs → results held at 32 px.
+- `scripts/verify-feed-card-design.mjs` gained liquid-pill assertions (settle position within 1.5 px, ghost show/hide, reduced-motion snap); 16/16 pass. TypeScript and the production build pass. Evidence in `artifacts/design-qa/card-design-2026-07-17/`.
+
+### 2026-07-17 — Category-click scroll fix and spacing pass (Kimi)
+
+- Fixed Julio's reported bug where clicking Interactions (and sometimes All) scrolled the page into the feed (deterministic scrollY 851/5883). Traced with instrumented probes to cmdk (shadcn command demo) calling `scrollIntoView` on its selected item when a filtered grid mounts. Fix: while the Feed is mounted, `scrollIntoView` calls originating inside `.vault-filter-results` are swallowed (original restored on unmount; detail pages unaffected; no node_modules patching). Scroll anchoring and focus were ruled out as causes.
+- Spacing requests: header → tabs 32 → 28 px (section `gap-8` → `gap-7` with `mt-1` on the results wrapper so tabs → results stays 32 px), and RichCaption normalized to Julio's rule-of-four grid (side/bottom padding 6 → 8 px, footer margin 10 → 12 px).
+- `scripts/verify-feed-card-design.mjs` gained scroll-position regression assertions; 12/12 pass. TypeScript and the production build pass. Evidence in `artifacts/design-qa/card-design-2026-07-17/`.
+
+### 2026-07-17 — Feed card pilot polish round 4: regular-weight headline, gap 4 px (Kimi)
+
+- Julio's fourth-pass corrections: headline → summary gap 2 → 4 px (footer margin re-compensated so the summary → footer rhythm stays at 14 px), and the headline drops `font-semibold` to regular weight — matching the summary — while keeping the primary color. Verified with `scripts/verify-feed-card-design.mjs` (10/10) and refreshed captures in `artifacts/design-qa/card-design-2026-07-17/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Feed card pilot polish round 3: 16 px border, tighter pairing (Kimi)
+
+- Julio's third-pass corrections: outer feed-card border radius 14 → 16 px, and headline → summary spacing reduced exactly 4 px (stack gap 6 → 2 px with the footer margin compensated so the summary → footer rhythm is unchanged). Verified with `scripts/verify-feed-card-design.mjs` (10/10) and refreshed captures in `artifacts/design-qa/card-design-2026-07-17/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Feed card pilot polish round 2: 14 px headline, rounder border (Kimi)
+
+- Julio's second-pass corrections: RichCaption headline 15 → 14 px and the outer feed-card border radius 12 → 14 px (`LinkCard` now `rounded-[14px]`; inner stage stays 12 px, detail-page `DemoCard` untouched). Verified with `scripts/verify-feed-card-design.mjs` (10/10) and refreshed captures in `artifacts/design-qa/card-design-2026-07-17/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Feed card pilot polish: sizes and divider removal (Kimi)
+
+- Julio's corrections after reviewing the pilot: removed the hairline divider above the RichCaption footer, card headline 17 → 15 px, card summary 13 → 14 px, and the site title set to 15 px (previously inheriting 16 px). Still pilot-only on the meeting card; feed-wide rollout awaits his go.
+- Verified with `scripts/verify-feed-card-design.mjs` (10/10) and refreshed captures in `artifacts/design-qa/card-design-2026-07-17/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Feed card design pilot (RichCaption) and header cleanup (Kimi)
+
+- Piloted Julio's new card design on the meeting-overlay card only (rollout pending his review): new `RichCaption` in `src/components/Card.tsx` adds a 17 px semibold headline, a two-line-clamped summary, and a hairline-divided footer with a "View demo" pill (visual affordance; the card itself stays the link) plus the category. All other cards keep `Caption`; `data-card-caption`/`data-card-category` are preserved for existing QA scripts.
+- Applied his red-markup header deletions: title shortened to "Design Experiments", subtitle replaced with "Here are some small projects I've been exploring lately. Feel free to remix them, btw.", the no-op X close anchor removed, and the "Browse by category" / experiment-count row above the filter tabs removed (unused `visibleCount` and `X` import cleaned up).
+- Verified with `scripts/verify-feed-card-design.mjs` (10/10: headline, summary renders and clamps to two lines, chip, category, zero console errors, zero overflow at 1440/390/320 px). Evidence in `artifacts/design-qa/card-design-2026-07-17/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Reactive Dither calibration-bench fix and restored merge scale (Kimi)
+
+- Julio reported the render regressed after his settings became defaults. Root cause chain: his ×0.65 / 2.4 px settings were tuned against the pre-DPR-fix engine, where sprite `drawImage` omitted destination size and every dot rendered at 2× nominal radius on his Retina screen (dark regions merged like the reference); the DPR fix halved them. Restoring the scale via `MAX_RADIUS_RATIO` 0.75 → 1.5 then overshot into crushed black because the calibration bench measured its whole canvas — an empty one-pitch border ring diluted every measured coverage to 44% of truth, so sampling picked oversized levels for all mid targets.
+- The bench now stamps a 6×6 dot grid and measures only the inner 3×3 cells, which is exactly the infinite-grid coverage. With truthful calibration at `MAX_RADIUS_RATIO` 1.5, the engine reproduces the render Julio approved — with DPR-correct stamping and his exact panel settings unchanged.
+- Audit: every patch lands within ±4 luminance of the reference (field 12.3 → 10.5, triangle 133.5 → 129.8, folds within ±3.3, band 154.1 → 155.7). Verified with `scripts/verify-reactive-dither.mjs` (20/20); TypeScript and the production build pass. Evidence in `artifacts/design-qa/reactive-dither-2026-07-18/`.
+
+### 2026-07-17 — Reactive Dither tone audit, artwork tone-field, Julio's defaults (Kimi)
+
+- Ran a tone audit (`scripts/audit-reactive-dither-tones.mjs`, rewritten as a tile-normalized mean-absolute-error comparison) after Julio reported the render still missed the reference. Findings: the eyeballed four-tone values were wrong (the reference's left fold is darkest, right lightest, and faces are gradients, not flats); the theoretical radius law `r = p·√((1−W)/π)` undershoots because antialiasing and sprite overlap bleed coverage; the `#26262a` ink biased the calibration bench and capped the darkest field at luminance 38 vs the reference's 13; and sprite `drawImage` calls omitted destination size, rendering dots at device-pixel size (2× too large at DPR 2).
+- Reworked the engine to use Julio's dithered artwork directly as the tone field: `public/vault/reactive-dither/cube-tone.png` loads into the 512 px mask, each grid point box-averages a ±7 px window to descreen the artwork's own dot grid into local white fraction, and every dot picks the sprite level whose EMPIRICALLY measured coverage (16 levels, each stamped on a test grid and measured) is closest to the target ink coverage. Sprites stamp pure black in normal mode; `drawImage` now passes explicit CSS-px size at both the calibration bench and the main loop; `syncSettings`/`resize` rebuild sprites before resampling since sampling now depends on the coverage table. The flat-region vector fallback remains for artwork load failure.
+- Applied Julio's chosen live-control values as the shared `DEFAULT_SETTINGS` for thumbnail, hero, and playground: spacing 2.4 px, dot size ×0.65, interaction radius 100 px, displacement 16 px, stiffness 0.110, damping 0.850, falloff 2.00, Normal color. The capped dot size prevents merging, so mid-tones land on the reference (triangle −4.2, band −15.0 luminance) while the darkest field stays a textured charcoal by design.
+- Verified with `scripts/verify-reactive-dither.mjs` (20/20, reset assertion now expects the 2.4 px default); audit deltas and fresh evidence are under `artifacts/design-qa/reactive-dither-2026-07-18/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Reactive Dither shaded cube tile, four-tone mask (Kimi)
+
+- Reworked the Reactive Dither mask after Julio's correction that the binary carve flattened the reference's shades of gray. The engine now paints the tile field, right face, left face, and top face at distinct mask levels and buckets every sampled dot into one of four tones, each stamped from its own sprite (`TONE_RADIUS_SCALE` 3.7/2.6/1.9/1 off the base radius). Shades now come from dot size: the tile's oversized dots nearly merge into black with light speck gaps, the top face keeps sparse pin dots, the side faces sit at two grays, and the wireframe edges carve as clean channels. Inverted mode yields the true halftone negative.
+- The Dot radius control is now the base (top-face) radius at 0.3–1.2 px in 0.05 steps (default 0.5 px); spacing stays at the reference-matched 3.2 px default. Sampling reads the mask's red channel for tone bucketing while alpha still gates dot existence; sprites rebuild on radius/invert changes and resampling on spacing changes, as before.
+- Verified with `scripts/verify-reactive-dither.mjs` (20/20); settled, feed, displaced, and inverted captures match the reference region for region. Evidence and references are under `artifacts/design-qa/reactive-dither-2026-07-18/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Reactive Dither cube-tile mark and reference dot density (Kimi)
+
+- Swapped the Reactive Dither mark to Julio's dithered cube app-tile logo: the mask draws a rounded-square tile (radius 13, spanning 12–88 of the 100-box) and carves the isometric cube as negative space — solid top face plus nine uniform 2.6-unit edge channels — with vertices measured tile-relative from the reference. Reinstated `roundedRectPath` for the tile; updated header comment, aria-label, build prompt, guide section, and intro prose.
+- Matched the reference's dot density (measured ≈ 19–20 px pitch over a ≈ 1098 px tile): default spacing 5.8 → 3.2 px and dot radius 1.36 → 0.5 px, with slider ranges extended (spacing min 2.4, radius min 0.4) so the new defaults stay reachable. QA reset assertion updated to the 3.2 px default.
+- Verified with `scripts/verify-reactive-dither.mjs` (20/20); settled and inverted captures match the reference structure and its white-on-black texture. Evidence and all three symbol references are under `artifacts/design-qa/reactive-dither-2026-07-18/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Reactive Dither pixel-invader mark (Kimi)
+
+- Swapped the Reactive Dither mark to Julio's supplied classic arcade invader sprite, recreated 1:1 as the canonical 11 × 8 bitmap (`MARK_BITMAP`) drawn cell by cell as one merged fill on a 68-unit-wide centered grid in `drawSourceMark`; the unchanged engine samples it into the same dot field. Removed the now-unused `roundedRectPath` helper and updated the header comment, aria-label, build prompt, guide section, and intro prose.
+- Verified with `scripts/verify-reactive-dither.mjs` (20/20); settled desktop capture matches the reference silhouette row for row, and the 390/320 px thumbnails stay legible with zero overflow. Evidence (feed, hero, settled, controls, displaced, inverted, mobile, and both symbol references) is under `artifacts/design-qa/reactive-dither-2026-07-18/`. TypeScript and the production build pass.
+
+### 2026-07-17 — Reactive Dither waveform mark and smaller dots (Kimi)
+
+- Swapped the Reactive Dither mark from the rounded-square ring to Julio's supplied waveform symbol: nine vertical bars with rounded caps (twin tall peaks, a dipped center bar that runs lowest, small capsules at the edges) drawn as `MARK_BARS` in `drawSourceMark` and sampled by the unchanged offscreen-mask dot-grid engine. Updated the engine header comment, canvas aria-label, build prompt, guide section, and intro prose to describe the waveform mark.
+- Reduced the default dot radius 20% (1.7 → 1.36 px) in the shared defaults; one engine and one set of defaults still powers the feed thumbnail, expanded hero, and implementation, and the detail control reflects the new default.
+- Verified with `scripts/verify-reactive-dither.mjs` (20/20) plus desktop evidence captures (feed card, hero, settled mark, controls, pointer-displaced, inverted) written to the previously missing `artifacts/design-qa/reactive-dither-2026-07-18/` alongside the symbol reference; reusable evidence capture is `scripts/capture-reactive-dither-evidence.mjs`. TypeScript and the production build pass.
+
 ### 2026-07-18 — Reactive Dither card (Kimi)
 
 - Added `/vault/reactive-dither` directly after the promoted meeting card, titled "Reactive Dither" and categorized under Motion, from Julio's reference post (Emil Kowalski's canvas dither interaction, x.com/emilkowalski/status/2036778116748542220). Clean-room implementation; no upstream source copied.
