@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { BetterColorsDemo, BetterTypographyDemo, BetterUiDemo } from '../demos/SkillsLab'
+import { BetterColorsDemo, BetterTypographyDemo } from '../demos/SkillsLab'
 import skillsLabSrc from '../demos/SkillsLab.tsx?raw'
 import betterColorsSkillSrc from '../content/skills/better-colors/SKILL.md?raw'
 import accessibilityContrastSrc from '../content/skills/better-colors/accessibility-contrast.md?raw'
@@ -13,23 +13,16 @@ import typographyDetailsSrc from '../content/skills/better-typography/details-an
 import spacingSizingSrc from '../content/skills/better-typography/spacing-and-sizing.md?raw'
 import variableFontsSrc from '../content/skills/better-typography/variable-fonts-and-opentype.md?raw'
 import wrappingPunctuationSrc from '../content/skills/better-typography/wrapping-and-punctuation.md?raw'
-import betterUiSkillSrc from '../content/skills/better-ui/SKILL.md?raw'
-import surfacesSrc from '../content/skills/better-ui/surfaces.md?raw'
-import animationsSrc from '../content/skills/better-ui/animations.md?raw'
-import performanceSrc from '../content/skills/better-ui/performance.md?raw'
-import { ChipButton, CodeTabs, CopyPromptChip, CreditRows, DetailShell, SliderChip, assembleCopy } from './detail-kit'
+import { ChipButton, CodeTabs, ControlsSection, CopyPromptChip, CreditRows, DetailShell, SliderChip, assembleCopy } from './detail-kit'
 
 const REFERENCES = {
   colors: 'https://github.com/jakubkrehel/skills/tree/main/skills/better-colors',
   typography: 'https://github.com/jakubkrehel/skills/tree/main/skills/better-typography',
-  ui: 'https://github.com/jakubkrehel/skills/tree/main/skills/better-ui',
 }
 
 const COLOR_PROMPT = `Build an interactive OKLCH palette study. Keep one hue stable while lightness moves evenly from tint to shade, reduce chroma near the gamut edges, and expose hue and chroma as keyboard-accessible controls. Label every step and keep text readable over each color.`
 
 const TYPOGRAPHY_PROMPT = `Build a restrained typography study that makes size, line-height, and measure visible. Pair one characterful headline face with one quiet UI sans, use a tight heading and readable body rhythm, and expose the three variables as keyboard-accessible controls.`
-
-const UI_PROMPT = `Build a small interface-polish study inside an existing light design system. Reuse its page, surface, border, and text tokens; keep a 12px outer radius, a 28px outlined action with an invisible 40px hit area, scale 0.96 on press, and interruptible plus-to-check icon transitions using opacity, scale, and blur. Include reduced-motion behavior and no animation dependency.`
 
 const COLOR_TABS = [
   {
@@ -95,57 +88,6 @@ const TYPOGRAPHY_TABS = [
 
 // Name values by what they do. A small, explicit scale is easier
 // to preserve than a collection of unrelated font sizes.`,
-  },
-]
-
-const UI_TABS = [
-  {
-    file: 'surface.css',
-    code: `.surface {
-  padding: 8px;
-  border: 1px solid var(--border-line);
-  border-radius: 12px;
-  background: var(--bg-surface);
-}
-
-.action {
-  position: relative;
-  height: 28px;
-  border: 1px solid var(--border-line);
-  border-radius: 8px;
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  transition-property: transform, border-color, background-color, color;
-  transition-duration: 150ms;
-}
-
-.action::after {
-  content: "";
-  position: absolute;
-  width: 40px;
-  height: 40px;
-}
-
-.action:active { transform: scale(0.96); }`,
-  },
-  {
-    file: 'icons.css',
-    code: `.icon {
-  position: absolute;
-  inset: 0;
-  transition: opacity 200ms, transform 200ms, filter 200ms;
-  transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
-}
-
-.icon[data-visible="false"] {
-  opacity: 0;
-  transform: scale(0.25);
-  filter: blur(4px);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .icon { transition: none; }
-}`,
   },
 ]
 
@@ -260,48 +202,6 @@ const TYPOGRAPHY_SKILL_FILES = [
   { file: 'wrapping-and-punctuation.md', code: wrappingPunctuationSrc },
 ]
 
-const UI_GUIDE_AREAS = [
-  ['Surfaces', 'Radii, optical alignment, shadows, image outlines, and hit areas.'],
-  ['Animations', 'Interruptible state changes, staggered entrances, soft exits, icon swaps, and press feedback.'],
-  ['Performance', 'Exact transition properties and careful use of GPU compositing hints.'],
-]
-
-const UI_PRINCIPLES = [
-  ['Concentric border radius', 'For nearby nested surfaces, outer radius equals inner radius plus the padding between them. Past 24 px of padding, treat the layers as separate surfaces.'],
-  ['Optical alignment', 'Geometric centering is only a starting point. Shift icons or adjust their SVG when asymmetric weight makes the mathematically centered result look wrong.'],
-  ['Shadows over depth borders', 'Use layered transparent shadows when a border is trying to create elevation. Keep real borders for dividers, input outlines, tables, and dense layout separation.'],
-  ['Interruptible animations', 'Use CSS transitions for interactive state changes so motion can reverse from its current frame. Save keyframes for staged, one-shot sequences.'],
-  ['Split and stagger entrances', 'Animate semantic pieces instead of one large container. A useful rhythm is roughly 100 ms between groups and 80 ms between headline words.'],
-  ['Subtle exits', 'Exits should attract less attention than entrances. Favor a short 150 ms fade, blur, and fixed movement of about 12 px.'],
-  ['Contextual icon motion', 'Keep both icons mounted. Cross-fade from scale 0.25 to 1, opacity 0 to 1, and blur 4 px to 0 with no bounce.'],
-  ['Neutral image outlines', 'Inset a 1 px pure-black outline at 10% in light mode or pure white at 10% in dark mode. Tinted neutrals make image edges look dirty.'],
-  ['Scale on press', 'Use 0.96 for tactile press feedback and never go below 0.95. Provide a static option when movement would distract.'],
-  ['Skip default-state entrances', 'When using AnimatePresence for toggles or icon swaps, initial={false} prevents the default state from animating on first render.'],
-  ['Never transition all', 'List the properties that actually change. This prevents accidental animation and gives the browser a smaller problem to solve.'],
-  ['Use will-change sparingly', 'Only add it after observing first-frame stutter, and only for compositor-friendly properties such as transform, opacity, filter, or clip-path.'],
-  ['Minimum hit area', 'Use 44 × 44 px for touch and at least 40 × 40 px on desktop. A pseudo-element can expand a smaller visible control without changing its layout.'],
-]
-
-const UI_REVIEW_CHECKLIST = [
-  'Nested radii are concentric where the surfaces are visually related.',
-  'Icons are optically—not only mathematically—centered.',
-  'Depth uses shadows; structural separation keeps borders.',
-  'Entrances are split and staggered; exits stay softer.',
-  'Images use a neutral inset outline.',
-  'Pressable controls scale to 0.96 where appropriate.',
-  'Default states do not animate on first load.',
-  'Transitions name exact properties instead of all.',
-  'will-change is limited to observed compositor needs.',
-  'Hit areas reach 44 px on touch and 40 px on desktop.',
-]
-
-const UI_SKILL_FILES = [
-  { file: 'SKILL.md', code: betterUiSkillSrc },
-  { file: 'surfaces.md', code: surfacesSrc },
-  { file: 'animations.md', code: animationsSrc },
-  { file: 'performance.md', code: performanceSrc },
-]
-
 function SkillGuide({
   id,
   introTitle,
@@ -410,60 +310,6 @@ function BetterTypographySkillGuide() {
   )
 }
 
-function BetterUiSkillGuide() {
-  return (
-    <section aria-labelledby="better-ui-guide" className="flex min-w-0 flex-col gap-5">
-      <header className="border-b border-[var(--border-line)] pb-2">
-        <h2 id="better-ui-guide" className="font-semibold text-[var(--text-primary)]">The complete guide</h2>
-      </header>
-
-      <div className="rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-4">
-        <p className="font-medium text-[var(--text-primary)]">Use this when an interface works, but still feels off.</p>
-        <p className="mt-1 text-pretty text-[13px] text-[var(--text-secondary)]">
-          The skill covers component polish, hover states, surfaces, micro-interactions, entrance and exit motion,
-          performance hints, and the small alignment decisions that make an interface feel intentional.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-        {UI_GUIDE_AREAS.map(([title, description]) => (
-          <article key={title} className="rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-3">
-            <h3 className="text-[13px] font-medium text-[var(--text-primary)]">{title}</h3>
-            <p className="mt-1 text-[12px] leading-[1.55] text-[var(--text-secondary)]">{description}</p>
-          </article>
-        ))}
-      </div>
-
-      <div>
-        <h3 className="pb-2 text-[13px] font-medium text-[var(--text-primary)]">13 core principles</h3>
-        <div className="overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)]">
-          {UI_PRINCIPLES.map(([title, description], index) => (
-            <article key={title} className="grid gap-1 border-b border-[var(--border-subtle)] p-3 last:border-b-0 sm:grid-cols-[12rem_1fr] sm:gap-5">
-              <h4 className="flex gap-2 text-[13px] font-medium text-[var(--text-primary)]">
-                <span className="w-5 shrink-0 font-mono tabular-nums text-[var(--text-tertiary)]">{String(index + 1).padStart(2, '0')}</span>
-                <span>{title}</span>
-              </h4>
-              <p className="pl-7 text-[13px] leading-[1.6] text-[var(--text-secondary)] sm:pl-0">{description}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="pb-2 text-[13px] font-medium text-[var(--text-primary)]">Review checklist</h3>
-        <ul className="grid grid-cols-1 overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] sm:grid-cols-2">
-          {UI_REVIEW_CHECKLIST.map((item) => (
-            <li key={item} className="flex gap-2 border-b border-[var(--border-subtle)] p-3 text-[13px] leading-[1.55] text-[var(--text-secondary)] sm:odd:border-r">
-              <span aria-hidden="true" className="mt-[3px] size-3.5 shrink-0 rounded-[4px] border border-[var(--border-ring)]" />
-              <span>{item}</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
-  )
-}
-
 function LocalSkillArchive({ slug, files }: { slug: string; files: { file: string; code: string }[] }) {
   return (
     <section data-local-skill={slug} className="flex min-w-0 flex-col gap-3">
@@ -555,9 +401,20 @@ export function BetterColorsDetail() {
 
   return (
     <DetailShell title="Better colors">
-      <BetterColorsDemo />
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <section className="flex min-w-0 flex-col gap-4">
+          <BetterColorsDemo hue={hue} chroma={chroma} />
+        </section>
+
+        <ControlsSection actions={<ChipButton onClick={() => { setHue(264); setChroma(0.2) }}>Reset</ChipButton>}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <SliderChip label="Hue" min={0} max={360} value={hue} format={(value) => `${Math.round(value)}°`} onChange={(value) => setHue(Math.round(value))} />
+            <SliderChip label="Chroma" min={0.04} max={0.28} value={chroma} format={(value) => value.toFixed(2)} onChange={(value) => setChroma(Math.round(value * 100) / 100)} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             Most digital color scales become strange at the edges: blue drifts purple, yellow feels brighter than
@@ -569,18 +426,6 @@ export function BetterColorsDetail() {
             before it looks technical—which is generally where I want a color system to land.
           </p>
         </div>
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <ChipButton onClick={() => { setHue(264); setChroma(0.2) }}>Reset</ChipButton>
-          </header>
-          <BetterColorsDemo hue={hue} chroma={chroma} />
-          <div className="-mt-5 grid grid-cols-1 gap-3 rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 sm:grid-cols-2">
-            <SliderChip label="Hue" min={0} max={360} value={hue} format={(value) => `${Math.round(value)}°`} onChange={(value) => setHue(Math.round(value))} />
-            <SliderChip label="Chroma" min={0.04} max={0.28} value={chroma} format={(value) => value.toFixed(2)} onChange={(value) => setChroma(Math.round(value * 100) / 100)} />
-          </div>
-        </section>
 
         <BetterColorsSkillGuide />
 
@@ -606,9 +451,21 @@ export function BetterTypographyDetail() {
 
   return (
     <DetailShell title="Better typography">
-      <BetterTypographyDemo />
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <section className="flex min-w-0 flex-col gap-4">
+          <BetterTypographyDemo size={size} leading={leading} measure={measure} />
+        </section>
+
+        <ControlsSection actions={<ChipButton onClick={() => { setSize(52); setLeading(1.08); setMeasure(520) }}>Reset</ChipButton>}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <SliderChip label="Size" min={32} max={68} value={size} format={(value) => `${Math.round(value)}px`} onChange={(value) => setSize(Math.round(value))} />
+            <SliderChip label="Leading" min={0.95} max={1.35} value={leading} format={(value) => value.toFixed(2)} onChange={(value) => setLeading(Math.round(value * 100) / 100)} />
+            <SliderChip label="Measure" min={340} max={620} value={measure} format={(value) => `${Math.round(value)}px`} onChange={(value) => setMeasure(Math.round(value))} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             Good typography is mostly restraint. I wanted to make the quiet variables visible here: a heading that is
@@ -617,24 +474,11 @@ export function BetterTypographyDetail() {
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
             The serif and sans are deliberately different, but everything else stays on a small scale. Change the size,
-            leading, or measure below and the composition quickly shows why those three decisions need each other.
+            leading, or measure above and the composition quickly shows why those three decisions need each other.
           </p>
         </div>
 
         <BetterTypographySkillGuide />
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <ChipButton onClick={() => { setSize(52); setLeading(1.08); setMeasure(520) }}>Reset</ChipButton>
-          </header>
-          <BetterTypographyDemo size={size} leading={leading} measure={measure} />
-          <div className="-mt-5 grid grid-cols-1 gap-3 rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 sm:grid-cols-3">
-            <SliderChip label="Size" min={32} max={68} value={size} format={(value) => `${Math.round(value)}px`} onChange={(value) => setSize(Math.round(value))} />
-            <SliderChip label="Leading" min={0.95} max={1.35} value={leading} format={(value) => value.toFixed(2)} onChange={(value) => setLeading(Math.round(value * 100) / 100)} />
-            <SliderChip label="Measure" min={340} max={620} value={measure} format={(value) => `${Math.round(value)}px`} onChange={(value) => setMeasure(Math.round(value))} />
-          </div>
-        </section>
 
         <LocalSkillArchive slug="better-typography" files={TYPOGRAPHY_SKILL_FILES} />
 
@@ -644,52 +488,6 @@ export function BetterTypographyDetail() {
           tags="Typography, Rhythm, Measure"
           reference={REFERENCES.typography}
           referenceLabel="jakubkrehel/skills — Better Typography"
-        />
-      </div>
-      <div aria-hidden="true" className="h-16" />
-    </DetailShell>
-  )
-}
-
-export function BetterUiDetail() {
-  return (
-    <DetailShell title="Better UI">
-      <BetterUiDemo interactive />
-
-      <div className="flex min-w-0 flex-col gap-14">
-        <div className="flex flex-col gap-3">
-          <p className="text-pretty text-[var(--text-primary)]">
-            Interfaces rarely feel polished because of one spectacular decision. It is usually the accumulation of
-            smaller ones—and, in this vault, the first detail is consistency. The surface, hairline, radius, type, and
-            control below all come from the same system as every other experiment.
-          </p>
-          <p className="text-pretty text-[var(--text-primary)]">
-            Press Save: the visible chip gives by four percent while its hit area remains 40 px, then the icons stay
-            mounted and trade places through scale, opacity, and blur. Press it again before it finishes and the
-            transition simply turns around.
-          </p>
-        </div>
-
-        <BetterUiSkillGuide />
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-          </header>
-          <BetterUiDemo interactive />
-          <p className="text-pretty text-[13px] text-[var(--text-secondary)]">
-            The visible chip stays at the vault's 28 px control height; an invisible 40 px target keeps it easy to use.
-          </p>
-        </section>
-
-        <LocalSkillArchive slug="better-ui" files={UI_SKILL_FILES} />
-
-        <CodeAndCredits
-          prompt={UI_PROMPT}
-          tabs={UI_TABS}
-          tags="Surfaces, Motion, Micro-interactions"
-          reference={REFERENCES.ui}
-          referenceLabel="jakubkrehel/skills — Better UI"
         />
       </div>
       <div aria-hidden="true" className="h-16" />

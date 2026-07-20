@@ -131,30 +131,6 @@ body {
   .vault-filter-results { animation: none; }
 }
 
-/* Paged knockout bracket: every piece shares the same reflow timing. */
-.kb-stage {
-  transition: height 260ms var(--ease-move);
-}
-
-.kb-move,
-.kb-line {
-  transition:
-    left 260ms var(--ease-move),
-    top 260ms var(--ease-move),
-    width 260ms var(--ease-move),
-    height 260ms var(--ease-move),
-    opacity 180ms ease,
-    transform 260ms var(--ease-move);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .kb-stage,
-  .kb-move,
-  .kb-line {
-    transition: none;
-  }
-}
-
 /* graph-paper grid behind the pixel-select card (values measured from the
    live page: 8px fine grid + 32px major grid + 16px checker, faint blue) */
 .pixel-select {

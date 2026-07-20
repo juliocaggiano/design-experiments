@@ -1,7 +1,7 @@
 import { useRef, useState, type ReactNode } from 'react'
 import { CaretLeft, CaretRight, X } from '@phosphor-icons/react'
 import { navigate } from '../router'
-import { categoryHref, getVaultItem, getVaultNeighbors } from '../vault-config'
+import { getVaultItem, getVaultNeighbors } from '../vault-config'
 
 /* Shared building blocks for vault detail pages — the cloned typer-page
    shell: header + close, chip buttons, copy-prompt swap, chip sliders,
@@ -21,73 +21,48 @@ export function DetailShell({ title, children }: { title: string; children: Reac
   const item = getVaultItem(path)
   const neighbors = getVaultNeighbors(path)
   const displayTitle = item?.title ?? title
-  const category = item?.category ?? 'Experiment'
   const go = (nextPath: string) => {
     navigate(nextPath)
     window.scrollTo({ top: 0, behavior: 'auto' })
   }
 
   return (
-    <article className="flex min-w-0 flex-col gap-10 text-[15px] leading-[1.7]">
-      <div className="flex min-w-0 flex-col gap-7">
-        <nav aria-label="Breadcrumb" className="flex min-w-0 items-center gap-2 text-[13px] leading-none">
+    <article className="flex min-w-0 flex-col gap-9 text-[15px] leading-[1.7]">
+      <header className="flex min-w-0 items-center justify-between gap-4">
+        <h1 className="min-w-0 truncate font-semibold text-[var(--text-primary)]">{displayTitle}</h1>
+        <div className="flex shrink-0 items-center gap-2">
+          {neighbors ? (
+            <nav aria-label="Browse experiments" className="flex items-center gap-2">
+              <a
+                aria-label={`Previous experiment: ${neighbors.previous.title}`}
+                title={neighbors.previous.title}
+                href={neighbors.previous.path}
+                onClick={(event) => { event.preventDefault(); go(neighbors.previous.path) }}
+                className="grid size-8 place-items-center rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-[background-color,color,transform] duration-150 hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-1"
+              >
+                <CaretLeft size={15} weight="bold" aria-hidden="true" />
+              </a>
+              <a
+                aria-label={`Next experiment: ${neighbors.next.title}`}
+                title={neighbors.next.title}
+                href={neighbors.next.path}
+                onClick={(event) => { event.preventDefault(); go(neighbors.next.path) }}
+                className="grid size-8 place-items-center rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-[background-color,color,transform] duration-150 hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-1"
+              >
+                <CaretRight size={15} weight="bold" aria-hidden="true" />
+              </a>
+            </nav>
+          ) : null}
           <a
+            aria-label="Close"
             href="/"
             onClick={(event) => { event.preventDefault(); go('/') }}
-            className="shrink-0 text-[var(--text-secondary)] transition-colors duration-150 hover:text-[var(--text-primary)]"
+            className="relative grid size-8 place-items-center rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-surface)] text-[var(--text-secondary)] transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-1"
           >
-            Home
+            <X size={15} weight="regular" aria-hidden="true" />
           </a>
-          <span aria-hidden="true" className="text-[var(--text-tertiary)]">/</span>
-          {item ? (
-            <a
-              href={categoryHref(item.category)}
-              onClick={(event) => { event.preventDefault(); go(categoryHref(item.category)) }}
-              className="shrink-0 text-[var(--text-secondary)] transition-colors duration-150 hover:text-[var(--text-primary)]"
-            >
-              {category}
-            </a>
-          ) : <span className="shrink-0 text-[var(--text-secondary)]">{category}</span>}
-          <span aria-hidden="true" className="text-[var(--text-tertiary)]">/</span>
-          <span aria-current="page" className="truncate font-medium text-[var(--text-primary)]">{displayTitle}</span>
-        </nav>
-
-        <header className="flex min-w-0 items-center justify-between gap-4">
-          <h1 className="min-w-0 truncate font-semibold text-[var(--text-primary)]">{displayTitle}</h1>
-          <div className="flex shrink-0 items-center gap-2">
-            {neighbors ? (
-              <nav aria-label="Browse experiments" className="grid grid-cols-2 overflow-hidden rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-surface)]">
-                <a
-                  aria-label={`Previous experiment: ${neighbors.previous.title}`}
-                  title={neighbors.previous.title}
-                  href={neighbors.previous.path}
-                  onClick={(event) => { event.preventDefault(); go(neighbors.previous.path) }}
-                  className="grid size-8 place-items-center border-r border-[var(--border-line)] text-[var(--text-secondary)] transition-[background-color,color,transform] duration-150 hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] focus-visible:relative focus-visible:z-10 focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-[-2px]"
-                >
-                  <CaretLeft size={15} weight="bold" aria-hidden="true" />
-                </a>
-                <a
-                  aria-label={`Next experiment: ${neighbors.next.title}`}
-                  title={neighbors.next.title}
-                  href={neighbors.next.path}
-                  onClick={(event) => { event.preventDefault(); go(neighbors.next.path) }}
-                  className="grid size-8 place-items-center text-[var(--text-secondary)] transition-[background-color,color,transform] duration-150 hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] focus-visible:relative focus-visible:z-10 focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)] focus-visible:outline-offset-[-2px]"
-                >
-                  <CaretRight size={15} weight="bold" aria-hidden="true" />
-                </a>
-              </nav>
-            ) : null}
-            <a
-              aria-label="Close"
-              href="/"
-              onClick={(event) => { event.preventDefault(); go('/') }}
-              className="relative grid size-8 place-items-center rounded-[10px] text-[var(--text-secondary)] transition-[background-color,color,transform] duration-150 ease-[var(--ease-out)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] active:scale-[0.96] focus-visible:outline focus-visible:outline-1 focus-visible:outline-[var(--text-primary)]"
-            >
-              <X size={15} weight="regular" aria-hidden="true" />
-            </a>
-          </div>
-        </header>
-      </div>
+        </div>
+      </header>
       {children}
     </article>
   )
@@ -126,6 +101,23 @@ export function CopyPromptChip({ text }: { text: string }) {
         <span aria-hidden={!copied} className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-[opacity,filter] duration-200 ease-[var(--ease-out)] ${copied ? 'opacity-100 blur-0 text-[var(--copy-ok)]' : 'opacity-0 blur-[3px]'}`}>Copied</span>
       </span>
     </button>
+  )
+}
+
+/* Controls block: "Description" heading + the frame's action chips
+   (Reset/Replay/etc.) right-aligned in the header row, controls panel below.
+   Sits directly under the implementation frame (24 px wrapper on each page). */
+export function ControlsSection({ children, actions }: { children: ReactNode; actions?: ReactNode }) {
+  return (
+    <section className="flex min-w-0 flex-col gap-4">
+      <header className="flex items-center justify-between gap-3 pb-2">
+        <h2 className="font-semibold text-[var(--text-primary)]">Description</h2>
+        {actions ? <div className="flex items-center gap-2">{actions}</div> : null}
+      </header>
+      <div className="flex min-w-0 flex-col gap-3.5 rounded-xl border border-[var(--border-line)] bg-[var(--bg-surface)] p-4">
+        {children}
+      </div>
+    </section>
   )
 }
 
@@ -179,12 +171,37 @@ export function SliderChip({
         onPointerMove={(e) => { if (e.buttons) fromEvent(e) }}
         className="relative flex h-8 w-full cursor-pointer touch-none select-none items-center overflow-hidden rounded-lg border border-[var(--border-line)] bg-[var(--bg-page)] outline-none ring-[var(--border-ring)] focus-visible:ring-1"
       >
-        <span className="pointer-events-none absolute inset-y-0 left-0 bg-[var(--bg-hover)]" style={{ width: `${pct}%` }} />
+        <span data-slider-fill className="pointer-events-none absolute inset-y-0 left-0 bg-[var(--bg-hover)]" style={{ width: `${pct}%` }} />
         <span className="pointer-events-none absolute top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-full bg-[var(--text-primary)] transition-opacity duration-150 opacity-40" style={{ left: `max(3px, calc(${pct}% - 1.5px))` }} />
         <span className="pointer-events-none relative z-10 pl-3 text-[12px] text-[var(--text-secondary)]">{label}</span>
         <span className="pointer-events-none relative z-10 ml-auto mr-3 text-[12px] tabular-nums text-[var(--text-secondary)]">{format(value)}</span>
       </div>
     </label>
+  )
+}
+
+/* Switch row in the SliderChip bar shape: same 32 px rounded bar, label left,
+   small switch right. Keeps role="switch" + stable aria-labels for QA. */
+export function SwitchChip({
+  label, checked, onChange,
+}: { label: string; checked: boolean; onChange: (next: boolean) => void }) {
+  return (
+    <div className="flex h-8 min-w-[9rem] flex-1 items-center justify-between rounded-lg border border-[var(--border-line)] bg-[var(--bg-page)] pl-3 pr-1.5">
+      <span className="text-[12px] text-[var(--text-secondary)]">{label}</span>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-label={label}
+        onClick={() => onChange(!checked)}
+        className={`relative h-[18px] w-[30px] shrink-0 rounded-full transition-colors duration-150 outline-none ring-[var(--border-ring)] focus-visible:ring-1 ${checked ? 'bg-[var(--text-primary)]' : 'bg-[var(--bg-hover)]'}`}
+      >
+        <span
+          aria-hidden="true"
+          className={`absolute top-[2px] h-[14px] w-[14px] rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.2)] transition-transform duration-150 ${checked ? 'translate-x-[14px] left-[2px]' : 'translate-x-0 left-[2px]'}`}
+        />
+      </button>
+    </div>
   )
 }
 

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { OpticalTypeDemo, type OpticalTypeControls } from '../demos/OpticalTypeDemo'
-import { ChipButton, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, ControlsSection, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import typeSrc from '../demos/OpticalTypeDemo.tsx?raw'
 
 /* Skill card #4: the apple-design skill's typography chapter. */
@@ -102,15 +102,41 @@ export function OpticalTypeDetail() {
 
   return (
     <DetailShell title="Optical typography">
-      {/* hero */}
-      <div
-        aria-label="The same word twice: size-derived tracking versus one fixed value"
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <OpticalTypeDemo />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
+            <OpticalTypeDemo sizeOverride={size} fixedTrack={fixedTrack} controls={controls} />
+          </div>
+        </div>
+
+        <ControlsSection actions={(
+          <>
+            <ChipButton onClick={() => { setSize(Number.NaN); controls.breathe?.() }}>Breathe</ChipButton>
+            <ChipButton onClick={() => { setSize(Number.NaN); controls.reset?.() }}>Reset</ChipButton>
+          </>
+        )}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <SliderChip
+              label="Size"
+              min={14}
+              max={88}
+              value={Number.isNaN(size) ? 48 : size}
+              format={(v) => `${Math.round(v)} px`}
+              onChange={(v) => setSize(Math.round(v))}
+            />
+            <SliderChip
+              label="Fixed track"
+              min={-0.02}
+              max={0.05}
+              value={fixedTrack}
+              format={(v) => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(3)} em`}
+              onChange={(v) => setFixedTrack(Math.round(v * 1000) / 1000)}
+            />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             The quietest chapter of the apple-design skill, and the one type people care most about: tracking and
@@ -121,43 +147,10 @@ export function OpticalTypeDetail() {
             somewhere, always.
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
-            Drag horizontally across the canvas to drive the size yourself. Below, the slider pins an exact size, and
+            Drag horizontally across the canvas to drive the size yourself. The controls above pin an exact size, and
             you can change which fixed tracking value the bottom line is stuck with — try a "safe" 0 and watch it go
             loose anyway.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border-line)]">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => { setSize(Number.NaN); controls.breathe?.() }}>Breathe</ChipButton>
-              <ChipButton onClick={() => { setSize(Number.NaN); controls.reset?.() }}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
-            <OpticalTypeDemo sizeOverride={size} fixedTrack={fixedTrack} controls={controls} />
-          </div>
-          <div className="-mt-5 flex min-w-0 flex-col rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 gap-3.5">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <SliderChip
-                label="Size"
-                min={14}
-                max={88}
-                value={Number.isNaN(size) ? 48 : size}
-                format={(v) => `${Math.round(v)} px`}
-                onChange={(v) => setSize(Math.round(v))}
-              />
-              <SliderChip
-                label="Fixed track"
-                min={-0.02}
-                max={0.05}
-                value={fixedTrack}
-                format={(v) => `${v >= 0 ? '+' : '−'}${Math.abs(v).toFixed(3)} em`}
-                onChange={(v) => setFixedTrack(Math.round(v * 1000) / 1000)}
-              />
-            </div>
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

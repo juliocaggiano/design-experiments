@@ -8,7 +8,6 @@
   --sx-muted-foreground: #737373;
   --sx-border: #e5e5e5;
   --sx-ring: #a3a3a3;
-  --sx-destructive: #e7000b;
   position: absolute;
   inset: 0;
   overflow: hidden;
@@ -122,7 +121,9 @@
   opacity: 0.5;
 }
 
-.sx-button-default {
+/* Scoped to .sh-demo so the variant beats the `.sh-demo button { color: inherit }`
+   normalize rule — otherwise the primary label renders black-on-black. */
+.sh-demo .sx-button-default {
   color: #fafafa;
   background: #171717;
 }
@@ -553,22 +554,23 @@
   to { background-position: -220% 0; }
 }
 
-/* Calendar — official base-nova primary demo */
+/* Calendar — official base-nova primary demo, restyled on vault tokens */
 .sx-calendar-frame {
   width: fit-content;
-  color: #171717;
+  color: var(--text-primary);
+  font-family: inherit;
 }
 
 .sx-calendar {
-  --cell-size: 28px;
+  --cell-size: 32px;
   --cell-radius: 8px;
   position: relative;
   width: fit-content;
-  border: 1px solid var(--sx-border);
-  border-radius: 8px;
-  padding: 8px;
+  border: 1px solid var(--border-line);
+  border-radius: 12px;
+  padding: 12px;
   background: #fff;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .sx-calendar-months,
@@ -579,12 +581,12 @@
 
 .sx-calendar-months {
   position: relative;
-  gap: 16px;
+  gap: 12px;
 }
 
 .sx-calendar-month {
   width: 100%;
-  gap: 16px;
+  gap: 12px;
 }
 
 .sx-calendar-nav {
@@ -609,13 +611,15 @@
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 0;
+  color: var(--text-secondary);
   background: transparent;
   cursor: pointer;
   user-select: none;
 }
 
 .sx-calendar-nav-button:hover {
-  background: var(--sx-muted);
+  color: var(--text-primary);
+  background: var(--bg-hover);
 }
 
 .sx-calendar-chevron {
@@ -638,8 +642,8 @@
   height: var(--cell-size);
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  font-size: 14px;
+  gap: 4px;
+  font-size: 13px;
   font-weight: 500;
 }
 
@@ -648,13 +652,13 @@
   display: inline-flex;
   height: 24px;
   align-items: center;
-  border: 1px solid var(--sx-border);
+  border: 1px solid var(--border-line);
   border-radius: var(--cell-radius);
 }
 
 .sx-calendar-dropdown-root:focus-within {
-  border-color: var(--sx-ring);
-  box-shadow: 0 0 0 3px rgb(163 163 163 / 50%);
+  border-color: var(--text-tertiary);
+  box-shadow: 0 0 0 3px rgb(0 0 0 / 6%);
 }
 
 .sx-calendar-dropdown {
@@ -672,7 +676,7 @@
   gap: 4px;
   border-radius: var(--cell-radius);
   padding: 0 4px 0 6px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   user-select: none;
 }
@@ -680,7 +684,7 @@
 .sx-calendar-caption-label svg {
   width: 14px;
   height: 14px;
-  color: var(--sx-muted-foreground);
+  color: var(--text-tertiary);
 }
 
 .sx-calendar-grid {
@@ -695,16 +699,16 @@
 }
 
 .sx-calendar-week {
-  margin-top: 8px;
+  margin-top: 4px;
 }
 
 .sx-calendar-weekday {
   width: var(--cell-size);
   flex: 1;
   border-radius: var(--cell-radius);
-  color: var(--sx-muted-foreground);
-  font-size: 12.8px;
-  font-weight: 400;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
   text-align: center;
   user-select: none;
 }
@@ -733,7 +737,7 @@
   padding: 0;
   color: inherit;
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 1;
   cursor: pointer;
@@ -741,24 +745,26 @@
 }
 
 .sx-calendar-day-button:hover {
-  background: var(--sx-muted);
+  background: var(--bg-hover);
 }
 
 .sx-calendar-day-button[data-selected-single="true"] {
-  color: #fafafa;
-  background: #171717;
+  color: #fff;
+  background: var(--text-primary);
 }
 
 .sx-calendar-today:not(:has(.sx-calendar-day-button[data-selected-single="true"])) {
-  background: var(--sx-muted);
+  background: var(--bg-hover);
+  box-shadow: inset 0 0 0 1px var(--border-line);
+  font-weight: 500;
 }
 
 .sx-calendar-outside {
-  color: var(--sx-muted-foreground);
+  color: var(--text-tertiary);
 }
 
 .sx-calendar-disabled {
-  color: var(--sx-muted-foreground);
+  color: var(--text-tertiary);
   opacity: 0.5;
 }
 
@@ -1180,197 +1186,6 @@
   background: rgb(23 23 23 / 10%);
 }
 
-/* Bubble — official base-rhea primary demo */
-.sx-bubble-demo {
-  display: flex;
-  width: min(384px, calc(100cqw - 32px));
-  max-width: 384px;
-  flex-direction: column;
-  gap: 32px;
-  padding: 48px 0;
-  color: #171717;
-}
-
-.sx-bubble-group {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.sx-bubble {
-  position: relative;
-  display: flex;
-  width: fit-content;
-  max-width: 80%;
-  min-width: 0;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.sx-bubble[data-align="end"] {
-  align-self: flex-end;
-}
-
-.sx-bubble-content {
-  width: fit-content;
-  max-width: 100%;
-  min-width: 0;
-  overflow: hidden;
-  overflow-wrap: break-word;
-  border: 1px solid transparent;
-  border-radius: 24px;
-  padding: 10px 12px;
-  color: #fafafa;
-  background: #171717;
-  font-size: 14px;
-  line-height: 1.625;
-}
-
-.sx-bubble[data-variant="muted"] .sx-bubble-content {
-  color: #171717;
-  background: var(--sx-muted);
-}
-
-.sx-bubble-reactions {
-  position: absolute;
-  z-index: 2;
-  right: 12px;
-  bottom: 0;
-  display: flex;
-  width: fit-content;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  border-radius: 999px;
-  padding: 2px 6px;
-  background: var(--sx-muted);
-  box-shadow: 0 0 0 3px #fff;
-  font-size: 14px;
-  transform: translateY(75%);
-}
-
-/* Button Group — official base-nova primary demo */
-.sx-button-group-demo {
-  display: flex;
-  width: fit-content;
-  align-items: stretch;
-  gap: 8px;
-}
-
-.sx-button-group {
-  display: flex;
-  width: fit-content;
-  align-items: stretch;
-}
-
-.sx-button-group > .sx-button {
-  border-radius: 0;
-}
-
-.sx-button-group > .sx-button:first-child {
-  border-radius: 8px 0 0 8px;
-}
-
-.sx-button-group > .sx-button:last-of-type {
-  border-radius: 0 8px 8px 0;
-}
-
-.sx-button-group > .sx-button:only-child {
-  border-radius: 8px;
-}
-
-.sx-button-group > .sx-button + .sx-button {
-  border-left: 0;
-}
-
-.sx-more-group {
-  position: relative;
-}
-
-.sx-mail-menu,
-.sx-label-menu {
-  position: absolute;
-  z-index: 40;
-  display: none;
-  width: 160px;
-  border-radius: 8px;
-  padding: 4px;
-  color: #171717;
-  background: rgb(255 255 255 / 94%);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 10%), 0 0 0 1px rgb(23 23 23 / 10%);
-  backdrop-filter: blur(20px) saturate(150%);
-}
-
-.sx-mail-menu {
-  top: calc(100% + 4px);
-  right: 0;
-}
-
-.sx-label-menu {
-  top: 149px;
-  left: calc(100% + 4px);
-  width: 112px;
-}
-
-.sx-mail-menu[data-open="true"],
-.sx-label-menu[data-open="true"] {
-  display: block;
-}
-
-.sx-mail-menu > button,
-.sx-label-menu > button {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  gap: 6px;
-  border: 0;
-  border-radius: 6px;
-  padding: 4px 6px;
-  background: transparent;
-  font-size: 14px;
-  text-align: left;
-  cursor: default;
-}
-
-.sx-mail-menu > button:hover,
-.sx-mail-menu > button:focus-visible,
-.sx-label-menu > button:hover,
-.sx-label-menu > button:focus-visible {
-  background: rgb(23 23 23 / 10%);
-}
-
-.sx-mail-menu svg,
-.sx-label-menu svg {
-  width: 16px;
-  height: 16px;
-  flex: none;
-}
-
-.sx-mail-menu hr {
-  height: 1px;
-  margin: 4px -4px;
-  border: 0;
-  background: rgb(23 23 23 / 5%);
-}
-
-.sx-menu-caret {
-  margin-left: auto;
-}
-
-.sx-mail-menu .sx-destructive {
-  color: var(--sx-destructive);
-}
-
-.sx-label-menu > button > span {
-  display: inline-flex;
-  width: 16px;
-  height: 16px;
-  align-items: center;
-  justify-content: center;
-}
-
 /* Command — official base-nova primary demo */
 .sx-command {
   display: flex;
@@ -1566,13 +1381,59 @@
   }
 }
 
+/* Calendar: anchor the scaled specimen to the thumbnail center so it never drifts out of compact frames. */
+.sh-demo[data-id="calendar"] .sx-native {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+@container (max-height: 150px) {
+  .sh-demo[data-id="calendar"] .sx-native {
+    transform: scale(0.3);
+  }
+}
+
+/* Card: anchor the login specimen to the frame center (same drift fix as
+   calendar) — the auto-sized grid track top-anchored it, so the scaled box
+   overflowed the stage's bottom edge (42 px at 1440, 41 px at 390). The
+   login surface is 368 px tall, taller than the generic ladder assumes, so
+   it also gets its own tighter steps. */
+.sh-demo[data-id="card"] .sx-native {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+}
+
+@container (max-height: 260px) {
+  .sh-demo[data-id="card"] .sx-native {
+    transform: scale(0.5);
+  }
+}
+
+@container (max-height: 205px) {
+  .sh-demo[data-id="card"] .sx-native {
+    transform: scale(0.4);
+  }
+}
+
+@container (max-height: 150px) {
+  .sh-demo[data-id="card"] .sx-native {
+    transform: scale(0.22);
+  }
+}
+
+@container (max-height: 110px) {
+  .sh-demo[data-id="card"] .sx-native {
+    transform: scale(0.16);
+  }
+}
+
 @container (max-width: 639px) {
   .sx-carousel {
     width: 192px;
-  }
-
-  .sx-back-group {
-    display: none;
   }
 
   .sx-chart-header {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { OverlayDemo } from '../demos/OverlayDemo'
-import { ChipButton, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, ControlsSection, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import webDemoSrc from '../demos/OverlayDemo.tsx?raw'
 import runPy from '../content/overlay/run.py?raw'
 import configPy from '../content/overlay/config.py?raw'
@@ -161,16 +161,53 @@ export function MeetingOverlayDetail() {
   }
 
   return (
-    <DetailShell title="Meeting overlay">
-      {/* hero: the overlay running on a clean strip of "screen" */}
-      <div
-        aria-label="Pixel detective announcing a meeting"
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <OverlayDemo title="Work Session: New Portfolio" time="Tomorrow 06:00" holdMs={3800} />
-      </div>
-
+    <DetailShell title="Don't Miss Meetings">
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] flex min-h-[160px] items-center justify-center px-6 py-8 transition-colors duration-500 ease-[var(--ease-out)] sm:min-h-[190px] bg-[var(--bg-page)]">
+            <div className="absolute inset-0">
+              <OverlayDemo title={title} time={time} holdMs={holdMs} speed={speed} spriteH={spriteH} replayKey={replayKey} />
+            </div>
+          </div>
+        </div>
+
+        <ControlsSection actions={(
+          <>
+            <ChipButton onClick={remix}>Remix</ChipButton>
+            <ChipButton onClick={() => setReplayKey((k) => k + 1)}>Replay</ChipButton>
+          </>
+        )}>
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <input
+              type="text"
+              spellCheck={false}
+              placeholder="Meeting name…"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="h-8 w-full min-w-0 flex-1 rounded-lg border border-[var(--border-line)] bg-[var(--bg-page)] px-3 text-[13px] text-[var(--text-body)] outline-none transition-colors duration-150 placeholder:text-[var(--text-tertiary)] focus:border-[var(--border-ring)]"
+            />
+            <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
+              <div className="min-w-0 sm:w-[124px]">
+                <input
+                  type="text"
+                  spellCheck={false}
+                  placeholder="Time…"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="h-8 w-full min-w-0 rounded-lg border border-[var(--border-line)] bg-[var(--bg-page)] px-2.5 text-[12px] text-[var(--text-body)] outline-none transition-colors duration-150 placeholder:text-[var(--text-tertiary)] focus:border-[var(--border-ring)]"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <SliderChip label="Hold" min={1500} max={10000} value={holdMs} format={(v) => `${(v / 1000).toFixed(1)}s`} onChange={(v) => setHoldMs(Math.round(v / 100) * 100)} />
+            <SliderChip label="Speed" min={60} max={320} value={speed} format={(v) => `${Math.round(v)} px/s`} onChange={(v) => setSpeed(Math.round(v))} />
+            <SliderChip label="Sprite" min={34} max={90} value={spriteH} format={(v) => `${Math.round(v)} px`} onChange={(v) => setSpriteH(Math.round(v))} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             Five minutes before a meeting, a pixel detective walks in along the bottom of the screen. He stops, a speech
@@ -179,53 +216,9 @@ export function MeetingOverlayDetail() {
             you're doing and never blocks the mouse.
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
-            Below you can change the meeting, how long he holds, how fast he walks, and his size. The desktop app reads
-            your real calendar from one iCal URL; the copy button gives you the full build prompt for your own setup.
+            The controls above change the meeting, how long he holds, how fast he walks, and his size. The desktop app
+            reads your real calendar from one iCal URL; the copy button gives you the full build prompt for your own setup.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border-line)]">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={remix}>Remix</ChipButton>
-              <ChipButton onClick={() => setReplayKey((k) => k + 1)}>Replay</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] flex min-h-[160px] items-center justify-center px-6 py-8 transition-colors duration-500 ease-[var(--ease-out)] sm:min-h-[190px] bg-[var(--bg-page)]">
-            <div className="absolute inset-0">
-              <OverlayDemo title={title} time={time} holdMs={holdMs} speed={speed} spriteH={spriteH} replayKey={replayKey} />
-            </div>
-          </div>
-          <div className="-mt-5 flex min-w-0 flex-col rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 gap-3.5">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-              <input
-                type="text"
-                spellCheck={false}
-                placeholder="Meeting name…"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="h-8 w-full min-w-0 flex-1 rounded-lg border border-[var(--border-line)] bg-[var(--bg-page)] px-3 text-[13px] text-[var(--text-body)] outline-none transition-colors duration-150 placeholder:text-[var(--text-tertiary)] focus:border-[var(--border-ring)]"
-              />
-              <div className="grid grid-cols-2 gap-2 sm:flex sm:shrink-0">
-                <div className="min-w-0 sm:w-[124px]">
-                  <input
-                    type="text"
-                    spellCheck={false}
-                    placeholder="Time…"
-                    value={time}
-                    onChange={(e) => setTime(e.target.value)}
-                    className="h-8 w-full min-w-0 rounded-lg border border-[var(--border-line)] bg-[var(--bg-page)] px-2.5 text-[12px] text-[var(--text-body)] outline-none transition-colors duration-150 placeholder:text-[var(--text-tertiary)] focus:border-[var(--border-ring)]"
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <SliderChip label="Hold" min={1500} max={10000} value={holdMs} format={(v) => `${(v / 1000).toFixed(1)}s`} onChange={(v) => setHoldMs(Math.round(v / 100) * 100)} />
-              <SliderChip label="Speed" min={60} max={320} value={speed} format={(v) => `${Math.round(v)} px/s`} onChange={(v) => setSpeed(Math.round(v))} />
-              <SliderChip label="Sprite" min={34} max={90} value={spriteH} format={(v) => `${Math.round(v)} px`} onChange={(v) => setSpriteH(Math.round(v))} />
-            </div>
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { SheetDemo, type SheetControls } from '../demos/SheetDemo'
-import { ChipButton, CopyPromptChip, CodeTabs, CreditRows, DetailShell, SliderChip, assembleCopy } from './detail-kit'
+import { ChipButton, ControlsSection, CopyPromptChip, CodeTabs, CreditRows, DetailShell, SliderChip, assembleCopy } from './detail-kit'
 import sheetSrc from '../demos/SheetDemo.tsx?raw'
 
 /* Skill card #2: the apple-design skill's drawer/sheet recipe. */
@@ -95,15 +95,28 @@ export function SheetDetail() {
 
   return (
     <DetailShell title="The sheet">
-      {/* hero */}
-      <div
-        aria-label="A draggable bottom sheet with snap points and velocity-based dismissal"
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <SheetDemo />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
+            <SheetDemo damping={damping} response={response} dim={dim} controls={controls} />
+          </div>
+        </div>
+
+        <ControlsSection actions={(
+          <>
+            <ChipButton onClick={() => controls.open?.()}>Open</ChipButton>
+            <ChipButton onClick={() => controls.dismiss?.()}>Dismiss</ChipButton>
+          </>
+        )}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <SliderChip label="Damping" min={0.5} max={1} value={damping} format={(v) => v.toFixed(2)} onChange={(v) => setDamping(Math.round(v * 100) / 100)} />
+            <SliderChip label="Response" min={0.15} max={0.6} value={response} format={(v) => `${v.toFixed(2)}s`} onChange={(v) => setResponse(Math.round(v * 100) / 100)} />
+            <SliderChip label="Dim" min={0} max={0.4} value={dim} format={(v) => v.toFixed(2)} onChange={(v) => setDim(Math.round(v * 100) / 100)} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             The interaction everyone knows from iOS, rebuilt from the apple-design skill's drawer recipe. Drag the sheet
@@ -113,29 +126,9 @@ export function SheetDetail() {
             position so the three layers move as a single object. Past the top it rubber-bands.
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
-            Below you can tune Apple's shipped drawer values — damping 0.8, response 0.3s — and how hard the background
-            dims. Grab the sheet mid-flight anytime; it never locks you out.
+            The controls above tune Apple's shipped drawer values — damping 0.8, response 0.3s — and how hard the
+            background dims. Grab the sheet mid-flight anytime; it never locks you out.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border-line)]">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.open?.()}>Open</ChipButton>
-              <ChipButton onClick={() => controls.dismiss?.()}>Dismiss</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
-            <SheetDemo damping={damping} response={response} dim={dim} controls={controls} />
-          </div>
-          <div className="-mt-5 flex min-w-0 flex-col rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 gap-3.5">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <SliderChip label="Damping" min={0.5} max={1} value={damping} format={(v) => v.toFixed(2)} onChange={(v) => setDamping(Math.round(v * 100) / 100)} />
-              <SliderChip label="Response" min={0.15} max={0.6} value={response} format={(v) => `${v.toFixed(2)}s`} onChange={(v) => setResponse(Math.round(v * 100) / 100)} />
-              <SliderChip label="Dim" min={0} max={0.4} value={dim} format={(v) => v.toFixed(2)} onChange={(v) => setDim(Math.round(v * 100) / 100)} />
-            </div>
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

@@ -2,18 +2,11 @@ import { chromium } from 'playwright'
 
 const base = process.env.BASE_URL ?? 'http://127.0.0.1:5173'
 const routes = [
-  ['/vault/thinking-state', 'Thinking State'],
   ['/vault/thinking-reasoning', 'Thinking + Reasoning'],
   ['/vault/ai-web-search', 'Web Search'],
-  ['/vault/ai-file-diff', 'File Diff'],
-  ['/vault/ai-image-generation', 'Image Generation'],
-  ['/vault/ai-text-response', 'Text Response'],
   ['/vault/ai-streaming-text', 'Streaming Text'],
   ['/vault/ai-inline-citations', 'Inline Citations'],
-  ['/vault/ai-code-block', 'Code Block'],
   ['/vault/ai-task-list', 'To-do List'],
-  ['/vault/ai-data-table', 'Data Table'],
-  ['/vault/ai-comparison-table', 'Comparison Table'],
 ]
 
 const browser = await chromium.launch()
@@ -36,7 +29,7 @@ async function auditViewport(width, height) {
     await page.goto(`${base}${path}`, { waitUntil: 'commit', timeout: 12_000 })
     await page.locator('.ac-demo').first().waitFor()
     if (await page.locator('h1').textContent() !== title) throw new Error(`${path} title mismatch`)
-    if (await page.locator('.ac-demo').count() !== 2) throw new Error(`${path} does not share one demo across hero and implementation`)
+    if (await page.locator('.ac-demo').count() !== 1) throw new Error(`${path} does not render the shared implementation demo`)
     if (await page.getByRole('button', { name: 'Reset' }).count() !== 1) throw new Error(`${path} is missing Reset`)
     if (await page.getByRole('button', { name: 'Replay' }).count() !== 1) throw new Error(`${path} is missing Replay`)
 
@@ -65,7 +58,7 @@ page.on('pageerror', (error) => errors.push(`interaction page: ${error.message}`
 
 await page.goto(`${base}/vault/ai-streaming-text`, { waitUntil: 'commit', timeout: 12_000 })
 await page.locator('.ac-demo').first().waitFor()
-const stream = page.locator('.ac-demo').nth(1).locator('.ac-streaming-text p')
+const stream = page.locator('.ac-demo').first().locator('.ac-streaming-text p')
 const earlyStream = await stream.textContent()
 await page.waitForTimeout(500)
 const laterStream = await stream.textContent()
@@ -74,38 +67,36 @@ await page.getByRole('button', { name: 'Replay' }).click()
 await page.waitForTimeout(80)
 if ((await stream.textContent())?.length > 8) throw new Error('Streaming text did not restart')
 
+await page.goto(base, { waitUntil: 'commit', timeout: 12_000 })
+const streamCard = page.locator('article').filter({ has: page.locator('a[href="/vault/ai-streaming-text"]') })
+const compactStream = streamCard.locator('.ac-demo[data-compact="true"] .ac-streaming-text p')
+await streamCard.scrollIntoViewIfNeeded()
+await page.waitForFunction(() => document.querySelector('.ac-demo[data-compact="true"][data-component="streaming-text"] .ac-streaming-text p')?.getAttribute('data-in-view') === 'true')
+const compactEarly = await compactStream.textContent()
+await page.waitForTimeout(600)
+const compactLater = await compactStream.textContent()
+if ((compactLater?.length ?? 0) <= (compactEarly?.length ?? 0)) throw new Error('Compact streaming thumbnail did not advance in view')
+
 await page.goto(`${base}/vault/ai-web-search`, { waitUntil: 'commit', timeout: 12_000 })
 await page.locator('.ac-demo').first().waitFor()
 await page.waitForTimeout(2600)
-if (await page.locator('.ac-demo').nth(1).locator('[data-resolved="true"]').count() !== 3) throw new Error('Web search sources did not resolve')
-
-await page.goto(`${base}/vault/ai-code-block`, { waitUntil: 'commit', timeout: 12_000 })
-await page.locator('.ac-demo').first().waitFor()
-const codeDemo = page.locator('.ac-demo').nth(1)
-await codeDemo.getByRole('button', { name: 'Copy' }).click()
-if (await codeDemo.getByRole('button', { name: 'Copied' }).count() !== 1) throw new Error('Code copy feedback did not appear')
+if (await page.locator('.ac-demo').first().locator('[data-resolved="true"]').count() !== 3) throw new Error('Web search sources did not resolve')
 
 await page.goto(`${base}/vault/ai-task-list`, { waitUntil: 'commit', timeout: 12_000 })
 await page.locator('.ac-demo').first().waitFor()
-const taskDemo = page.locator('.ac-demo').nth(1)
+const taskDemo = page.locator('.ac-demo').first()
 if (!(await taskDemo.locator('.ac-task-header small').textContent())?.includes('2/5')) throw new Error('Task list initial progress is wrong')
 await page.getByRole('button', { name: 'Replay' }).click()
 if (!(await taskDemo.locator('.ac-task-header small').textContent())?.includes('3/5')) throw new Error('Task list replay did not advance progress')
 
 await page.goto(`${base}/vault/ai-inline-citations`, { waitUntil: 'commit', timeout: 12_000 })
 await page.locator('.ac-demo').first().waitFor()
-const citationDemo = page.locator('.ac-demo').nth(1)
+const citationDemo = page.locator('.ac-demo').first()
 await citationDemo.getByRole('button', { name: 'View citation 2' }).click()
 if (await citationDemo.locator('footer > button[data-active="true"] b').textContent() !== 'W3C WAI') throw new Error('Citation selection did not update the source')
-
-await page.goto(`${base}/vault/ai-comparison-table`, { waitUntil: 'commit', timeout: 12_000 })
-await page.locator('.ac-demo').first().waitFor()
-const comparison = page.locator('.ac-demo').nth(1).locator('table')
-await page.locator('.ac-demo').nth(1).getByRole('button', { name: 'Personal' }).click()
-if (await comparison.getAttribute('data-selected') !== 'personal') throw new Error('Comparison selection did not move')
 
 await page.close()
 await browser.close()
 
 if (errors.length) throw new Error(errors.join('\n'))
-console.log(`AI CSS verified: ${routes.length} cards × 3 viewports, shared hero/implementation parity, and key interactions.`)
+console.log(`AI CSS verified: ${routes.length} cards × 3 viewports, one shared implementation demo per page, key interactions, and the compact streaming thumbnail.`)

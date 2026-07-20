@@ -31,14 +31,20 @@ The complete shared AI component collection follows. Render the specimen with id
 
   return (
     <DetailShell title={definition.title}>
-      <div
-        aria-label={`${definition.title} expanded preview`}
-        className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <AiCssDemo id={definition.id} />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <section className="flex min-w-0 flex-col gap-4">
+          <div className="flex items-center justify-end gap-2">
+            <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+            <ChipButton onClick={() => controls.replay?.()}>Replay</ChipButton>
+          </div>
+          <div className="relative z-10 h-[440px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] max-sm:h-[400px]">
+            <AiCssDemo id={definition.id} controls={controls} />
+          </div>
+          <p className="text-[12px] text-[var(--text-tertiary)]">
+            The feed thumbnail and this implementation render the same stateful component. Replay restarts or advances its primary behavior.
+          </p>
+        </section>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">{definition.summary}</p>
           <p className="text-pretty text-[var(--text-primary)]">
@@ -46,22 +52,6 @@ The complete shared AI component collection follows. Render the specimen with id
             spacing, and motion restraint have been rebuilt for the vault’s light design system.
           </p>
         </div>
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-              <ChipButton onClick={() => controls.replay?.()}>Replay</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 h-[440px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] max-sm:h-[400px]">
-            <AiCssDemo id={definition.id} controls={controls} />
-          </div>
-          <p className="text-[12px] text-[var(--text-tertiary)]">
-            The preview, feed thumbnail, and implementation all render this same stateful component. Replay restarts or advances its primary behavior.
-          </p>
-        </section>
 
         <section className="flex min-w-0 flex-col gap-3">
           <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">

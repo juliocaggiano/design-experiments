@@ -1,9 +1,22 @@
 import { useEffect, useState, type CSSProperties, type FormEvent } from 'react'
 import { PaperPlaneTilt } from '@phosphor-icons/react'
+import { SliderChip } from '../pages/detail-kit'
 import './BorderBeamDemo.css'
 
-type BeamType = 'large' | 'small' | 'line'
-type BeamColor = 'colorful' | 'mono' | 'ocean' | 'sunset'
+export type BeamType = 'large' | 'small' | 'line'
+export type BeamColor = 'ink' | 'graphite' | 'stone' | 'mist'
+
+export type BorderBeamSettings = {
+  beamType: BeamType
+  color: BeamColor
+  strength: number
+}
+
+export const BORDER_BEAM_DEFAULTS: BorderBeamSettings = {
+  beamType: 'line',
+  color: 'graphite',
+  strength: 60,
+}
 
 const TYPE_OPTIONS: Array<{ label: string; value: BeamType }> = [
   { label: 'Large', value: 'large' },
@@ -12,10 +25,10 @@ const TYPE_OPTIONS: Array<{ label: string; value: BeamType }> = [
 ]
 
 const COLOR_OPTIONS: Array<{ label: string; value: BeamColor }> = [
-  { label: 'Colorful', value: 'colorful' },
-  { label: 'Mono', value: 'mono' },
-  { label: 'Ocean', value: 'ocean' },
-  { label: 'Sunset', value: 'sunset' },
+  { label: 'Ink', value: 'ink' },
+  { label: 'Graphite', value: 'graphite' },
+  { label: 'Stone', value: 'stone' },
+  { label: 'Mist', value: 'mist' },
 ]
 
 const TYPE_CODE: Record<BeamType, string> = {
@@ -31,15 +44,26 @@ export type BorderBeamControls = {
 export function BorderBeamDemo({
   compact = false,
   controls,
+  settings: settingsProp,
+  onSettingsChange,
+  chrome = 'full',
 }: {
   compact?: boolean
   controls?: BorderBeamControls
+  settings?: BorderBeamSettings
+  onSettingsChange?: (next: BorderBeamSettings) => void
+  chrome?: 'full' | 'stage'
 }) {
-  const [beamType, setBeamType] = useState<BeamType>('line')
-  const [color, setColor] = useState<BeamColor>('ocean')
-  const [strength, setStrength] = useState(60)
+  const [internalSettings, setInternalSettings] = useState<BorderBeamSettings>(BORDER_BEAM_DEFAULTS)
+  const settings = settingsProp ?? internalSettings
+  const { beamType, color, strength } = settings
   const [message, setMessage] = useState('')
   const [sent, setSent] = useState(false)
+
+  const updateSettings = (next: BorderBeamSettings) => {
+    if (onSettingsChange) onSettingsChange(next)
+    else setInternalSettings(next)
+  }
 
   useEffect(() => {
     if (!sent) return
@@ -49,9 +73,7 @@ export function BorderBeamDemo({
   }, [sent])
 
   const reset = () => {
-    setBeamType('line')
-    setColor('ocean')
-    setStrength(60)
+    updateSettings(BORDER_BEAM_DEFAULTS)
     setMessage('')
     setSent(false)
   }
@@ -69,79 +91,9 @@ export function BorderBeamDemo({
   const beamStyle = { '--bb-strength': strength / 100 } as CSSProperties
 
   return (
-    <div className={`bb-shell ${compact ? 'bb-compact' : ''}`}>
-      {!compact ? (
-        <div className="bb-controls" aria-label="Border beam settings">
-          <div className="bb-control-group" role="radiogroup" aria-label="Effect type">
-            <span className="bb-control-label">Type</span>
-            <div className="bb-control-options">
-              {TYPE_OPTIONS.map((option) => (
-                <button
-                  type="button"
-                  className="bb-choice"
-                  role="radio"
-                  aria-checked={beamType === option.value}
-                  key={option.value}
-                  onClick={() => setBeamType(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="bb-control-group" role="radiogroup" aria-label="Color variant">
-            <span className="bb-control-label">Color</span>
-            <div className="bb-control-options">
-              {COLOR_OPTIONS.map((option) => (
-                <button
-                  type="button"
-                  className="bb-choice"
-                  role="radio"
-                  aria-checked={color === option.value}
-                  key={option.value}
-                  onClick={() => setColor(option.value)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          <label className="bb-control-group bb-strength-control">
-            <span className="bb-control-label">Strength</span>
-            <span className="bb-strength-track" style={{ '--bb-fill': `${strength}%` } as CSSProperties}>
-              <span>{strength}%</span>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                step="1"
-                value={strength}
-                aria-label="Effect strength"
-                onChange={(event) => setStrength(Number(event.target.value))}
-                onPointerDown={(event) => {
-                  const rect = event.currentTarget.getBoundingClientRect()
-                  const nextStrength = Math.round(((event.clientX - rect.left) / rect.width) * 100)
-                  setStrength(Math.max(0, Math.min(100, nextStrength)))
-                }}
-                onKeyDown={(event) => {
-                  const direction = event.key === 'ArrowRight' || event.key === 'ArrowUp'
-                    ? 1
-                    : event.key === 'ArrowLeft' || event.key === 'ArrowDown'
-                      ? -1
-                      : 0
-
-                  if (direction !== 0) {
-                    event.preventDefault()
-                    setStrength((value) => Math.max(0, Math.min(100, value + direction)))
-                  } else if (event.key === 'Home' || event.key === 'End') {
-                    event.preventDefault()
-                    setStrength(event.key === 'Home' ? 0 : 100)
-                  }
-                }}
-              />
-            </span>
-          </label>
-        </div>
+    <div className={`bb-shell ${compact ? 'bb-compact' : ''} ${!compact && chrome === 'stage' ? 'bb-stage-only' : ''}`}>
+      {!compact && chrome === 'full' ? (
+        <BorderBeamControlPanel settings={settings} onChange={updateSettings} embedded />
       ) : null}
 
       <div className="bb-stage">
@@ -176,13 +128,78 @@ export function BorderBeamDemo({
         </div>
       </div>
 
-      {!compact ? (
+      {!compact && chrome === 'full' ? (
         <div className="bb-live-code" aria-live="polite">
           <code>{`<BorderBeam size="${TYPE_CODE[beamType]}" colorVariant="${color}" strength={${Number((strength / 100).toFixed(2))}}>
   <Input placeholder="Ask anything..." />
 </BorderBeam>`}</code>
         </div>
       ) : null}
+    </div>
+  )
+}
+
+/* Reference-style control panel: chip rows and the strength slider share one
+   rounded 44px row shape — label on the left, control on the right. The
+   slider row paints a solid light-gray fill block anchored to the left edge,
+   a thin vertical handle at the fill's right edge, and the value right-aligned
+   in the unfilled area; a real range input overlays the row as the
+   interaction, keyboard, and accessibility layer. */
+export function BorderBeamControlPanel({
+  settings,
+  onChange,
+  embedded = false,
+}: {
+  settings: BorderBeamSettings
+  onChange: (next: BorderBeamSettings) => void
+  embedded?: boolean
+}) {
+  return (
+    <div className={`bb-panel${embedded ? ' bb-panel--embedded' : ''}`} aria-label="Border beam settings">
+      <div className="bb-row" role="radiogroup" aria-label="Effect type">
+        <span className="bb-row-label">Type</span>
+        <div className="bb-row-options">
+          {TYPE_OPTIONS.map((option) => (
+            <button
+              type="button"
+              className="bb-choice"
+              role="radio"
+              aria-checked={settings.beamType === option.value}
+              key={option.value}
+              onClick={() => onChange({ ...settings, beamType: option.value })}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <SliderChip
+        label="Strength"
+        min={0}
+        max={100}
+        value={settings.strength}
+        format={(v) => `${Math.round(v)}%`}
+        onChange={(v) => onChange({ ...settings, strength: Math.round(v) })}
+      />
+
+      <div className="bb-row" role="radiogroup" aria-label="Color variant">
+        <span className="bb-row-label">Color</span>
+        <div className="bb-row-options">
+          {COLOR_OPTIONS.map((option) => (
+            <button
+              type="button"
+              className="bb-choice"
+              role="radio"
+              aria-checked={settings.color === option.value}
+              key={option.value}
+              onClick={() => onChange({ ...settings, color: option.value })}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }

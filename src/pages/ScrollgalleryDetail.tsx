@@ -29,14 +29,18 @@ export function ScrollgalleryDetail() {
 
   return (
     <DetailShell title="Scroll Gallery">
-      <div
-        aria-label="Light-mode New Yorker cover gallery"
-        className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <ScrollgalleryDemo compact interactive />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <section className="flex min-w-0 flex-col gap-4">
+          <div className="flex items-center justify-end gap-2">
+            <ChipButton onClick={() => controls.openSearch?.()}>Search</ChipButton>
+            <ChipButton onClick={() => controls.shuffle?.()}>Shuffle</ChipButton>
+            <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+          </div>
+          <div className="relative z-10 min-h-[620px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] max-[480px]:min-h-[670px]">
+            <ScrollgalleryDemo controls={controls} />
+          </div>
+        </section>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             Scroll Gallery turns a temporary selection of New Yorker covers into the navigation itself. The selected
@@ -50,20 +54,6 @@ export function ScrollgalleryDetail() {
             for your final selections without changing the interaction or letting the thumbnail drift from this page.
           </p>
         </div>
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.openSearch?.()}>Search</ChipButton>
-              <ChipButton onClick={() => controls.shuffle?.()}>Shuffle</ChipButton>
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 min-h-[620px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] max-[480px]:min-h-[670px]">
-            <ScrollgalleryDemo controls={controls} />
-          </div>
-        </section>
 
         <section className="flex min-w-0 flex-col gap-3">
           <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">

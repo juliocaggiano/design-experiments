@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { FluidSpringDemo, type SpringControls } from '../demos/FluidSpring'
-import { ChipButton, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, ControlsSection, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import springSrc from '../demos/FluidSpring.tsx?raw'
 
 /* Skill card: the apple-design skill's motion recipes as a demo you can grab. */
@@ -96,15 +96,28 @@ export function FluidSpringsDetail() {
 
   return (
     <DetailShell title="Fluid springs">
-      {/* hero */}
-      <div
-        aria-label="A draggable card that springs, flicks, and rubber-bands"
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <FluidSpringDemo />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
+            <FluidSpringDemo damping={damping} response={response} decel={decel} controls={controls} />
+          </div>
+        </div>
+
+        <ControlsSection actions={(
+          <>
+            <ChipButton onClick={() => controls.flick?.()}>Flick</ChipButton>
+            <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+          </>
+        )}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <SliderChip label="Damping" min={0.5} max={1} value={damping} format={(v) => v.toFixed(2)} onChange={(v) => setDamping(Math.round(v * 100) / 100)} />
+            <SliderChip label="Response" min={0.15} max={0.6} value={response} format={(v) => `${v.toFixed(2)}s`} onChange={(v) => setResponse(Math.round(v * 100) / 100)} />
+            <SliderChip label="Decel" min={0.99} max={0.999} value={decel} format={(v) => v.toFixed(3)} onChange={(v) => setDecel(Math.round(v * 1000) / 1000)} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             Apple's fluid-interface motion, rebuilt with no animation library. The card above is a real physical object:
@@ -114,29 +127,9 @@ export function FluidSpringsDetail() {
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
             The recipes come from the apple-design skill — WWDC's "Designing Fluid Interfaces," translated to pointer
-            events and requestAnimationFrame. Below you can tune the two parameters Apple designs with: damping
+            events and requestAnimationFrame. The controls above tune the two parameters Apple designs with: damping
             (overshoot) and response (speed), plus the deceleration rate that decides how far a flick throws.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border-line)]">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.flick?.()}>Flick</ChipButton>
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
-            <FluidSpringDemo damping={damping} response={response} decel={decel} controls={controls} />
-          </div>
-          <div className="-mt-5 flex min-w-0 flex-col rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 gap-3.5">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <SliderChip label="Damping" min={0.5} max={1} value={damping} format={(v) => v.toFixed(2)} onChange={(v) => setDamping(Math.round(v * 100) / 100)} />
-              <SliderChip label="Response" min={0.15} max={0.6} value={response} format={(v) => `${v.toFixed(2)}s`} onChange={(v) => setResponse(Math.round(v * 100) / 100)} />
-              <SliderChip label="Decel" min={0.99} max={0.999} value={decel} format={(v) => v.toFixed(3)} onChange={(v) => setDecel(Math.round(v * 1000) / 1000)} />
-            </div>
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

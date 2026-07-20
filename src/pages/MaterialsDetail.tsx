@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { MaterialsDemo, type MaterialsControls } from '../demos/MaterialsDemo'
-import { ChipButton, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, ControlsSection, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import materialsSrc from '../demos/MaterialsDemo.tsx?raw'
 
 /* Skill card: the apple-design skill's materials chapter, in the minimal
@@ -122,15 +122,28 @@ export function MaterialsDetail() {
 
   return (
     <DetailShell title="Frosted materials">
-      {/* hero */}
-      <div
-        aria-label="A glossy sky-blue glass pill centered on a minimal gray surface"
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)]"
-      >
-        <MaterialsDemo />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px]">
+            <MaterialsDemo blue={blue} edge={edge} gloss={gloss} controls={controls} />
+          </div>
+        </div>
+
+        <ControlsSection actions={(
+          <>
+            <ChipButton onClick={() => controls.pulse?.()}>Pulse</ChipButton>
+            <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+          </>
+        )}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+            <SliderChip label="Blue" min={0} max={1} value={blue} format={(v) => v.toFixed(2)} onChange={(v) => setBlue(Math.round(v * 100) / 100)} />
+            <SliderChip label="Edge" min={0} max={1} value={edge} format={(v) => v.toFixed(2)} onChange={(v) => setEdge(Math.round(v * 100) / 100)} />
+            <SliderChip label="Gloss" min={0} max={1} value={gloss} format={(v) => v.toFixed(2)} onChange={(v) => setGloss(Math.round(v * 100) / 100)} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             The minimal register of the materials chapter: one control, cropped close, on a surface that's almost
@@ -140,29 +153,9 @@ export function MaterialsDetail() {
             springs back to center at the speed you threw it.
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
-            Below you can retune the three qualities that define the look — how vivid the blue is, how hard the edge
-            catches light, and how strong the hover sheen glows. Everything else is restraint.
+            The controls above retune the three qualities that define the look — how vivid the blue is, how hard the
+            edge catches light, and how strong the hover sheen glows. Everything else is restraint.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border-line)]">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.pulse?.()}>Pulse</ChipButton>
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px]">
-            <MaterialsDemo blue={blue} edge={edge} gloss={gloss} controls={controls} />
-          </div>
-          <div className="-mt-5 flex min-w-0 flex-col rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 gap-3.5">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <SliderChip label="Blue" min={0} max={1} value={blue} format={(v) => v.toFixed(2)} onChange={(v) => setBlue(Math.round(v * 100) / 100)} />
-              <SliderChip label="Edge" min={0} max={1} value={edge} format={(v) => v.toFixed(2)} onChange={(v) => setEdge(Math.round(v * 100) / 100)} />
-              <SliderChip label="Gloss" min={0} max={1} value={gloss} format={(v) => v.toFixed(2)} onChange={(v) => setGloss(Math.round(v * 100) / 100)} />
-            </div>
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

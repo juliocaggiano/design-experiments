@@ -1,16 +1,22 @@
-import { useRef } from 'react'
-import { BorderBeamDemo, type BorderBeamControls } from '../demos/BorderBeamDemo'
-import { ChipButton, CodeTabs, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { useRef, useState } from 'react'
+import {
+  BORDER_BEAM_DEFAULTS,
+  BorderBeamControlPanel,
+  BorderBeamDemo,
+  type BorderBeamControls,
+  type BorderBeamSettings,
+} from '../demos/BorderBeamDemo'
+import { ChipButton, CodeTabs, ControlsSection, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import demoSrc from '../demos/BorderBeamDemo.tsx?raw'
 import demoCss from '../demos/BorderBeamDemo.css?raw'
 
 const BUILD_PROMPT = `Build a self-contained, switchable border beam playground in React and CSS.
 
 Visual structure:
-- Present the effect on a restrained light canvas, with a graphite 348 by 66 pixel field centered in the stage.
-- Use a 22 pixel continuous/squircle radius, a subtle cool border, soft inset depth, and an editable “Ask anything...” field.
+- Present the effect on a restrained light canvas, with a light 348 by 66 pixel field centered in the stage.
+- Use a 22 pixel continuous/squircle radius, a subtle neutral border, soft inset depth, and an editable “Ask anything...” field.
 - Keep layout padding on a 4 pixel grid, with 32 pixels of vertical stage padding and a compact icon control inside the field.
-- Include the source playground's Large, Small, and Line type choices plus Colorful, Mono, Ocean, and Sunset palettes.
+- Include the source playground's Large, Small, and Line type choices plus four grayscale palettes (Ink, Graphite, Stone, Mist).
 
 Border effect:
 - Use the source's 1.96 second rotating conic treatment for Large and Small.
@@ -25,43 +31,45 @@ Keep every class namespaced so the component can live inside an existing design 
 
 export function BorderBeamDetail() {
   const controls = useRef<BorderBeamControls>({}).current
+  const [settings, setSettings] = useState<BorderBeamSettings>(BORDER_BEAM_DEFAULTS)
 
   return (
     <DetailShell title="Border beam">
-      <div
-        aria-label="Ocean line border beam preview"
-        className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <BorderBeamDemo compact />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
-        <div className="flex flex-col gap-3">
-          <p className="text-pretty text-[var(--text-primary)]">
-            A thin line can carry more energy than a loud surface. The default remains Beam’s Ocean treatment, but the
-            playground now exposes its complete type and color system: rotating large and small beams plus the focused
-            line treatment.
+        <div className="flex min-w-0 flex-col gap-6">
+        <section className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)]">
+            <BorderBeamDemo
+              chrome="stage"
+              settings={settings}
+              onSettingsChange={setSettings}
+              controls={controls}
+            />
+          </div>
+          <p className="text-[12px] text-[var(--text-tertiary)]">
+            Type a message and send it for the plane animation; switch palettes and beam types from the controls below.
           </p>
-          <p className="text-pretty text-[var(--text-primary)]">
-            The effect is rebuilt locally with typed CSS properties, layered radial gradients, and a border mask. The
-            surrounding page stays in the vault’s light system while a softer graphite “Ask anything...” field gives
-            each palette enough contrast to read clearly. Its Apple-like continuous corners, four-point spacing, and
-            animated send control now stay equally editable in the thumbnail, expanded hero, and implementation while
-            the beam itself loops continuously.
-          </p>
+        </section>
+
+        <ControlsSection actions={<ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>}>
+          <BorderBeamControlPanel settings={settings} onChange={setSettings} />
+        </ControlsSection>
         </div>
 
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 min-h-[430px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)]">
-            <BorderBeamDemo controls={controls} />
-          </div>
-        </section>
+        <div className="flex flex-col gap-3">
+          <p className="text-pretty text-[var(--text-primary)]">
+            A thin line can carry more energy than a loud surface. The default is a quiet graphite treatment, and the
+            playground exposes the complete type and tone system: rotating large and small beams plus the focused line
+            treatment, each in four grayscale palettes.
+          </p>
+          <p className="text-pretty text-[var(--text-primary)]">
+            The effect is rebuilt locally with typed CSS properties, layered radial gradients, and a border mask —
+            entirely in black and gray, so it sits natively in the vault's light system. The white “Ask anything...”
+            field keeps the dark beam legible. Its Apple-like continuous corners, four-point spacing, and animated
+            send control stay equally editable in the thumbnail and the implementation above while the beam
+            itself loops continuously.
+          </p>
+        </div>
 
         <section className="flex min-w-0 flex-col gap-3">
           <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">

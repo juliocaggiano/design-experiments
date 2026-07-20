@@ -49,27 +49,8 @@ The complete shared component collection follows. Render the specimen with id="$
 
   return (
     <DetailShell title={definition.title}>
-      <div
-        aria-label={`${definition.title} expanded preview`}
-        className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <ShadcnDemo id={definition.id} />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
-        <div className="flex flex-col gap-3">
-          <p className="text-pretty text-[var(--text-primary)]">{definition.summary}</p>
-          <p className="text-pretty text-[var(--text-primary)]">
-            {definition.detail} The behavior, typography, spacing, and light-mode component treatment follow the
-            official base-nova or base-rhea source across the feed, hero, and implementation.
-          </p>
-        </div>
-
         <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-          </header>
-
           <div className={`relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] ${
             definition.id === 'attachment' ? 'h-[360px] max-sm:h-[300px]' : 'h-[480px] max-sm:h-[420px]'
           }`}>
@@ -81,6 +62,14 @@ The complete shared component collection follows. Render the specimen with id="$
               : 'This is the canonical primary demo from the official shadcn/ui source, reproduced in place so it remains interactive without leaving the vault.'}
           </p>
         </section>
+
+        <div className="flex flex-col gap-3">
+          <p className="text-pretty text-[var(--text-primary)]">{definition.summary}</p>
+          <p className="text-pretty text-[var(--text-primary)]">
+            {definition.detail} The behavior, typography, spacing, and light-mode component treatment follow the
+            official base-nova or base-rhea source across the feed and this implementation.
+          </p>
+        </div>
 
         {definition.id === 'command' ? <ShadcnCommandGuide /> : null}
 

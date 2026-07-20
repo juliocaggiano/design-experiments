@@ -63,123 +63,22 @@
 }
 
 .rd-controls {
-  display: flex;
   min-width: 0;
-  flex-direction: column;
-  gap: 18px;
+}
+
+.rd-controls--embedded {
   border-top: 1px solid var(--rd-line);
   padding: 18px 20px 20px;
   background: #fff;
 }
 
-.rd-ranges {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px 18px;
-}
-
-.rd-range {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.rd-range-copy {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  color: var(--rd-muted);
-  font-size: 10px;
-  line-height: 1;
-}
-
-.rd-range output {
-  color: var(--rd-ink);
-  font-variant-numeric: tabular-nums;
-}
-
-.rd-range input {
-  width: 100%;
-  height: 14px;
-  margin: 0;
-  accent-color: #3f3f42;
-  cursor: pointer;
-}
-
-.rd-range input:focus-visible,
-.rd-segmented button:focus-visible {
-  outline: 2px solid #3f3f42;
-  outline-offset: 2px;
-}
-
-.rd-control-group {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 7px;
-  margin: 0;
-  border: 0;
-  padding: 0;
-}
-
-.rd-control-group legend {
-  margin-bottom: 7px;
-  padding: 0;
-  color: var(--rd-muted);
-  font-size: 10px;
-  line-height: 1;
-}
-
-.rd-segmented {
-  display: grid;
-  flex: 1;
-  grid-auto-columns: minmax(0, 1fr);
-  grid-auto-flow: column;
-  overflow: hidden;
-  border: 1px solid var(--rd-line);
-  border-radius: 9px;
-  padding: 2px;
-  background: var(--rd-soft);
-}
-
-.rd-segmented button {
-  min-width: 0;
-  height: 30px;
-  border: 0;
-  border-radius: 7px;
-  padding: 0 8px;
-  color: var(--rd-muted);
-  background: transparent;
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-}
-
-.rd-segmented button:hover {
-  color: var(--rd-ink);
-}
-
-.rd-segmented button[aria-pressed='true'] {
-  color: var(--rd-ink);
-  background: #fff;
-  box-shadow: 0 1px 2px rgb(0 0 0 / .06), 0 0 0 1px rgb(0 0 0 / .035);
-}
 
 @media (max-width: 540px) {
   .rd-stage {
     min-height: 320px;
   }
 
-  .rd-controls {
+  .rd-controls--embedded {
     padding: 16px;
-  }
-
-  .rd-ranges {
-    grid-template-columns: 1fr;
   }
 }

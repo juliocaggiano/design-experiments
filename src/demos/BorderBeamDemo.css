@@ -46,32 +46,44 @@
   font-family: "neueMontreal", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-.bb-controls {
-  display: grid;
-  grid-template-columns: auto auto minmax(130px, 1fr);
-  align-items: end;
-  gap: 16px;
+.bb-panel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bb-panel--embedded {
   border-bottom: 1px solid var(--border-line);
   padding: 16px;
   background: var(--bg-surface);
 }
 
-.bb-control-group {
+/* Panel rows: one rounded 44px shape per radio setting — label on the left,
+   choices on the right. The strength setting uses the shared SliderChip bar
+   from detail-kit. */
+.bb-row {
   display: flex;
+  min-height: 44px;
   min-width: 0;
-  flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  border: 1px solid var(--border-line);
+  border-radius: 12px;
+  padding: 5px 8px 5px 14px;
+  background: #f7f7f7;
 }
 
-.bb-control-label {
-  color: var(--text-tertiary);
-  font-size: 11px;
+.bb-row-label {
+  flex: 0 0 auto;
+  color: #5c5c5c;
+  font-size: 12px;
   line-height: 1;
 }
 
-.bb-control-options {
+.bb-row-options {
   display: flex;
   min-width: 0;
+  margin-left: auto;
   gap: 4px;
 }
 
@@ -102,52 +114,11 @@
 .bb-choice[aria-checked="true"] {
   border-color: var(--border-ring);
   color: var(--text-primary);
-  background: var(--bg-hover);
+  background: #ffffff;
   box-shadow: 0 0 0 1px var(--bg-page), 0 0 0 2px var(--border-ring);
 }
 
 .bb-choice:focus-visible {
-  outline: 1px solid var(--border-ring);
-  outline-offset: 2px;
-}
-
-.bb-strength-track {
-  --bb-fill: 60%;
-  position: relative;
-  display: flex;
-  height: 32px;
-  min-width: 0;
-  align-items: center;
-  overflow: hidden;
-  border: 1px solid var(--border-line);
-  border-radius: 10px;
-  background:
-    linear-gradient(90deg, var(--bg-hover) 0 var(--bb-fill), transparent var(--bb-fill)),
-    var(--bg-page);
-  corner-shape: squircle;
-}
-
-.bb-strength-track span {
-  position: relative;
-  z-index: 1;
-  padding-left: 12px;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-variant-numeric: tabular-nums;
-}
-
-.bb-strength-track input {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  opacity: 0;
-  cursor: pointer;
-}
-
-.bb-strength-track:focus-within {
   outline: 1px solid var(--border-ring);
   outline-offset: 2px;
 }
@@ -161,20 +132,20 @@
   justify-content: center;
   gap: 24px;
   padding: 32px 24px;
-  background: color-mix(in srgb, var(--bg-page) 94%, var(--text-primary) 6%);
+  background: var(--bg-page);
 }
 
 .bb-beam {
   --bb-strength: 0.6;
-  --bb-c1: #6450dc;
-  --bb-c2: #3c78ff;
-  --bb-c3: #5064c8;
-  --bb-c4: #8246ff;
-  --bb-c5: #4682ff;
-  --bb-c6: #7850ff;
-  --bb-c7: #5a6ee6;
-  --bb-c8: #6e5af0;
-  --bb-c9: #8c64ff;
+  --bb-c1: #1c1c1f;
+  --bb-c2: #2a2a2e;
+  --bb-c3: #212125;
+  --bb-c4: #323236;
+  --bb-c5: #25252a;
+  --bb-c6: #2e2e33;
+  --bb-c7: #22222a;
+  --bb-c8: #2c2c31;
+  --bb-c9: #1e1e24;
   --bb-spot-scale: 1;
   position: relative;
   display: flex;
@@ -182,69 +153,69 @@
   height: 66px;
   align-items: center;
   overflow: hidden;
-  border: 1px solid rgba(71, 74, 82, 0.58);
+  border: 1px solid rgba(0, 0, 0, 0.14);
   border-radius: 22px;
-  background: #29292b;
-  box-shadow: inset 0 0 44px rgba(255, 255, 255, 0.025), 0 18px 42px rgba(26, 31, 48, 0.1);
+  background: #ffffff;
+  box-shadow: inset 0 0 44px rgba(0, 0, 0, 0.03), 0 18px 42px rgba(0, 0, 0, 0.08);
   isolation: isolate;
   transition: width 220ms ease, height 220ms ease, border-radius 220ms ease, background-color 180ms ease;
   corner-shape: squircle;
 }
 
 .bb-beam:focus-within {
-  border-color: rgba(122, 132, 255, 0.68);
+  border-color: rgba(0, 0, 0, 0.45);
   box-shadow:
-    inset 0 0 44px rgba(255, 255, 255, 0.03),
-    0 0 0 3px rgba(104, 119, 255, 0.14),
-    0 18px 42px rgba(26, 31, 48, 0.1);
+    inset 0 0 44px rgba(0, 0, 0, 0.035),
+    0 0 0 3px rgba(0, 0, 0, 0.08),
+    0 18px 42px rgba(0, 0, 0, 0.08);
 }
 
-.bb-beam[data-color="colorful"] {
-  --bb-c1: #ff3264;
-  --bb-c2: #28b4dc;
-  --bb-c3: #32c850;
-  --bb-c4: #b428f0;
-  --bb-c5: #ffa01e;
-  --bb-c6: #6446ff;
-  --bb-c7: #288cff;
-  --bb-c8: #f032b4;
-  --bb-c9: #1eb9aa;
+.bb-beam[data-color="ink"] {
+  --bb-c1: #08080a;
+  --bb-c2: #111114;
+  --bb-c3: #0c0c0e;
+  --bb-c4: #151518;
+  --bb-c5: #0e0e11;
+  --bb-c6: #131316;
+  --bb-c7: #0d0d12;
+  --bb-c8: #121216;
+  --bb-c9: #09090d;
 }
 
-.bb-beam[data-color="mono"] {
-  --bb-c1: #c8c8c8;
-  --bb-c2: #aaaaaa;
-  --bb-c3: #9b9b9b;
-  --bb-c4: #b9b9b9;
-  --bb-c5: #a5a5a5;
-  --bb-c6: #b4b4b4;
-  --bb-c7: #a0a0a0;
-  --bb-c8: #afafaf;
-  --bb-c9: #bebebe;
+.bb-beam[data-color="graphite"] {
+  --bb-c1: #1c1c1f;
+  --bb-c2: #2a2a2e;
+  --bb-c3: #212125;
+  --bb-c4: #323236;
+  --bb-c5: #25252a;
+  --bb-c6: #2e2e33;
+  --bb-c7: #22222a;
+  --bb-c8: #2c2c31;
+  --bb-c9: #1e1e24;
 }
 
-.bb-beam[data-color="ocean"] {
-  --bb-c1: #6450dc;
-  --bb-c2: #3c78ff;
-  --bb-c3: #5064c8;
-  --bb-c4: #8246ff;
-  --bb-c5: #4682ff;
-  --bb-c6: #7850ff;
-  --bb-c7: #5a6ee6;
-  --bb-c8: #6e5af0;
-  --bb-c9: #8c64ff;
+.bb-beam[data-color="stone"] {
+  --bb-c1: #48484c;
+  --bb-c2: #58585e;
+  --bb-c3: #4e4e54;
+  --bb-c4: #606066;
+  --bb-c5: #525258;
+  --bb-c6: #5c5c62;
+  --bb-c7: #4c4c54;
+  --bb-c8: #5a5a60;
+  --bb-c9: #4a4a50;
 }
 
-.bb-beam[data-color="sunset"] {
-  --bb-c1: #ff643c;
-  --bb-c2: #ffb432;
-  --bb-c3: #ff8c46;
-  --bb-c4: #ff5050;
-  --bb-c5: #ffc83c;
-  --bb-c6: #ff7832;
-  --bb-c7: #ffa050;
-  --bb-c8: #ff5a3c;
-  --bb-c9: #ff4646;
+.bb-beam[data-color="mist"] {
+  --bb-c1: #707076;
+  --bb-c2: #808088;
+  --bb-c3: #76767c;
+  --bb-c4: #8a8a90;
+  --bb-c5: #7c7c82;
+  --bb-c6: #86868c;
+  --bb-c7: #74747c;
+  --bb-c8: #84848a;
+  --bb-c9: #72727a;
 }
 
 .bb-beam[data-type="line"] {
@@ -286,7 +257,7 @@
 .bb-beam[data-type="line"]::after {
   border-radius: 21px;
   background:
-    radial-gradient(ellipse calc(24px * var(--bb-w)) calc(28px * var(--bb-h)) at calc(var(--bb-x) * 100%) calc(100% + 2px), rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.12) 30%, transparent 65%),
+    radial-gradient(ellipse calc(24px * var(--bb-w)) calc(28px * var(--bb-h)) at calc(var(--bb-x) * 100%) calc(100% + 2px), rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.28) 30%, transparent 65%),
     radial-gradient(ellipse calc(36px * var(--bb-w)) calc(36px * var(--bb-h)) at calc(var(--bb-x) * 100%) calc(100% + 2px), var(--bb-c1), transparent),
     radial-gradient(ellipse calc(30px * var(--bb-w)) calc(32px * var(--bb-h)) at calc(var(--bb-x) * 100% + 39px) 100%, var(--bb-c2), transparent),
     radial-gradient(ellipse calc(33px * var(--bb-w)) calc(28px * var(--bb-h)) at calc(var(--bb-x) * 100% - 36px) calc(100% + 2px), var(--bb-c3), transparent),
@@ -296,7 +267,7 @@
     radial-gradient(ellipse calc(30px * var(--bb-w)) calc(22px * var(--bb-h)) at calc(var(--bb-x) * 100% - 21px) 100%, var(--bb-c7), transparent),
     radial-gradient(ellipse calc(25px * var(--bb-w)) calc(28px * var(--bb-h)) at calc(var(--bb-x) * 100% + 66px) calc(100% + 1px), var(--bb-c8), transparent),
     radial-gradient(ellipse calc(23px * var(--bb-w)) calc(30px * var(--bb-h)) at calc(var(--bb-x) * 100% - 66px) calc(100% - 1px), var(--bb-c9), transparent);
-  opacity: calc(var(--bb-opacity) * var(--bb-edge) * 1.14 * var(--bb-strength));
+  opacity: calc(var(--bb-opacity) * var(--bb-edge) * 1.45 * var(--bb-strength));
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -314,10 +285,10 @@
     radial-gradient(ellipse calc(23px * var(--bb-w)) calc(28px * var(--bb-h)) at calc(var(--bb-x) * 100% - 54px) calc(100% - 2px), color-mix(in srgb, var(--bb-c4) 42%, transparent), transparent),
     radial-gradient(ellipse calc(24px * var(--bb-w)) calc(24px * var(--bb-h)) at calc(var(--bb-x) * 100% + 51px) calc(100% - 1px), color-mix(in srgb, var(--bb-c5) 50%, transparent), transparent),
     radial-gradient(ellipse calc(30px * var(--bb-w)) calc(20px * var(--bb-h)) at calc(var(--bb-x) * 100% + 21px) 100%, color-mix(in srgb, var(--bb-c6) 45%, transparent), transparent),
-    radial-gradient(ellipse calc(25px * var(--bb-w)) calc(18px * var(--bb-h)) at calc(var(--bb-x) * 100% - 21px) calc(100% - 2px), color-mix(in srgb, var(--bb-c7) 40%, transparent), transparent),
-    radial-gradient(ellipse calc(21px * var(--bb-w)) calc(24px * var(--bb-h)) at calc(var(--bb-x) * 100% + 66px) 100%, color-mix(in srgb, var(--bb-c8) 45%, transparent), transparent),
+    radial-gradient(ellipse calc(25px * var(--bb-w)) calc(18px * var(--bb-h)) at calc(var(--bb-x) * 100% - 21px) 100%, color-mix(in srgb, var(--bb-c7) 40%, transparent), transparent),
+    radial-gradient(ellipse calc(21px * var(--bb-w)) calc(24px * var(--bb-h)) at calc(var(--bb-x) * 100% + 66px) calc(100% - 2px), color-mix(in srgb, var(--bb-c8) 45%, transparent), transparent),
     radial-gradient(ellipse calc(18px * var(--bb-w)) calc(26px * var(--bb-h)) at calc(var(--bb-x) * 100% - 66px) calc(100% - 1px), color-mix(in srgb, var(--bb-c9) 52%, transparent), transparent);
-  opacity: calc(var(--bb-opacity) * var(--bb-edge) * 0.7 * var(--bb-strength));
+  opacity: calc(var(--bb-opacity) * var(--bb-edge) * 0.85 * var(--bb-strength));
   animation: bb-hue 12s ease-in-out infinite;
 }
 
@@ -325,7 +296,7 @@
 .bb-beam[data-type="small"]::after {
   border-radius: inherit;
   background:
-    conic-gradient(from var(--bb-angle), transparent 0 54%, rgba(255, 255, 255, 0.1) 57%, rgba(255, 255, 255, 0.75) 66%, rgba(255, 255, 255, 0.1) 75%, transparent 78% 100%),
+    conic-gradient(from var(--bb-angle), transparent 0 54%, rgba(0, 0, 0, 0.12) 57%, rgba(0, 0, 0, 0.85) 66%, rgba(0, 0, 0, 0.12) 75%, transparent 78% 100%),
     radial-gradient(ellipse calc(70px * var(--bb-spot-scale)) calc(40px * var(--bb-spot-scale)) at 33% -7.4%, var(--bb-c1), transparent),
     radial-gradient(ellipse calc(60px * var(--bb-spot-scale)) calc(35px * var(--bb-spot-scale)) at 12% -5%, var(--bb-c2), transparent),
     radial-gradient(ellipse calc(40px * var(--bb-spot-scale)) calc(70px * var(--bb-spot-scale)) at 2.1% 68.3%, var(--bb-c3), transparent),
@@ -333,7 +304,7 @@
     radial-gradient(ellipse calc(85px * var(--bb-spot-scale)) calc(26px * var(--bb-spot-scale)) at 55% 100%, var(--bb-c5), transparent),
     radial-gradient(ellipse calc(74px * var(--bb-spot-scale)) calc(32px * var(--bb-spot-scale)) at 93.9% 0%, var(--bb-c9), transparent),
     radial-gradient(ellipse calc(52px * var(--bb-spot-scale)) calc(48px * var(--bb-spot-scale)) at 100% 27.1%, var(--bb-c4), transparent);
-  opacity: calc(var(--bb-opacity) * 0.34 * var(--bb-strength));
+  opacity: calc(var(--bb-opacity) * 0.75 * var(--bb-strength));
   -webkit-mask:
     conic-gradient(from var(--bb-angle), transparent 0 30%, rgba(255,255,255,.1) 36%, white 52% 80%, rgba(255,255,255,.1) 92%, transparent 95% 100%),
     linear-gradient(#fff 0 0) content-box,
@@ -385,16 +356,10 @@
 
 .bb-beam[data-type="large"] .bb-bloom,
 .bb-beam[data-type="small"] .bb-bloom {
-  background: conic-gradient(from var(--bb-angle), transparent 0 58%, rgba(255, 255, 255, 0.03) 62%, color-mix(in srgb, var(--bb-c2) 65%, transparent) 69%, rgba(255, 255, 255, 0.82) 70%, color-mix(in srgb, var(--bb-c4) 50%, transparent) 72%, transparent 82%);
+  background: conic-gradient(from var(--bb-angle), transparent 0 58%, rgba(0, 0, 0, 0.03) 62%, color-mix(in srgb, var(--bb-c2) 65%, transparent) 69%, rgba(0, 0, 0, 0.5) 70%, color-mix(in srgb, var(--bb-c4) 50%, transparent) 72%, transparent 82%);
   opacity: calc(var(--bb-opacity) * 0.34 * var(--bb-strength));
   filter: blur(8px);
   animation: bb-hue-rotate 12s ease-in-out infinite;
-}
-
-.bb-beam[data-color="mono"]::after,
-.bb-beam[data-color="mono"]::before,
-.bb-beam[data-color="mono"] .bb-bloom {
-  filter: none;
 }
 
 .bb-field-content {
@@ -406,7 +371,7 @@
   align-items: center;
   gap: 8px;
   padding: 0 8px 0 24px;
-  color: #bfc0c4;
+  color: #5f5f5f;
   font-size: 13px;
   line-height: 16px;
   white-space: nowrap;
@@ -418,15 +383,15 @@
   border: 0;
   outline: 0;
   padding: 0;
-  color: #f2f2f4;
+  color: #1c1c1c;
   background: transparent;
-  caret-color: #8d9cff;
+  caret-color: #1c1c1c;
   font: inherit;
   line-height: inherit;
 }
 
 .bb-field-input::placeholder {
-  color: #bfc0c4;
+  color: #8a8a8a;
   opacity: 1;
 }
 
@@ -439,25 +404,25 @@
   flex: 0 0 36px;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-line);
   border-radius: 12px;
   padding: 0;
-  color: #d7d9ff;
-  background: rgba(255, 255, 255, 0.08);
+  color: #3a3a3a;
+  background: #f0f0f0;
   corner-shape: squircle;
   cursor: pointer;
   transition: color 150ms ease, background-color 150ms ease, transform 150ms ease;
 }
 
 .bb-send-button:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.13);
+  color: #1c1c1c;
+  background: #e7e7e7;
 }
 
 .bb-send-button:active { transform: scale(0.94); }
 
 .bb-send-button:focus-visible {
-  outline: 2px solid rgba(151, 163, 255, 0.86);
+  outline: 2px solid rgba(0, 0, 0, 0.4);
   outline-offset: 2px;
 }
 
@@ -480,6 +445,10 @@
 .bb-compact {
   min-height: 0;
   height: 100%;
+}
+
+.bb-stage-only {
+  min-height: 0;
 }
 
 .bb-compact .bb-stage {
@@ -532,28 +501,27 @@
 @keyframes bb-fade-in { to { --bb-opacity: 1; } }
 
 @keyframes bb-hue {
-  0%, 100% { filter: hue-rotate(-13deg) brightness(1.3) saturate(1.2); }
-  50% { filter: hue-rotate(13deg) brightness(1.3) saturate(1.2); }
+  0%, 100% { filter: brightness(1.12); }
+  50% { filter: brightness(0.94); }
 }
 
 @keyframes bb-hue-bloom {
-  0%, 100% { filter: blur(8px) hue-rotate(-23deg) brightness(1.3) saturate(1.2); }
-  50% { filter: blur(8px) hue-rotate(23deg) brightness(1.3) saturate(1.2); }
+  0%, 100% { filter: blur(8px) brightness(1.12); }
+  50% { filter: blur(8px) brightness(0.94); }
 }
 
 @keyframes bb-hue-rotate {
-  0%, 100% { filter: hue-rotate(-30deg) brightness(1.3) saturate(1.2); }
-  50% { filter: hue-rotate(30deg) brightness(1.3) saturate(1.2); }
+  0%, 100% { filter: brightness(1.12); }
+  50% { filter: brightness(0.94); }
 }
 
 @container (max-width: 600px) {
-  .bb-controls {
-    grid-template-columns: 1fr;
-    align-items: stretch;
-    gap: 16px;
+  .bb-row {
+    flex-wrap: wrap;
+    row-gap: 6px;
   }
 
-  .bb-control-options { flex-wrap: wrap; }
+  .bb-row-options { flex-wrap: wrap; }
   .bb-stage { min-height: 300px; padding: 28px 16px; }
   .bb-beam:not([data-type="small"]) { width: min(280px, 70cqi); height: 58px; border-radius: 20px; }
   .bb-beam[data-type="line"]::after { border-radius: 19px; }

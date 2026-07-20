@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { MicroButtonsDemo, type MicroButtonsControls } from '../demos/MicroButtonsDemo'
-import { ChipButton, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, ControlsSection, CopyPromptChip, SliderChip, CodeTabs, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import buttonsSrc from '../demos/MicroButtonsDemo.tsx?raw'
 
 /* Card: Amicro's button micro-interaction families, matched 1:1 in behavior,
@@ -136,15 +136,27 @@ export function MicroButtonsDetail() {
 
   return (
     <DetailShell title="Micro buttons">
-      {/* hero */}
-      <div
-        aria-label="Nine pill buttons, one per micro-interaction family"
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <MicroButtonsDemo />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <div className="flex min-w-0 flex-col gap-4">
+          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
+            <MicroButtonsDemo speed={speed} pop={pop} controls={controls} />
+          </div>
+        </div>
+
+        <ControlsSection actions={(
+          <>
+            <ChipButton onClick={() => controls.playAll?.()}>Play all</ChipButton>
+            <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+          </>
+        )}>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <SliderChip label="Speed" min={0.4} max={2} value={speed} format={(v) => `${v.toFixed(1)}×`} onChange={(v) => setSpeed(Math.round(v * 10) / 10)} />
+            <SliderChip label="Pop" min={0} max={0.3} value={pop} format={(v) => v.toFixed(2)} onChange={(v) => setPop(Math.round(v * 100) / 100)} />
+          </div>
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             The nine ways a button can react to your pointer, matched one-to-one to Amicro — Syed Subhan's catalogue of
@@ -159,25 +171,6 @@ export function MicroButtonsDetail() {
             a single class so touch, keyboard focus, and the idle loop share the exact states. Speed divides every
             duration at once; Pop raises the heartbeat's peak. Left alone, the set demos itself.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 pb-2 border-b border-[var(--border-line)]">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.playAll?.()}>Play all</ChipButton>
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[190px] bg-[var(--bg-page)]">
-            <MicroButtonsDemo speed={speed} pop={pop} controls={controls} />
-          </div>
-          <div className="-mt-5 flex min-w-0 flex-col rounded-b-xl border border-t-0 border-[var(--border-line)] bg-[var(--bg-surface)] p-4 pt-8 gap-3.5">
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <SliderChip label="Speed" min={0.4} max={2} value={speed} format={(v) => `${v.toFixed(1)}×`} onChange={(v) => setSpeed(Math.round(v * 10) / 10)} />
-              <SliderChip label="Pop" min={0} max={0.3} value={pop} format={(v) => v.toFixed(2)} onChange={(v) => setPop(Math.round(v * 100) / 100)} />
-            </div>
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

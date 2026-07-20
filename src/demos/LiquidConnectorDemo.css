@@ -1,0 +1,341 @@
+/* Liquid Connector — React port of the upstream Web Component styles
+   (MIT, (c) 2026 Liquid Connector contributors), namespaced under lc- so it
+   can live inside the vault's light design system. The stage sits on the
+   upstream demo page's #f2f2f2; the borderless white surfaces lift off it
+   with a soft drop shadow on the fill path instead of the upstream hairline
+   strokes — only the focus-within outline remains. The vault control rows at
+   the bottom mirror the rd- reference rows. */
+
+.lc-demo {
+  --liquid-surface: #fdfdfd;
+  --liquid-ink: #191919;
+  --liquid-muted: #686868;
+  --liquid-blue: #1e55c7;
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 520 / 300;
+  overflow: hidden;
+  color: var(--liquid-ink);
+  background: var(--bg-page);
+  font-family: inherit;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+  contain: layout style;
+}
+
+.lc-demo,
+.lc-demo * {
+  box-sizing: border-box;
+}
+
+/* Batch 10: the compact feed thumbnail renders the drawing reduced to the
+   annotated ~34% of the stage width on wide cards (never above the native
+   520 px, never below 180 px on small stages), centered; the stage itself
+   stays full-width. The compact stage's 1344/520 ratio is wider than the
+   demo's 520/300, so the svg was always height-bound — a plain 520 px cap
+   would change nothing visually. */
+.lc-demo--compact {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: auto;
+}
+
+.lc-demo--compact .lc-stage {
+  flex: none;
+  width: min(520px, max(34%, 180px));
+  height: auto;
+  max-height: 100%;
+}
+
+.lc-stage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.lc-surface-fill,
+.lc-outline-edge,
+.lc-surface {
+  pointer-events: none;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Batch 10 recalibration: the stage moved from #f2f2f2 to the vault stage
+   white (var(--bg-page) #fcfcfc), where the #fdfdfd surface is only one
+   luminance step away — the separation now rides almost entirely on the
+   shadow, so both layers are strengthened modestly (grays only, still no
+   hairline strokes). */
+.lc-surface-fill {
+  fill: var(--liquid-surface);
+  stroke: none;
+  filter:
+    drop-shadow(0 1px 2px rgba(20, 23, 28, 0.08))
+    drop-shadow(0 8px 20px rgba(20, 23, 28, 0.11));
+}
+
+.lc-outline-edge,
+.lc-surface {
+  fill: none;
+  stroke: none;
+}
+
+.lc-demo:focus-within .lc-surface {
+  stroke: color-mix(in srgb, var(--liquid-blue) 42%, #e2e2e2);
+  stroke-width: 1.1;
+}
+
+.lc-content {
+  width: 100%;
+  height: 100%;
+  color: var(--liquid-ink);
+}
+
+.lc-output-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 0 24px;
+  transform-origin: 50% 100%;
+}
+
+.lc-output-object {
+  --output-blur: 0px;
+  filter: blur(var(--output-blur));
+}
+
+.lc-output-smear {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.lc-demo[data-animating] .lc-output-content {
+  will-change: opacity, transform;
+}
+
+.lc-demo[data-animating] .lc-input-content {
+  will-change: transform;
+}
+
+.lc-identity {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 13px;
+  margin-right: auto;
+  transform: translateY(-2px);
+}
+
+.lc-codex-mark {
+  display: block;
+  width: 31px;
+  height: 33px;
+  flex: 0 0 31px;
+  color: #111111;
+}
+
+.lc-provider-copy {
+  display: block;
+  min-width: 0;
+  line-height: 1;
+}
+
+.lc-eyebrow {
+  display: block;
+  overflow: hidden;
+  color: var(--liquid-muted);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lc-provider-name {
+  display: block;
+  margin-top: 1px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 18px;
+}
+
+.lc-demo button,
+.lc-demo textarea {
+  font: inherit;
+}
+
+.lc-demo button {
+  position: relative;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lc-demo button::before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  content: "";
+  transform: translate(-50%, -50%);
+}
+
+.lc-demo button:focus-visible {
+  outline: 2px solid #2b70e8;
+  outline-offset: 2px;
+}
+
+.lc-demo button:disabled {
+  cursor: default;
+}
+
+.lc-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 21px;
+  transform: translateY(-1px);
+}
+
+.lc-demo .lc-skip {
+  width: 32px;
+  min-height: 32px;
+  padding: 0;
+  background: transparent;
+  color: #525252;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.lc-demo .lc-connect {
+  width: 97px;
+  height: 35px;
+  padding: 0;
+  border: 1px solid #ccd9f2;
+  border-radius: 999px;
+  background: #fdfdfd;
+  box-shadow:
+    0 1px 2px rgba(31, 73, 150, 0.06),
+    inset 0 0 0 0.5px rgba(255, 255, 255, 0.8);
+  color: var(--liquid-blue);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.lc-connect:not(:disabled):hover {
+  border-color: #adc4ec;
+  background: #fafcff;
+}
+
+.lc-connect:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+.lc-input-content {
+  position: relative;
+  transform-origin: 50% 100%;
+}
+
+.lc-demo textarea {
+  position: absolute;
+  top: 19px;
+  right: 24px;
+  left: 23px;
+  width: calc(100% - 47px);
+  height: 54px;
+  padding: 0;
+  resize: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: #242424;
+  font-size: 18px;
+  font-weight: 400;
+  letter-spacing: 0.009em;
+  line-height: 1.4;
+}
+
+.lc-demo textarea::placeholder {
+  color: #535353;
+  opacity: 1;
+}
+
+.lc-demo textarea:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid #2b70e8;
+  outline-offset: 4px;
+}
+
+.lc-demo .lc-send {
+  --send-offset-y: 0px;
+  --send-height: 34px;
+  --send-radius-y: 17px;
+  --send-arrow-scale-y: 1;
+  position: absolute;
+  right: 14px;
+  bottom: 17px;
+  display: grid;
+  width: 34px;
+  height: var(--send-height);
+  padding: 0;
+  place-items: center;
+  border-radius: 17px / var(--send-radius-y);
+  background: #dedede;
+  color: #ffffff;
+  transform: translateY(var(--send-offset-y));
+  transform-origin: 50% 50%;
+}
+
+.lc-send:disabled {
+  cursor: default;
+}
+
+.lc-send:not(:disabled) {
+  background: #2369df;
+}
+
+.lc-send:not(:disabled):active {
+  transform:
+    translateY(var(--send-offset-y))
+    scale(0.97);
+}
+
+.lc-send svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+  transform: scaleY(var(--send-arrow-scale-y));
+  transform-origin: 50% 50%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-connect,
+  .lc-send {
+    transition-duration: 0ms;
+  }
+}
+
+/* ── Detail playground cap ──
+   The feed thumbnail (lc-demo--compact) still stretches to its card, but the
+   detail playground renders the demo at its native 520×300 viewBox geometry,
+   centered inside the full-width gray panel. */
+
+.lc-demo--playground {
+  aspect-ratio: auto;
+}
+
+.lc-demo--playground .lc-stage {
+  width: min(520px, 100%);
+  height: auto;
+  margin-inline: auto;
+}

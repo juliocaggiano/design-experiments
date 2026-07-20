@@ -1,25 +1,16 @@
 import 'react-day-picker/style.css'
 import {
-  Archive,
-  ArrowLeft,
   Calculator,
   Calendar,
-  CalendarPlus,
-  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Clock,
   CreditCard,
   FileCode,
-  ListFilter,
-  MailCheck,
   MoreHorizontal,
   Search,
   Settings,
   Smile,
-  Tag,
-  Trash2,
   User,
   X,
 } from 'lucide-react'
@@ -290,7 +281,7 @@ function CalendarDemo({ controls }: { controls?: ShadcnDemoControls }) {
   exposeControls(controls, replay, reset)
 
   return (
-    <div className="sx-calendar-frame sx-nova">
+    <div className="sx-calendar-frame">
       <DayPicker
         mode="single"
         selected={date}
@@ -612,79 +603,6 @@ function BreadcrumbDemo({ controls }: { controls?: ShadcnDemoControls }) {
   )
 }
 
-function BubbleDemo({ controls }: { controls?: ShadcnDemoControls }) {
-  exposeControls(controls, () => {}, () => {})
-  return (
-    <div className="sx-bubble-demo sx-rhea">
-      <div className="sx-bubble" data-align="end"><div className="sx-bubble-content">Hey there! what&apos;s up?</div></div>
-      <div className="sx-bubble-group">
-        <div className="sx-bubble" data-variant="muted">
-          <div className="sx-bubble-content">Hey! Want to see chat bubbles?</div>
-        </div>
-        <div className="sx-bubble" data-variant="muted">
-          <div className="sx-bubble-content">I can group messages, switch sides, and keep the whole thread easy to scan.</div>
-          <div className="sx-bubble-reactions" role="img" aria-label="Reaction: thumbs up"><span>👍</span></div>
-        </div>
-      </div>
-      <div className="sx-bubble" data-align="end"><div className="sx-bubble-content">Sure. Hit me with your best demo.</div></div>
-      <div className="sx-bubble" data-variant="muted">
-        <div className="sx-bubble-content">Yes. You are reading a demo that is demoing itself. Very meta. Very on-brand.</div>
-        <div className="sx-bubble-reactions" role="img" aria-label="Reactions: thumbs up, fire, eyes, and 2 more">
-          <span>👍</span><span>🔥</span><span>👀</span><span>+2</span>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ButtonGroupDemo({ controls }: { controls?: ShadcnDemoControls }) {
-  const [open, setOpen] = useState(false)
-  const [subOpen, setSubOpen] = useState(false)
-  const [label, setLabel] = useState('personal')
-  const reset = () => { setOpen(false); setSubOpen(false); setLabel('personal') }
-  const replay = () => setOpen((value) => !value)
-  exposeControls(controls, replay, reset)
-
-  return (
-    <div className="sx-button-group-demo sx-nova">
-      <div className="sx-button-group sx-back-group">
-        <ExactButton variant="outline" size="icon" aria-label="Go Back"><ArrowLeft /></ExactButton>
-      </div>
-      <div className="sx-button-group">
-        <ExactButton variant="outline">Archive</ExactButton>
-        <ExactButton variant="outline">Report</ExactButton>
-      </div>
-      <div className="sx-button-group sx-more-group">
-        <ExactButton variant="outline">Snooze</ExactButton>
-        <ExactButton variant="outline" size="icon" aria-label="More Options" aria-expanded={open} onClick={replay}>
-          <MoreHorizontal />
-        </ExactButton>
-        <div className="sx-mail-menu" data-open={open}>
-          <button type="button"><MailCheck />Mark as Read</button>
-          <button type="button"><Archive />Archive</button>
-          <hr />
-          <button type="button"><Clock />Snooze</button>
-          <button type="button"><CalendarPlus />Add to Calendar</button>
-          <button type="button"><ListFilter />Add to List</button>
-          <button type="button" aria-expanded={subOpen} onClick={() => setSubOpen((value) => !value)}>
-            <Tag />Label As...<ChevronRight className="sx-menu-caret" />
-          </button>
-          <hr />
-          <button type="button" className="sx-destructive"><Trash2 />Trash</button>
-          <div className="sx-label-menu" data-open={subOpen}>
-            {['personal', 'work', 'other'].map((value) => (
-              <button type="button" key={value} onClick={() => setLabel(value)}>
-                <span>{label === value ? <Check /> : null}</span>
-                {value[0].toUpperCase() + value.slice(1)}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 function CommandDemo({ controls }: { controls?: ShadcnDemoControls }) {
   const [query, setQuery] = useState('')
   const reset = () => setQuery('')
@@ -730,8 +648,6 @@ export function ShadcnDemo({
     carousel: <CarouselDemo controls={controls} />,
     chart: <ChartDemo controls={controls} />,
     breadcrumb: <BreadcrumbDemo controls={controls} />,
-    bubble: <BubbleDemo controls={controls} />,
-    'button-group': <ButtonGroupDemo controls={controls} />,
     command: <CommandDemo controls={controls} />,
   }[id]
 

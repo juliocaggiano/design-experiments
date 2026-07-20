@@ -1,3 +1,194 @@
+# Batch 10 annotated-screenshot changes: LC feed size + white stage, tab-bar↔card alignment, Card demo unclipped — 2026-07-19
+
+## Scope and visual truth
+
+- Four annotated items from Julio, all measurement-driven (`scripts/probe-batch10.mjs`).
+- (1) LC feed thumbnail reduced. Key measurement: the compact stage (668×257, ratio 2.585) is wider than the demo's 520/300 (1.733), so the svg always letterboxed height-bound at 0.857 scale — the brief's literal "extend the 520 px cap" would have been a visual no-op. The annotation's red box (≈34% of card width) is the operative target: `.lc-demo--compact` is now a flex-centering stage (still full-width) with `.lc-stage { width: min(520px, max(34%, 180px)); height: auto; max-height: 100% }` — 227.1 px (34.0%) centered at 1440, 180 px floor at 390/320, never above native. Interpretation documented in the CSS comment.
+- (2) Tab bar ↔ first card alignment. Measured: first card outer left = 376 = headline; the batch-9 −4 px pill-inset nudge had moved the bar to 372. Fix at the source: wrapper `-ml-2` → `-ml-1`, so tablist.left = 376.0 = card 376.0 exactly. QA now asserts tablist vs FIRST CARD (not headline − 4).
+- (3) LC stage background #f2f2f2 → `var(--bg-page)` (#fcfcfc, the standard feed-card stage white) in the single `.lc-demo` rule — both feed and detail instances, one visual default. On #fcfcfc the #fdfdfd surface is one luminance step away, so separation rides on the shadow; recalibrated `drop-shadow(0 1px 2px rgba(20,23,28,0.08))` + `drop-shadow(0 8px 20px rgba(20,23,28,0.11))` (from 0.05/0.06, grays only, still no hairline strokes). QA asserts feed/demo bg === stage container bg, detail bg === frame bg, and the new shadow alphas.
+- (4) Card demo (shadcn login) thumbnail clipping. Root cause: `.sx-preview`'s auto-sized grid track top-anchors the 384×368 specimen (the calendar demo had the same drift bug), so even a fitting scale overflowed the bottom — 42.5 px at 1440 ("cut off mid-button"), 41 px at 390. Fix: absolute center anchor (`position: absolute; top/left 50%; translate: -50% -50%`) + a card-specific scale ladder (0.5 @ ≤260 cqh, 0.4 @ ≤205, 0.22 @ ≤150, 0.16 @ ≤110 — the card's natural height grows to ~387 px at 230 px width, needing the extra rung). Detail page unchanged (transform none, full 368 px surface). Bonus fix in passing: the primary "Login" button rendered black-on-black — `.sh-demo button { color: inherit }` (0,1,1) beat `.sx-button-default` (0,1,0); the variant rule is now `.sh-demo .sx-button-default` (pre-existing bug, confirmed by computed style rgb(23,23,23) on rgb(23,23,23) → now #fafafa on #171717).
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-liquid-connector.mjs`: 38/38 (+4: compact cap ≈34% centered, feed stage white, detail stage white, recalibrated shadow). `verify-feed-card-design.mjs`: 22/22 (tab-bar assertion switched to first-card edge; +3 login-surface-fits checks at 1440/390/320). `verify-detail-order.mjs`: 167/167. `verify-reactive-dither.mjs`: 21/21. `verify-direct-card-actions.mjs`: pass.
+- Visual pass over `artifacts/design-qa/batch10-2026-07-19/`: bar↔card alignment, LC thumbnail reduced on white with clean shadow separation (1440 + 390), LC detail on white, full login surface at 1440/390 + detail top, readable Login button. Measurements: tablist 376.0 = card 376.0; LC compact 227.1 px = 34.0%, offsets 0.0/0.0; card fit margins 36.5/18.1/6.3 px at 1440/390/320.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Batch 9 annotated-screenshot changes: spacing, tab bar, LC panel cap, Codex swap, SliderChip ports — 2026-07-19
+
+## Scope and visual truth
+
+- Seven annotated items from Julio. (1) Detail title→frame gap 40→36 px (`detail-kit` article `gap-10`→`gap-9`, rule of four). (2) The hairline under the "Description" controls header is gone (`border-b` dropped, `pb-2` kept). (3) Feed tab bar nudged 4 px left (`-mx-1 px-1` → `-ml-2 -mr-1 pl-1 pr-1`): measurement showed the bar's border already aligned with the headline; the perceived inset was the active pill's 1 px border + 4 px padding, so the bar shifts left and the pill's content edge now lands exactly on the column (tablist 372 vs headline 376 at 1440).
+- (4) Liquid Connector detail playground is capped at its native 520 px viewBox width and centered in the full-width gray panel (`.lc-demo--playground { aspect-ratio: auto }` + stage `width: min(520px,100%); height: auto; margin-inline: auto`). 520 is the true native viewBox/host width (not the 522 measured with borders). The feed compact thumbnail is untouched. QA asserts 520 px + 0.0 px center offset at 1440.
+- (5) `LIQUID_GEOMETRY` corner radii tuned engine-wide: outputRadius 34→24, inputRadius 31→22. This voids the "vendored byte-identical" claim — the detail footer now reads "MIT, path solver vendored — corner radii tuned 24/22". Fused (−5) and contained (−28) states re-captured; the merged dissolve (opacity/scaleY per upstream frame math) matches batch-8 renders 1:1.
+- (6) Sample content swapped Notion→Codex: provider name, and the tile mark is an ORIGINAL vector redraw (arc-constructed 8-lobed ring + terminal `>_`), verified against the official Codex icon in OpenAI's ChatGPT.app bundle (`codex-ref/official-icon.png`) — no OpenAI artwork copied. NOTICE trademark paragraph, detail credits row, and prose updated; zero `Notion` references remain in `src/`.
+- (7) The three custom range/switch implementations (`lc-`, `rd-`, `bb-`) are replaced by the shared `SliderChip`/`SwitchChip` bars from `detail-kit` (MeetingOverlay reference style): 5+switch, 7+switch, and 1 slider respectively. Behavior preserved — gap scrub stays immediate (asserted), reset restores exact defaults (asserted via `aria-valuetext`), radio rows and roles untouched. Per-control rounding keeps readouts stable. Old `.lc-range*/.rd-range*/.bb-slider*` CSS deleted; `rd-controls`/`bb-panel` wrappers slimmed to avoid specificity fights with the Tailwind grid.
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-liquid-connector.mjs`: 34/34 (+3 checks: Codex name, glyph, 520 px cap/centering; slider drives moved to click + arrow-nudge on `role="slider"`). `verify-detail-order.mjs`: 167/167 (+16 article-gap 36 px, +12 divider-free Description headers). `verify-feed-card-design.mjs`: 19/19 (+1 tab-bar alignment). `verify-reactive-dither.mjs`: 21/21. `verify-direct-card-actions.mjs`: pass.
+- Visual pass over `artifacts/design-qa/batch9-2026-07-19/`: tab alignment, 36 px title gap, divider-free header, centered 520 px stage, Codex tile at 31 px, fused/contained seam states, and SliderChip style parity with MeetingOverlay all confirmed. Live probe: connector-card opacity/scaleY at gap 10/−5/−28 = 1 / 0.299·0.858 / 0 — upstream dissolve math unchanged.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Liquid Connector reworked to upstream 1:1 — 2026-07-19
+
+## Scope and visual truth
+
+- Julio compared the port with the upstream demo video and listed seven deltas (broken feed thumbnail, merged-look default, hairlines → soft shadows, Connect pill + round send button, idle focus ring, interaction triggers, dual credits). Findings and fixes:
+- Root-cause bug, present since the initial port: `lc-` namespacing raised specificity, so `.lc-demo button` (0,1,1) overrode `.lc-send`'s `position: absolute` and `.lc-connect`'s blue border. The send button rendered as a gray tab at the prompt's top-left — batch 7's QA note misidentified it as "upstream's peel notch". Fixed with `.lc-demo`-prefixed selectors (0,2,0); Connect regained its `#ccd9f2` border and the round send button sits bottom-right.
+- Batch-7 "peel notch" correction: upstream has no rest-state notch. Ground-truthed by running the upstream demo (`/tmp/liquid-connector`) in Playwright: settled −28 and hidden states are prompt-only; the video's fused waist exists only mid-scrub. The port matches all three upstream states in layout.
+- Ambient idle loop removed (upstream has none — verified in its `index.html`); the Rest gap slider scrubs with `{ immediate: true }` like upstream's range input; stage is `#f2f2f2` with borderless white surfaces lifted by a calibrated drop shadow (`0 1px 2px rgb(20 23 28/.05)`, `0 8px 20px rgb(20 23 28/.06)`) instead of hairline strokes; blue outline only under `:focus-within`; default stays upstream `open` + `gap=10`.
+- `verify-liquid-connector.mjs` 28 → 31 checks: ambient assertions inverted (card visible by default, no self re-open over 9 s, freeze, untouched re-entry), added strokes-removed/drop-shadow and immediate-scrub assertions, deterministic settled captures (element screenshots after `scrollTo(0,0)` — the switch click scrolls the page).
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-liquid-connector.mjs`: 31/31. `verify-detail-order.mjs`: 139/139 (16 routes). `verify-feed-card-design.mjs`: 18/18. `verify-reactive-dither.mjs`: 21/21.
+- Visual pass over `artifacts/design-qa/liquid-connector-2026-07-19/` (feed-card, detail-top, detail-fused, detail-closed, detail-controls) against upstream ground-truth captures (default / settled −28 / hidden): layout matches 1:1; surfaces intentionally swap hairlines for a soft shadow per the brief.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Controls pulled under the frame, section renamed Description — 2026-07-19
+
+## Scope and visual truth
+
+- Julio scribbled two changes on the "Don't Miss Meetings" detail page; applied to every page. (1) The controls block now sits directly under the implementation frame: each page's frame block + `ControlsSection` is wrapped in a nested `flex min-w-0 flex-col gap-6` (24 px, rules of four) inside the main `gap-14` column; all other sections keep the 56 px rhythm. (2) The controls heading reads "Description" instead of "Controls" (`ControlsSection` in `detail-kit.tsx`, header comment updated; Remix/Replay/etc. chips stay right-aligned in the header row).
+- Applied at 12 render spots: MeetingOverlayDetail, ReactiveDitherDetail, BorderBeamDetail, LiquidConnectorDetail, FluidSpringsDetail, MaterialsDetail, SheetDetail, MicroButtonsDetail, OpticalTypeDetail, `EmilSkillImplementation` (shared by the standalone Emil page and the Design Engineering umbrella), and both SkillDetails components. DesignEngineeringDetail has no `ControlsSection` of its own and inherits the wrap. Wrappers inserted without re-indenting inner content, per the brief.
+- `verify-detail-order.mjs`: heading assertions renamed to "Description", plus a new assertion that frame + controls are the only two children of a 24 px-gap wrapper (12 controls routes). Parent-container gap deliberately not asserted (umbrella nesting would make it fragile).
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-detail-order.mjs`: 139/139 (16 routes; +12 grouping checks). `verify-feed-card-design.mjs`: 18/18. `verify-reactive-dither.mjs`: 21/21. `verify-emil-skills.mjs`, `verify-design-engineering.mjs`: pass. `verify-liquid-connector.mjs`: 28/28.
+- Visual pass over `artifacts/design-qa/batch7-2026-07-19/meeting-overlay-top.png`: frame → 24 px → "Description" header with Remix/Replay chips → controls panel → 56 px → prose, exactly as scribbled.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Nav rework and Liquid Connector card — 2026-07-18
+
+## Scope and visual truth
+
+- Every `DetailShell` page lost its breadcrumb trail and its `Implementation` h2 + hairline. The header nav is now three matching bordered chips: two separate prev/next links (`rounded-[10px] border`, 32 px square) inside a borderless `nav[aria-label="Browse experiments"]`, plus a bordered Close chip. Action chips moved into the `ControlsSection` header via a new `actions` prop (Reset / Remix / Replay / Flick / Open / Dismiss / Pulse / Play all / Breathe / Search / Shuffle depending on the page); control-free pages keep chips in a bare right-aligned row on the frame. Verified on all 16 ordered routes.
+- New card #36, `/vault/liquid-connector` (Motion): a React port of zanwei's MIT-licensed `liquid-connector-web-component` — an output card (Notion MCP connector sample) peels off a prompt card with a liquid coupling seam rendered as ONE generated SVG path per frame (no filters, masks, or canvas). The upstream path solver is vendored byte-identical (`src/demos/liquidPath.js` + adjacent `.d.ts`); the component state machine (spring 1200/38, measured ~0.39 s open/close transitions, merge/detach hysteresis, tear age/strength, strain, blur, ±2 px smear clones) mirrors the upstream custom element as plain DOM + refs. Upstream colors kept 1:1. Vault lifecycle: 35 % visibility gate, idle peel/merge every 4 s yielding 5 s to interaction, instant settle under reduced motion. Feed card uses the `interactive` LinkCard pattern, so Skip/Connect work inside the thumbnail.
+- Controls on the detail page: reference-row sliders for Rest gap (−60…10 px), Detach gap (6–9.8), Peel transition (1.5–8), Coupling radius (4–48), Peel pull (0–8), an open switch row, and a Reset chip in the Controls header. LICENSE + NOTICE bundled (`src/content/liquid-connector/`) and shown as Code tabs.
+- Port deviations (deliberate): no shadow DOM / custom element / CustomEvents, no debug overlay, no frame-event stream; Connect closes the card and submit clears the prompt (upstream only fires events); Skip keeps upstream focus+close. Real bug fixed during QA: the send button's imperative `disabled` write was stomped by idle-loop re-renders — it is now React state.
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-liquid-connector.mjs` (new): 28/28 — thumbnail renders open and settled, Skip closes without navigating, idle re-opens after interaction quiets, offscreen freeze (no toggles, no repaints), re-entry resume, direct-load h1, generated path, 5 ranges + switch + header Reset, rest-gap and coupling-radius live re-solve (coupling asserted at a shallow −5 px bridge where the seam is sensitive), open-switch peel/re-merge, reset restores 10 px + open, send enables with text and clears on submit, reduced-motion instant settle with the idle loop disabled, zero console errors, no overflow at 1440/390/320 px (feed + detail).
+- `verify-detail-order.mjs` (rewritten for the nav contract): 127/127 across 16 routes — order sequence without the Implementation marker, no breadcrumbs, prev/next as two bordered chips on a borderless nav, bordered close, action chips in the Controls header (materials correctly marked orphan: hidden page, no `VAULT_ITEMS` entry, no prev/next). `verify-reactive-dither.mjs`: 21/21 (pointer check scrolls the canvas into view — frame now sits above controls). `verify-feed-card-design.mjs`: 18/18 (coverage 36/36). `verify-direct-card-actions.mjs`: pass (36 captions, 10 transitions). `verify-emil-skills.mjs`, `verify-design-engineering.mjs`, `verify-aicss.mjs`: pass.
+- Visual pass over `artifacts/design-qa/liquid-connector-2026-07-18/`: feed card (closed state with the peel nub), detail top (new nav chips + stage + caption), controls panel (rows, switch, Reset chip), closed state. The small tab at the prompt card's top-left corner is upstream's rest-state peel notch, not a defect.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Reference-style sliders and expanded-page reorder — 2026-07-18
+
+## Scope and visual truth
+
+- All `type="range"` controls restyled to the reference panel look (`artifacts/design-qa/slider-ref-2026-07-18/reference.jpg`): one 44 px rounded row on `#f7f7f7` per setting; the filled portion is a solid `#ebebeb` block anchored left with the label inside it, a thin 3×18 px `#a6a6a6` handle marks the fill edge, the formatted value sits right-aligned in the unfilled area, and five 3 px tick dots span each track. A real `<input type="range">` overlays each row (opacity 0) as the interaction/keyboard/a11y layer; fill and handle positions derive from `(v−min)/(max−min)` through a CSS custom property. Fully monochrome — the reference's orange swatch was excluded per the brief.
+- `ReactiveDitherDemo` was split for the new layout: exported `ReactiveDitherSettings`/`REACTIVE_DITHER_DEFAULTS`, optional `settings`/`onSettingsChange` controlled props, `chrome: 'full' | 'stage'`, and an exported `ReactiveDitherControlPanel` (7 reference rows + invert as a `role="switch"` light-gray toggle row). `BorderBeamDemo` got the same treatment (`BorderBeamSettings`/`BORDER_BEAM_DEFAULTS`, `chrome`, `BorderBeamControlPanel`: Type and Color chip rows + Strength slider row in the same 44 px shape; `.bb-stage-only` drops the full-mode min-height). Compact/feed rendering unchanged in both.
+- Every expanded page reordered to: title/nav → Implementation frame (reset/replay chips on the frame) → Controls → description (+guides) → Code/copy → Credits/reference. The duplicate top hero preview was removed on all 15 page files — each duplicated the implementation component, so no hero was kept. New shared `ControlsSection` in `detail-kit.tsx`. Tray pages (Meeting Overlay, Fluid Springs, Sheet, Materials, Micro Buttons, Optical Type, Better Colors, Better Typography) detached their `-mt-5` trays into standalone Controls sections; `EmilSkillImplementation` renders Implementation + Controls for both the standalone Emil page and the Design Engineering umbrella (umbrella intro moved below the playground, section summaries became captions); Transition/AiCss/Shadcn/Scrollgallery are hero-out reorders without Controls; Better Typography's guide moved below Implementation+Controls. OpticalTypeDetail stays unrouted, reordered for consistency.
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-feed-card-design.mjs`: 18/18. `verify-reactive-dither.mjs`: 21/21 (selectors updated for the new controls DOM; new fill-block width assertion — fill 559 px of 654 px after setting spacing 9). `verify-aicss.mjs`: pass (5 cards × 3 viewports, single shared implementation). `verify-direct-card-actions.mjs`: pass (35 captions, 10 transitions). `verify-emil-skills.mjs`, `verify-design-engineering.mjs`: pass. New `verify-detail-order.mjs`: 49/49 — 15 routes assert Implementation → Controls (when present) → description → Code (when present) → Credits document order, no Controls on control-free pages, and no hero frame outside the Implementation section (SkillsLab demos legitimately use the aspect frame as their stage).
+- Visual pass over `artifacts/design-qa/batch5-2026-07-18/` (new `scripts/capture-batch5.mjs`): dither and border-beam control panels at 1440/390/320 px match the reference — labels on the fill block, handles at the fill edge, values right, switch row quiet; reordered page tops (dither, border-beam, card-resize) open on the Implementation frame with Controls below.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Two cards deleted (35 total), tooltip ~1.8× scale-up, accordion + calendar vault-token restyle, streaming-text thumbnail autoplay — 2026-07-18
+
+## Scope and visual truth
+
+- `success-check` and `scribble-index` fully removed: catalog/vault-config entries, feed card, route branch, `SuccessCheck` specimen + `.td-success*` CSS, `ScribbleIndexDetail.tsx`, `ScribbleIndexDemo.tsx`/`.css`, and the direct-card-actions block. Feed now renders 35 cards: 12 transitions, 5 AI-CSS, 1 standalone Emil skill, 7 shadcn, 10 standalone.
+- Tooltip open/close specimen scaled ≈1.8×: trigger 38→68 px tall, font 11→18 px, padding 14→28 px, radius 11→20 px; tooltip copy 9→16 px, padding 6/9→12/16 px, radius 8→14 px, offset 9→16 px, arrow 7→12 px. Open/close behavior and timing untouched; no overflow at 1440/390/320.
+- Accordion restyled on the vault design system: inherited neueMontreal, `--text-primary/secondary/tertiary`, `--border-line`, `--bg-hover`, rules-of-four rhythm (52 px trigger, 40 px rows, 16/12 px padding), phosphor `Users`/`UserCircle` icons, bold `CaretDown`, checked-row emphasis via `:has(input:checked)`. Grid-row mechanics, radio group, and keyboard support identical — visual only.
+- shadcn Calendar restyled on vault tokens (neueMontreal replacing Geist for this specimen, text tokens, `--border-line`, quiet monochrome selected = `--text-primary` fill, today = `--bg-hover` + inset hairline, 32 px cells, 12 px padding/gaps, 13/11 px type). Compact thumbnails re-anchored: `.sx-native` is now absolutely centered with `translate: -50% -50%` plus a 0.3 scale step under 150 px container height — fixes the pre-existing drift that left the calendar clipped at 390 px and fully blank at 320 px. Detail hero uses the same component, so thumbnail and detail stay synchronized.
+- Streaming Text compact thumbnail now animates per vault convention: IntersectionObserver ≥35% visibility gate, timers cancelled and text reset offscreen, replay on re-entry, reduced-motion shows the fully streamed end state (mirrors thinking-reasoning).
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `verify-feed-card-design.mjs`: 18/18 (coverage 35/35). `verify-reactive-dither.mjs`: 20/20. `verify-aicss.mjs`: pass, including the new compact-streaming-thumbnail advance assertion. `verify-direct-card-actions.mjs`: pass (35 captions, 10 direct-manipulation transitions, new tooltip min-size assertions ≥56 px trigger / ≥14 px copy). `verify-emil-skills.mjs`, `verify-design-engineering.mjs`, `verify-thinking-reasoning-thumbnail.mjs`: pass.
+- Visual pass over captures in `artifacts/design-qa/batch4-2026-07-18/`: forced-open tooltip, open accordion, calendar hero, and calendar/accordion/tooltip feed cards at 1440/390/320 px — all centered, readable, no clipping.
+- Dev server was started per session with `--host 127.0.0.1` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
+# Ten feed cards deleted, four merged into Design Engineering umbrella, Gemini Button goes light — 2026-07-18
+
+## Scope and visual truth
+
+- Julio's deletion request, executed as briefed: ten feed cards removed with their routes, catalog entries, specimens, demo CSS, detail pages, and QA references — the Emil Motion Audit and Animation Opportunities skills (eight variants and both bundled content snapshots included), standalone Toast Notifications (`/vault/sonner`; "those notifications" was confirmed to mean the sonner card — the `notification-badge` transition stays), shadcn Bubble and Button Group, four transitions (Page side-by-side, Input clear, Blurred Text Animation, Dropdown menu morph), and standalone World Cup Knockout (including its `.kb-*` rules in `src/index.css`).
+- Four cards merged into one umbrella "Design Engineering" at `/vault/skill-design-eng` (category Skills, in the design-eng card's feed position): Emil design-eng Taste, Animation Vocabulary, 12 Principles, and Better UI behind an in-place chip switch. Taste/Vocabulary reuse the exported `EmilSkillImplementation` block; the umbrella credits emilkowalski/skills (MIT, pinned 6bf2443) plus raphaelsalaja/skill and jakubkrehel/skills. Emil content snapshots for the two absorbed skills stay; `better-ui` and `12-principles-of-animation` content dirs also stay on disk (unreferenced — judgment call, brief scheduled only the two deleted Emil snapshots).
+- Gemini Button (`/vault/border-beam`) restyled light per the brief: white field with dark text on vault tokens, beam and conic mask fully grayscale, four new palettes (Ink, Graphite default, Stone, Mist) replacing Colorful/Mono/Ocean/Sunset, grayscale focus/send states, brightness-pulse keyframes instead of hue-rotate. Layout, geometry, type/strength controls, and interactions are unchanged — colors only.
+- The feed now renders 37 cards: 13 transitions, 5 AI-CSS, 1 standalone Emil skill (Fluid Interfaces), 7 shadcn, 11 standalone.
+
+## Verification
+
+- Reusable QA: `scripts/verify-feed-card-design.mjs` — 18/18 pass (coverage 37/37). `scripts/verify-reactive-dither.mjs` — 20/20 pass. `scripts/verify-aicss.mjs` — pass (5 cards × 3 viewports). `scripts/verify-emil-skills.mjs` — pass after a rewrite around the single standalone Emil page plus the umbrella thumbnail (the offscreen-autoplay test now parks at the footer first, since the short skills feed can mount the card in view). `scripts/verify-design-engineering.mjs` (new) — pass: h1 "Design Engineering", four section chips, in-place switching with correct demo per section, variant selectors, Better UI save interaction, no overflow at 1440/390/320 px. `scripts/verify-direct-card-actions.mjs` — pass (37 captions, 10 direct-manipulation transitions).
+- The Gemini Button restyle was eyeballed with timed Playwright screenshots (line and large types captured at beam-peak frames; graphite default plus Ink check) — the grayscale beam reads clearly in motion on the white field.
+- Deleted `scripts/verify-sonner.mjs`, `scripts/verify-knockout.mjs`, `scripts/capture-emil-skills-audit.mjs` (three of four capture targets gone), and `scripts/verify-skills.mjs` (stale since the 07-17 RichCaption rollout — asserted an 8-card skills feed and in-caption dates; unfixable trim, removed instead).
+- TypeScript passes; the production build passes (pre-existing bundle-size advisory remains non-blocking). Dev server was started with `--host 127.0.0.1` for the Playwright runs and stopped afterward (port 5173 confirmed free).
+
+final result: passed
+
+# Six more feed cards deleted, three cards renamed — 2026-07-18
+
+## Scope and visual truth
+
+- Julio's deletion request, executed as briefed: six feed cards removed with their routes, catalog entries, specimens, demo CSS, detail pages, and QA references — the Panel reveal transition, three AI-CSS cards (Code Block, Data Table, Comparison Table), Playwright CLI (including its demo/detail files and the bundled `src/content/skills/playwright-cli/` snapshot, the same call as the batch-1 review-animations content deletion), and Interaction Sounds (demo/detail files; the `cuelume` npm dependency stays installed).
+- Renames (ids, paths, and component/file names unchanged): "Stop missing your meetings" → "Don't Miss Meetings" (feed caption and detail h1), "Texts reveal" → "Blurred Text Animation" (catalog title and specimen label), "Road Cup Knockout" → "World Cup Knockout" (catalog title and feed caption; the detail h1 "Knockout bracket" and the World Cup aria labels already matched).
+- The feed now renders 50 cards: 17 transitions, 5 AI-CSS, 5 Emil skills, 9 shadcn, 14 standalone. No surviving card, token, or layout changed, so existing captures of surviving cards remain representative.
+
+## Verification
+
+- Reusable QA: `scripts/verify-feed-card-design.mjs` — 18/18 pass (headline assertion now "Don't Miss Meetings", coverage 50/50). `scripts/verify-reactive-dither.mjs` — 20/20 pass. Updated family suites pass: `scripts/verify-aicss.mjs` (5 cards × 3 viewports) and `scripts/verify-direct-card-actions.mjs` (50 captions, 12 direct-manipulation transitions). `scripts/verify-knockout.mjs` — 93/93 pass after fixing one stale pre-existing assertion: it still expected the pre-RichCaption "Jul 12, 2026" caption date (untouched since the initial commit) and now asserts the "World Cup Knockout" title instead.
+- TypeScript passes; the production build passes (pre-existing bundle-size advisory remains non-blocking). Dev server was started with `--host 127.0.0.1` for the Playwright runs and stopped afterward (port 5173 confirmed free).
+
+final result: passed
+
+# Ten feed cards deleted, two transition cards renamed — 2026-07-18
+
+## Scope and visual truth
+
+- Julio's deletion request, executed as briefed: ten feed cards removed with their routes, catalog entries, specimens, demo CSS, detail pages, and QA references — Gradient Spin, Interface Craft Guidelines, Modal open/close, Avatar group hover, 3D tilt, Thinking State, File Diff, Image Generation, Text Response, and the Emil Craft Bar skill (including its four review-* variants and the bundled upstream content snapshot). The brief's "input generation" had no matching card; Image Generation was removed as the only "generation" card in the AI-CSS family.
+- Renames (ids, paths, and component/file names unchanged): "Skeleton loader and reveal" → "Loading frame and reveal"; "Shimmer text" → "Thinking text" (the Emil animation-vocabulary `shimmer` variant is unrelated and stays).
+- The feed now renders 56 cards: 18 transitions, 8 AI-CSS, 5 Emil skills, 9 shadcn, 16 standalone. No surviving card, token, or layout changed, so existing captures of surviving cards remain representative.
+
+## Verification
+
+- Reusable QA: `scripts/verify-feed-card-design.mjs` — 18/18 pass, coverage assertion updated to 56/56. `scripts/verify-reactive-dither.mjs` — 20/20 pass. Updated family suites also pass: `scripts/verify-aicss.mjs` (8 cards × 3 viewports), `scripts/verify-emil-skills.mjs` (five skills), `scripts/verify-direct-card-actions.mjs` (56 captions, 13 direct-manipulation transitions). Two pre-existing verify-emil-skills assertion bugs were fixed along the way: Reset/Replay role queries now use `exact: true` (Motion Audit specimen buttons are labelled "Replay before/after example…"), and the reduced-motion duration assertion accepts Chrome's `1e-05s` serialization, matching the verify-sonner convention.
+- TypeScript passes; the production build passes (pre-existing bundle-size advisory remains non-blocking). Dev server was started with `--host 127.0.0.1` for the Playwright runs and stopped afterward (port 5173 confirmed free).
+
+final result: passed
+
+# Liquid Dither Effect rename, pill bounce −60%, dither spring defaults — 2026-07-18
+
+## Scope and visual truth
+
+- Julio's requests, three parts. (1) Category pill bounce was too strong: damping retention lowered 0.76 → 0.69 per 60 fps frame, stiffness unchanged at 0.11 — step-response simulation puts overshoot at 8.8% of travel vs the previous 21.5% (−59%); travel speed and the droplet squash/stretch are preserved, just calmer. (2) Engine defaults are now return stiffness 0.080 and damping 0.770 (from 0.110 / 0.850), so the mark returns home more slowly and softly; applied to `DEFAULT_SETTINGS` in the engine and synced into the detail page's reusable example snippet. (3) The card is renamed "Liquid Dither Effect" in the catalog, feed caption, LinkCard label, detail h1, and preview/controls aria labels; the route `/vault/reactive-dither`, file names, and component names are unchanged.
+- No layout changed beyond motion tuning and titles, so the existing captures in `artifacts/design-qa/reactive-dither-2026-07-18/` and `artifacts/design-qa/card-design-2026-07-17/` remain representative.
+
+## Verification
+
+- Reusable QA: `scripts/verify-reactive-dither.mjs` — 20/20 checks pass with the h1 assertion updated to "Liquid Dither Effect" (reset-restores-defaults still verifies spacing 2.4 px / invert=false). `scripts/verify-feed-card-design.mjs` — 18/18 pass, including liquid-pill pixel-exact settle, mid-flight click travel, ghost show/hide, and reduced-motion snap on the calmer spring.
+- TypeScript passes; the production build passes (pre-existing bundle-size advisory remains non-blocking). Dev server was started with `--host 127.0.0.1` for the Playwright runs (Vite 8 defaults to IPv6 localhost, which the scripts cannot reach) and stopped afterward.
+
+final result: passed
+
 # Liquid-on-click fix + RichCaption feed-wide rollout — 2026-07-17
 
 ## Scope and visual truth

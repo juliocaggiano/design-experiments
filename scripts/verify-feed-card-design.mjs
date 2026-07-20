@@ -36,7 +36,7 @@ const browser = await chromium.launch()
   const chip = caption.locator('div span').first()
   const category = caption.locator('[data-card-category]')
 
-  check('headline renders', (await headline.textContent()) === 'Stop missing your meetings')
+  check('headline renders', (await headline.textContent()) === "Don't Miss Meetings")
   check('summary renders', ((await summary.textContent()) ?? '').length > 10)
 
   const box = await summary.boundingBox()
@@ -50,6 +50,38 @@ const browser = await chromium.launch()
   await card.screenshot({ path: `${OUT}/pilot-meeting-1440.png` })
   await page.screenshot({ path: `${OUT}/feed-1440.png`, fullPage: false })
   check('zero console errors on feed', errors.length === 0, errors[0] ?? '')
+
+  /* Tab bar alignment (batch 10): the bar's outer left edge matches the first
+     feed card's outer left edge exactly. */
+  const tabAlign = await page.evaluate(() => {
+    const tablist = document.querySelector('[role="tablist"]')
+    const firstCard = document.querySelector('#vault-filter-results > a, #vault-filter-results > article')
+    if (!tablist || !firstCard) return null
+    return { tab: tablist.getBoundingClientRect().left, card: firstCard.getBoundingClientRect().left }
+  })
+  check(
+    'tab bar outer left edge matches the first card',
+    tabAlign !== null && Math.abs(tabAlign.card - tabAlign.tab) <= 1,
+    tabAlign ? `tab ${tabAlign.tab.toFixed(1)}, card ${tabAlign.card.toFixed(1)}` : 'missing',
+  )
+
+  /* Card demo (login) thumbnail: the whole login surface fits inside the
+     stage — batch 10 fixed the top-anchored grid track that clipped the
+     footer mid-button. */
+  const cardFit = await page.evaluate(() => {
+    const card = document.querySelector('a[href="/vault/shadcn-card"], article:has(a[href="/vault/shadcn-card"])')
+    const demo = card?.querySelector('.sh-demo[data-id="card"]')
+    const specimen = demo?.querySelector('.sx-card-demo')
+    if (!demo || !specimen) return null
+    const d = demo.getBoundingClientRect()
+    const s = specimen.getBoundingClientRect()
+    return { topGap: s.top - d.top, bottomGap: d.bottom - s.bottom }
+  })
+  check(
+    'Card demo login surface fits inside the feed stage',
+    cardFit !== null && cardFit.topGap >= -0.5 && cardFit.bottomGap >= -0.5,
+    cardFit ? `top ${cardFit.topGap.toFixed(1)}px, bottom ${cardFit.bottomGap.toFixed(1)}px` : 'missing',
+  )
 
   /* Regression: category clicks must never scroll the page (cmdk in the
      shadcn command demo used to scrollIntoView its selected item). */
@@ -69,7 +101,7 @@ const browser = await chromium.launch()
     const summaries = [...document.querySelectorAll('[data-card-summary]')].filter((el) => (el.textContent ?? '').trim().length > 10)
     return { cards: cards.length, summaries: summaries.length }
   })
-  check('every feed card renders a rich caption with a summary', coverage.summaries === coverage.cards && coverage.cards > 0, `${coverage.summaries}/${coverage.cards} cards`)
+  check('every feed card renders a rich caption with a summary', coverage.summaries === coverage.cards && coverage.cards === 36, `${coverage.summaries}/${coverage.cards} cards`)
 
   /* Liquid pill: springs to the clicked tab and settles exactly on it. */
   const pillMatchesTab = async (tabName) => page.evaluate((name) => {
@@ -152,6 +184,20 @@ for (const width of [390, 320]) {
   await page.waitForTimeout(900)
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   check(`no horizontal overflow at ${width}px`, overflow <= 0, `${overflow}px`)
+  const cardFitMobile = await page.evaluate(() => {
+    const card = document.querySelector('a[href="/vault/shadcn-card"], article:has(a[href="/vault/shadcn-card"])')
+    const demo = card?.querySelector('.sh-demo[data-id="card"]')
+    const specimen = demo?.querySelector('.sx-card-demo')
+    if (!demo || !specimen) return null
+    const d = demo.getBoundingClientRect()
+    const s = specimen.getBoundingClientRect()
+    return { topGap: s.top - d.top, bottomGap: d.bottom - s.bottom }
+  })
+  check(
+    `Card demo login surface fits inside the feed stage at ${width}px`,
+    cardFitMobile !== null && cardFitMobile.topGap >= -0.5 && cardFitMobile.bottomGap >= -0.5,
+    cardFitMobile ? `top ${cardFitMobile.topGap.toFixed(1)}px, bottom ${cardFitMobile.bottomGap.toFixed(1)}px` : 'missing',
+  )
   const card = page.locator('a[href="/vault/meeting-overlay"]').first()
   await card.scrollIntoViewIfNeeded()
   await page.waitForTimeout(300)

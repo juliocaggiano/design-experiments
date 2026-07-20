@@ -7,8 +7,6 @@ export type ShadcnId =
   | 'carousel'
   | 'chart'
   | 'breadcrumb'
-  | 'bubble'
-  | 'button-group'
   | 'command'
 
 export type ShadcnDefinition = {
@@ -91,28 +89,6 @@ export const SHADCN_DEFINITIONS = [
     detail: 'The original separators, muted link styling, ellipsis trigger, and Documentation, Themes, and GitHub menu items remain unchanged.',
     tags: 'Navigation, Hierarchy, Overflow',
     sourceUrl: `${DOCS_ROOT}/breadcrumb`,
-  },
-  {
-    id: 'bubble',
-    path: '/vault/shadcn-bubble',
-    title: 'Bubble',
-    date: 'Jul 16, 2026',
-    category: 'Interfaces',
-    summary: 'The official bubble demo reproduces the complete four-part conversation and reaction states.',
-    detail: 'It uses base-rhea alignment, grouped muted messages, exact copy, pill geometry, and the original emoji reaction clusters.',
-    tags: 'Chat, Message, Reaction',
-    sourceUrl: `${DOCS_ROOT}/bubble`,
-  },
-  {
-    id: 'button-group',
-    path: '/vault/shadcn-button-group',
-    title: 'Button Group',
-    date: 'Jul 16, 2026',
-    category: 'Interactions',
-    summary: 'The official button-group demo joins back, archive, report, snooze, and overflow actions.',
-    detail: 'Its dropdown preserves the mail actions, label submenu with radio selection, destructive trash action, and responsive back button.',
-    tags: 'Buttons, Grouping, Action',
-    sourceUrl: `${DOCS_ROOT}/button-group`,
   },
   {
     id: 'command',

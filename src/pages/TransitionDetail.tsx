@@ -31,30 +31,12 @@ The complete shared transition catalog follows. Render the specimen with id="${d
 
   return (
     <DetailShell title={definition.title}>
-      <div
-        aria-label={`${definition.title} expanded preview`}
-        className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <TransitionDemo id={definition.id} />
-      </div>
-
       <div className="flex min-w-0 flex-col gap-14">
-        <div className="flex flex-col gap-3">
-          <p className="text-pretty text-[var(--text-primary)]">{definition.summary}</p>
-          <p className="text-pretty text-[var(--text-primary)]">
-            {definition.detail} The visual treatment has been rebuilt for the vault’s light design system while the
-            transition’s trigger, direction, timing hierarchy, and state semantics stay faithful to the reference.
-          </p>
-        </div>
-
         <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-              <ChipButton onClick={() => controls.replay?.()}>Replay</ChipButton>
-            </div>
-          </header>
+          <div className="flex items-center justify-end gap-2">
+            <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+            <ChipButton onClick={() => controls.replay?.()}>Replay</ChipButton>
+          </div>
           <div className="relative z-10 h-[440px] overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)] max-sm:h-[400px]">
             <TransitionDemo id={definition.id} controls={controls} />
           </div>
@@ -62,6 +44,14 @@ The complete shared transition catalog follows. Render the specimen with id="${d
             Interact directly with the specimen. Reset returns its source state; Replay advances or repeats the transition.
           </p>
         </section>
+
+        <div className="flex flex-col gap-3">
+          <p className="text-pretty text-[var(--text-primary)]">{definition.summary}</p>
+          <p className="text-pretty text-[var(--text-primary)]">
+            {definition.detail} The visual treatment has been rebuilt for the vault’s light design system while the
+            transition’s trigger, direction, timing hierarchy, and state semantics stay faithful to the reference.
+          </p>
+        </div>
 
         <section className="flex min-w-0 flex-col gap-3">
           <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">

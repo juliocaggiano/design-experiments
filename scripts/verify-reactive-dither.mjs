@@ -24,8 +24,24 @@ const canvasHash = (page, selector) =>
     return hash
   }, selector)
 
+/* Drive a SliderChip bar to an exact value: click the proportional position,
+   then nudge with arrow keys until aria-valuenow matches exactly. */
+async function setSlider(page, name, target, min, max) {
+  const slider = page.getByRole('slider', { name })
+  const box = await slider.boundingBox()
+  const k = (target - min) / (max - min)
+  await slider.click({ position: { x: Math.min(box.width - 1, Math.max(1, k * box.width)), y: box.height / 2 } })
+  for (let attempt = 0; attempt < 12; attempt += 1) {
+    const now = Number(await slider.getAttribute('aria-valuenow'))
+    if (now === target) return
+    await slider.press(now < target ? 'ArrowRight' : 'ArrowLeft')
+    await page.waitForTimeout(60)
+  }
+  const stuck = await slider.getAttribute('aria-valuenow')
+  if (Number(stuck) !== target) throw new Error(`slider "${name}" stuck at ${stuck}, target ${target}`)
+}
+
 const FEED_CANVAS = 'a[href="/vault/reactive-dither"] canvas'
-const HERO_CANVAS = '.rd-demo--compact canvas'
 const FULL_CANVAS = '.rd-demo--playground canvas'
 
 const browser = await chromium.launch()
@@ -84,29 +100,40 @@ const browser = await chromium.launch()
   await page.waitForSelector('.rd-demo--playground canvas')
   await page.waitForTimeout(800)
 
-  check('route works on direct browser load', await page.locator('h1').first().textContent() === 'Reactive Dither')
-  check('hero and implementation share the engine', (await page.locator('.rd-demo canvas').count()) === 2)
-  check('all seven range controls render', (await page.locator('.rd-demo--playground input[type="range"]').count()) === 7)
-  check('invert toggle renders', (await page.locator('.rd-segmented button').count()) === 2)
+  check('route works on direct browser load', await page.locator('h1').first().textContent() === 'Liquid Dither Effect')
+  check('implementation frame renders the shared engine', (await page.locator('.rd-demo canvas').count()) === 1)
+  check('all seven slider bars render', (await page.locator('.rd-controls [role="slider"]').count()) === 7)
+  check('invert toggle renders as a switch', (await page.getByRole('switch', { name: 'Inverted' }).count()) === 1)
 
-  const spacingOutput = page.locator('label.rd-range', { hasText: 'Dot spacing' }).locator('output')
-  const before = await spacingOutput.textContent()
-  await page.locator('input[aria-label="Dot spacing"]').fill('9')
-  const after = await spacingOutput.textContent()
+  const spacingSlider = page.getByRole('slider', { name: 'Dot spacing' })
+  const before = await spacingSlider.getAttribute('aria-valuetext')
+  await setSlider(page, 'Dot spacing', 9, 2.4, 10)
+  const after = await spacingSlider.getAttribute('aria-valuetext')
   await page.waitForTimeout(400)
-  check('dot spacing control updates live canvas', before !== after, `${before} → ${after}`)
+  check('dot spacing control updates live canvas', before !== after && after === '9.0 px', `${before} → ${after}`)
 
-  await page.getByRole('button', { name: 'Inverted' }).click()
+  const trackBox = await spacingSlider.boundingBox()
+  const fillBox = await spacingSlider.locator('[data-slider-fill]').boundingBox()
+  check(
+    'fill block tracks the value (reference style)',
+    trackBox !== null && fillBox !== null && fillBox.width > trackBox.width * 0.3,
+    fillBox && trackBox ? `fill ${Math.round(fillBox.width)}px of ${Math.round(trackBox.width)}px` : 'missing',
+  )
+
+  await page.getByRole('switch', { name: 'Inverted' }).click()
   await page.waitForTimeout(300)
   const inverted = await page.locator('.rd-demo--playground').getAttribute('data-invert')
   check('invert colors toggles live', inverted === 'true')
 
   await page.getByRole('button', { name: 'Reset' }).click()
   await page.waitForTimeout(300)
-  const resetSpacing = await spacingOutput.textContent()
+  const resetSpacing = await spacingSlider.getAttribute('aria-valuetext')
   const resetInvert = await page.locator('.rd-demo--playground').getAttribute('data-invert')
   check('reset restores defaults', resetSpacing === '2.4 px' && resetInvert === 'false', `${resetSpacing}, invert=${resetInvert}`)
 
+  /* Frame sits above the controls now, so bring the canvas back into the
+     viewport before pointing at it. */
+  await page.locator(FULL_CANVAS).scrollIntoViewIfNeeded()
   const fullBox = await page.locator(FULL_CANVAS).boundingBox()
   await page.mouse.move(fullBox.x + fullBox.width * 0.5, fullBox.y + fullBox.height * 0.5, { steps: 6 })
   await page.waitForTimeout(250)
@@ -128,12 +155,12 @@ const browser = await chromium.launch()
   await page.goto(`${BASE}/vault/reactive-dither`, { waitUntil: 'networkidle' })
   await page.waitForTimeout(700)
 
-  const heroBox = await page.locator(HERO_CANVAS).boundingBox()
-  await page.mouse.move(heroBox.x + 80, heroBox.y + 60, { steps: 6 })
+  const fullBox = await page.locator(FULL_CANVAS).boundingBox()
+  await page.mouse.move(fullBox.x + 80, fullBox.y + 60, { steps: 6 })
   await page.waitForTimeout(400)
-  const rmA = await canvasHash(page, HERO_CANVAS)
+  const rmA = await canvasHash(page, FULL_CANVAS)
   await page.waitForTimeout(500)
-  const rmB = await canvasHash(page, HERO_CANVAS)
+  const rmB = await canvasHash(page, FULL_CANVAS)
   check('reduced motion renders a settled static mark', rmA !== -1 && rmA === rmB)
   await context.close()
 }

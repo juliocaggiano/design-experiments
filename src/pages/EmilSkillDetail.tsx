@@ -6,43 +6,32 @@ import {
   type EmilSkillId,
   type EmilSkillVariantId,
 } from '../emilskills/catalog'
-import { ChipButton, CodeTabs, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, CodeTabs, ControlsSection, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 import demoSrc from '../demos/EmilSkillsDemo.tsx?raw'
 import demoCss from '../demos/EmilSkillsDemo.css?raw'
 import designEngSkill from '../content/skills/emil/emil-design-eng/SKILL.md?raw'
 import vocabularySkill from '../content/skills/emil/animation-vocabulary/SKILL.md?raw'
-import improveSkill from '../content/skills/emil/improve-animations/SKILL.md?raw'
-import opportunitiesSkill from '../content/skills/emil/find-animation-opportunities/SKILL.md?raw'
-import reviewSkill from '../content/skills/emil/review-animations/SKILL.md?raw'
 import appleSkill from '../content/skills/emil/apple-design/SKILL.md?raw'
 import designEngSource from '../content/skills/emil/emil-design-eng/SOURCE.md?raw'
 import vocabularySource from '../content/skills/emil/animation-vocabulary/SOURCE.md?raw'
-import improveSource from '../content/skills/emil/improve-animations/SOURCE.md?raw'
-import opportunitiesSource from '../content/skills/emil/find-animation-opportunities/SOURCE.md?raw'
-import reviewSource from '../content/skills/emil/review-animations/SOURCE.md?raw'
 import appleSource from '../content/skills/emil/apple-design/SOURCE.md?raw'
 import licenseSrc from '../content/skills/emil/emil-design-eng/LICENSE?raw'
 
-/* One detail page renders all six Emil skill cards, driven by the catalog.
-   The skill files are verbatim MIT-licensed snapshots (commit 6bf2443) —
-   bundled with their license and source records, following the vault's
-   skills-collection convention. */
+/* One detail page renders the standalone Emil skill cards, driven by the
+   catalog. The skill files are verbatim MIT-licensed snapshots (commit
+   6bf2443) — bundled with their license and source records, following the
+   vault's skills-collection convention. The design-eng and vocabulary texts
+   also feed the Design Engineering umbrella page. */
 
 const SKILL_TEXT: Record<EmilSkillId, string> = {
   'emil-design-eng': designEngSkill,
   'animation-vocabulary': vocabularySkill,
-  'improve-animations': improveSkill,
-  'find-animation-opportunities': opportunitiesSkill,
-  'review-animations': reviewSkill,
   'apple-design': appleSkill,
 }
 
 const SOURCE_TEXT: Record<EmilSkillId, string> = {
   'emil-design-eng': designEngSource,
   'animation-vocabulary': vocabularySource,
-  'improve-animations': improveSource,
-  'find-animation-opportunities': opportunitiesSource,
-  'review-animations': reviewSource,
   'apple-design': appleSource,
 }
 
@@ -75,58 +64,63 @@ Requirements shared by the collection:
 - Clicking inside the specimen must not trigger the surrounding card link (preventDefault + stopPropagation).
 - Namespace every class so the component can live inside a larger design system.`
 
-export function EmilSkillDetail({ definition }: { definition: EmilSkillDefinition }) {
+/* The interactive implementation block shared by the standalone Emil skill
+   pages and the Design Engineering umbrella: the Implementation frame wired
+   to Replay/Reset controls, then a Controls section with the variant
+   selector and the per-variant description. */
+export function EmilSkillImplementation({ definition }: { definition: EmilSkillDefinition }) {
   const controls = useRef<EmilSkillsControls>({}).current
   const variants = getEmilSkillVariants(definition.id)
   const [variant, setVariant] = useState<EmilSkillVariantId>(definition.defaultVariant)
   const selectedVariant = variants.find((option) => option.id === variant) ?? variants[0]
 
   return (
-    <DetailShell title={definition.title}>
-      {/* hero */}
-      <div
-        aria-label={definition.title}
-        className="relative mx-auto flex aspect-[1344/520] w-full select-none items-center justify-center overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <EmilSkillsDemo id={definition.id} variant={definition.defaultVariant} />
-      </div>
+    <>
+      <div className="flex min-w-0 flex-col gap-6">
+      <section className="flex min-w-0 flex-col gap-4">
+        <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[220px] bg-[var(--bg-page)]">
+          <EmilSkillsDemo id={definition.id} variant={variant} controls={controls} />
+        </div>
+      </section>
 
+      <ControlsSection actions={(
+        <>
+          <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
+          <ChipButton onClick={() => controls.replay?.()}>Replay</ChipButton>
+        </>
+      )}>
+        <label className="flex min-w-0 flex-col gap-1.5">
+          <span className="text-[11px] text-[var(--text-tertiary)]">Example</span>
+          <select
+            value={variant}
+            onChange={(event) => setVariant(event.target.value as EmilSkillVariantId)}
+            className="h-9 w-full rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-page)] px-3 text-[12px] text-[var(--text-primary)] outline-none transition-colors duration-150 hover:border-[var(--border-ring)] focus:border-[var(--border-ring)]"
+          >
+            {variants.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
+          </select>
+        </label>
+        <p className="text-pretty text-[11px] leading-[1.5] text-[var(--text-tertiary)]">
+          {selectedVariant.description}
+        </p>
+      </ControlsSection>
+      </div>
+    </>
+  )
+}
+
+export function EmilSkillDetail({ definition }: { definition: EmilSkillDefinition }) {
+  return (
+    <DetailShell title={definition.title}>
       <div className="flex min-w-0 flex-col gap-14">
+        <EmilSkillImplementation definition={definition} />
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">{definition.summary}</p>
           <p className="text-pretty text-[var(--text-primary)]">
-            The preview isolates one representative interaction so the idea reads immediately. Use the selector in the
-            implementation to explore the skill’s related examples. The complete upstream skill is bundled below,
-            verbatim, for installation from the Skill section.
+            The implementation above isolates one representative interaction so the idea reads immediately. Use the
+            selector in the Controls to explore the skill’s related examples. The complete upstream skill is bundled
+            below, verbatim, for installation from the Skill section.
           </p>
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-              <ChipButton onClick={() => controls.replay?.()}>Replay</ChipButton>
-            </div>
-          </header>
-          <div className="flex min-w-0 flex-wrap items-end justify-between gap-3">
-            <label className="flex min-w-[220px] flex-1 flex-col gap-1.5">
-              <span className="text-[11px] text-[var(--text-tertiary)]">Example</span>
-              <select
-                value={variant}
-                onChange={(event) => setVariant(event.target.value as EmilSkillVariantId)}
-                className="h-9 w-full rounded-[10px] border border-[var(--border-line)] bg-[var(--bg-surface)] px-3 text-[12px] text-[var(--text-primary)] outline-none transition-colors duration-150 hover:border-[var(--border-ring)] focus:border-[var(--border-ring)]"
-              >
-                {variants.map((option) => <option key={option.id} value={option.id}>{option.label}</option>)}
-              </select>
-            </label>
-            <p className="max-w-[360px] text-pretty text-[11px] leading-[1.5] text-[var(--text-tertiary)]">
-              {selectedVariant.description}
-            </p>
-          </div>
-          <div className="relative z-10 overflow-hidden rounded-xl border border-[var(--border-line)] min-h-[160px] sm:min-h-[220px] bg-[var(--bg-page)]">
-            <EmilSkillsDemo id={definition.id} variant={variant} controls={controls} />
-          </div>
         </div>
 
         <section className="flex min-w-0 flex-col gap-3">

@@ -3,43 +3,30 @@ import { LinkCard, RichCaption } from './components/Card'
 import { OverlayDemo } from './demos/OverlayDemo'
 import { FluidSpringDemo } from './demos/FluidSpring'
 import { SheetDemo } from './demos/SheetDemo'
-import { KnockoutBracketDemo } from './demos/KnockoutBracket'
-import { BetterColorsDemo, BetterTypographyDemo, BetterUiDemo } from './demos/SkillsLab'
+import { BetterColorsDemo, BetterTypographyDemo } from './demos/SkillsLab'
 import { MicroButtonsDemo } from './demos/MicroButtonsDemo'
 import { ScrollgalleryDemo } from './demos/ScrollgalleryDemo'
 import { BorderBeamDemo } from './demos/BorderBeamDemo'
-import { CuelumeDemo } from './demos/CuelumeDemo'
-import { PlaywrightCliDemo } from './demos/PlaywrightCliDemo'
-import { AnimationPrinciplesDemo } from './demos/AnimationPrinciplesDemo'
 import { TransitionDemo } from './demos/transitions/TransitionDemo'
 import { AiCssDemo } from './demos/aicss/AiCssDemo'
 import { EmilSkillsDemo } from './demos/EmilSkillsDemo'
-import { SonnerDemo } from './demos/SonnerDemo'
 import { ShadcnDemo } from './demos/shadcn/ShadcnDemo'
-import { InterfaceGuidelinesDemo } from './demos/InterfaceGuidelinesDemo'
-import { ScribbleIndexDemo } from './demos/ScribbleIndexDemo'
-import { GradientSpinDemo } from './demos/GradientSpinDemo'
 import { ReactiveDitherDemo } from './demos/ReactiveDitherDemo'
+import { LiquidConnectorDemo } from './demos/LiquidConnectorDemo'
 import { MeetingOverlayDetail } from './pages/MeetingOverlayDetail'
 import { FluidSpringsDetail } from './pages/FluidSpringsDetail'
 import { SheetDetail } from './pages/SheetDetail'
 import { MaterialsDetail } from './pages/MaterialsDetail'
-import { KnockoutBracketDetail } from './pages/KnockoutBracketDetail'
-import { BetterColorsDetail, BetterTypographyDetail, BetterUiDetail } from './pages/SkillDetails'
+import { BetterColorsDetail, BetterTypographyDetail } from './pages/SkillDetails'
 import { EmilSkillDetail } from './pages/EmilSkillDetail'
-import { SonnerDetail } from './pages/SonnerDetail'
+import { DesignEngineeringDetail } from './pages/DesignEngineeringDetail'
 import { ShadcnDetail } from './pages/ShadcnDetail'
-import { InterfaceGuidelinesDetail } from './pages/InterfaceGuidelinesDetail'
-import { ScribbleIndexDetail } from './pages/ScribbleIndexDetail'
-import { GradientSpinDetail } from './pages/GradientSpinDetail'
 import { ReactiveDitherDetail } from './pages/ReactiveDitherDetail'
+import { LiquidConnectorDetail } from './pages/LiquidConnectorDetail'
 import { EMIL_SKILL_DEFINITIONS, getEmilSkillDefinition, type EmilSkillDefinition } from './emilskills/catalog'
 import { MicroButtonsDetail } from './pages/MicroButtonsDetail'
 import { ScrollgalleryDetail } from './pages/ScrollgalleryDetail'
 import { BorderBeamDetail } from './pages/BorderBeamDetail'
-import { CuelumeDetail } from './pages/CuelumeDetail'
-import { PlaywrightCliDetail } from './pages/PlaywrightCliDetail'
-import { AnimationPrinciplesDetail } from './pages/AnimationPrinciplesDetail'
 import { TransitionDetail } from './pages/TransitionDetail'
 import { AiCssDetail } from './pages/AiCssDetail'
 import { usePath } from './router'
@@ -126,8 +113,8 @@ function CategoryFilter({
     const loop = (now: number) => {
       const dt = m.last === 0 ? 1 : Math.min(2.5, Math.max(0.25, (now - m.last) / 16.667))
       m.last = now
-      m.vx = (m.vx + (m.tx - m.x) * 0.11 * dt) * Math.pow(0.76, dt)
-      m.vw = (m.vw + (m.tw - m.w) * 0.11 * dt) * Math.pow(0.76, dt)
+      m.vx = (m.vx + (m.tx - m.x) * 0.11 * dt) * Math.pow(0.675, dt)
+      m.vw = (m.vw + (m.tw - m.w) * 0.11 * dt) * Math.pow(0.675, dt)
       m.x += m.vx * dt
       m.w += m.vw * dt
       m.gx += (m.gtx - m.gx) * Math.min(1, 0.2 * dt)
@@ -250,7 +237,7 @@ function CategoryFilter({
 
   return (
     <section aria-label="Filter experiments by category" className="flex min-w-0 flex-col gap-2">
-      <div className="-mx-1 overflow-x-auto px-1 pb-1">
+      <div className="-ml-1 -mr-1 overflow-x-auto pl-1 pr-1 pb-1">
         <div
           ref={tabsRef}
           role="tablist"
@@ -350,17 +337,6 @@ function Teaser() {
   )
 }
 
-function KnockoutBracketCard() {
-  return (
-    <LinkCard href="/vault/knockout-bracket">
-      <div className="relative mx-auto aspect-[1344/520] w-full select-none overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <KnockoutBracketDemo initialPage={2} compact light showNavigation={false} />
-      </div>
-      <RichCaption title="Road Cup Knockout" summary="A tournament bracket that advances winners round by round until one champion remains." category="Interfaces" />
-    </LinkCard>
-  )
-}
-
 function MicroButtonsCard() {
   return (
     <LinkCard href="/vault/micro-buttons">
@@ -390,39 +366,6 @@ function BorderBeamCard() {
         <BorderBeamDemo compact />
       </div>
       <RichCaption title="Gemini Button" summary="A button wrapped in a traveling border beam." category="Interactions" />
-    </LinkCard>
-  )
-}
-
-function CuelumeCard() {
-  return (
-    <LinkCard href="/vault/cuelume" interactive label="Open Interaction Sounds">
-      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <CuelumeDemo />
-      </div>
-      <RichCaption title="Interaction Sounds" summary="A soundboard of interface tones played through real controls." category="Interactions" />
-    </LinkCard>
-  )
-}
-
-function PlaywrightCliCard() {
-  return (
-    <LinkCard href="/vault/playwright-cli" interactive label="Open Playwright CLI">
-      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <PlaywrightCliDemo compact />
-      </div>
-      <RichCaption title="Playwright CLI" summary="A terminal-style walkthrough of driving a browser with the Playwright CLI." category="Skills" />
-    </LinkCard>
-  )
-}
-
-function AnimationPrinciplesCard() {
-  return (
-    <LinkCard href="/vault/animation-principles" interactive label="Open 12 Principles of Animation">
-      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <AnimationPrinciplesDemo compact />
-      </div>
-      <RichCaption title="12 Principles of Animation" summary="Disney's twelve animation principles, each demonstrated live." category="Motion" />
     </LinkCard>
   )
 }
@@ -488,35 +431,35 @@ const EMIL_SKILL_FEED_CARDS = EMIL_SKILL_DEFINITIONS.map((definition) => ({
   },
 })) satisfies readonly { path: string; category: VaultCategory; Card: ComponentType }[]
 
-function SonnerCard() {
+function DesignEngineeringCard() {
   return (
-    <LinkCard href="/vault/sonner" interactive label="Open Toast Notifications">
+    <LinkCard href="/vault/skill-design-eng" interactive label="Open Design Engineering">
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <SonnerDemo compact />
+        <EmilSkillsDemo id="emil-design-eng" compact />
       </div>
-      <RichCaption title="Toast Notifications" summary="Stacked toasts that slide in, spring into place, and swipe away." category="Interactions" />
+      <RichCaption title="Design Engineering" summary="Taste, animation vocabulary, motion principles, and UI upgrades in one place." category="Skills" />
     </LinkCard>
   )
 }
 
 function ReactiveDitherCard() {
   return (
-    <LinkCard href="/vault/reactive-dither" label="Open Reactive Dither">
+    <LinkCard href="/vault/reactive-dither" label="Open Liquid Dither Effect">
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <ReactiveDitherDemo compact />
       </div>
-      <RichCaption title="Reactive Dither" summary="A dithered cube mark that scatters under the pointer and springs back." category="Motion" />
+      <RichCaption title="Liquid Dither Effect" summary="A dithered cube mark that scatters under the pointer and springs back." category="Motion" />
     </LinkCard>
   )
 }
 
-function GradientSpinCard() {
+function LiquidConnectorCard() {
   return (
-    <LinkCard href="/vault/gradient-spin" label="Open Gradient Spin">
+    <LinkCard href="/vault/liquid-connector" interactive label="Open Liquid Connector">
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <GradientSpinDemo compact />
+        <LiquidConnectorDemo compact />
       </div>
-      <RichCaption title="Gradient Spin" summary="A silky spinning gradient you can retint with curated palettes." category="Motion" />
+      <RichCaption title="Liquid Connector" summary="A connector card that peels off the prompt with a liquid seam — the whole surface is one SVG path." category="Motion" />
     </LinkCard>
   )
 }
@@ -540,28 +483,6 @@ const SHADCN_FEED_CARDS = SHADCN_DEFINITIONS.map((definition) => ({
   },
 })) satisfies readonly { path: string; category: VaultCategory; Card: ComponentType }[]
 
-function InterfaceGuidelinesCard() {
-  return (
-    <LinkCard href="/vault/interface-guidelines" interactive label="Open Interface Craft Guidelines">
-      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <InterfaceGuidelinesDemo compact />
-      </div>
-      <RichCaption title="Interface Craft Guidelines" summary="A living checklist of interface-craft rules, each with a tiny demo." category="Skills" />
-    </LinkCard>
-  )
-}
-
-function ScribbleIndexCard() {
-  return (
-    <LinkCard href="/vault/scribble-index" interactive label="Open Scribble Index">
-      <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
-        <ScribbleIndexDemo compact />
-      </div>
-      <RichCaption title="Scribble Index" summary="A notes index that doubles as a magenta scribble pad." category="Interactions" />
-    </LinkCard>
-  )
-}
-
 function BetterColorsCard() {
   return (
     <LinkCard href="/vault/better-colors">
@@ -576,15 +497,6 @@ function BetterTypographyCard() {
     <LinkCard href="/vault/better-typography">
       <BetterTypographyDemo compact />
       <RichCaption title="Typography Skills" summary="Type settings and tweaks that make interface text read better." category="Skills" />
-    </LinkCard>
-  )
-}
-
-function BetterUiCard() {
-  return (
-    <LinkCard href="/vault/better-ui">
-      <BetterUiDemo compact />
-      <RichCaption title="Better UI" summary="Small interface upgrades that compound into a cleaner product." category="Skills" />
     </LinkCard>
   )
 }
@@ -618,7 +530,7 @@ function MeetingOverlayCard() {
         <OverlayDemo title="Work Session: New Portfolio" time="Tomorrow 06:00" holdMs={3200} />
       </div>
       <RichCaption
-        title="Stop missing your meetings"
+        title="Don't Miss Meetings"
         summary="A desktop-pet overlay that walks on screen to remind you before every meeting."
         category="Motion"
       />
@@ -629,24 +541,17 @@ function MeetingOverlayCard() {
 const FEED_CARDS = [
   { path: '/vault/meeting-overlay', category: 'Motion', Card: MeetingOverlayCard },
   { path: '/vault/reactive-dither', category: 'Motion', Card: ReactiveDitherCard },
-  { path: '/vault/gradient-spin', category: 'Motion', Card: GradientSpinCard },
-  { path: '/vault/scribble-index', category: 'Interactions', Card: ScribbleIndexCard },
+  { path: '/vault/liquid-connector', category: 'Motion', Card: LiquidConnectorCard },
+  { path: '/vault/skill-design-eng', category: 'Skills', Card: DesignEngineeringCard },
   ...EMIL_SKILL_FEED_CARDS,
-  { path: '/vault/sonner', category: 'Interactions', Card: SonnerCard },
   ...SHADCN_FEED_CARDS,
-  { path: '/vault/interface-guidelines', category: 'Skills', Card: InterfaceGuidelinesCard },
-  { path: '/vault/animation-principles', category: 'Motion', Card: AnimationPrinciplesCard },
   ...TRANSITION_FEED_CARDS,
   ...AICSS_FEED_CARDS,
-  { path: '/vault/playwright-cli', category: 'Skills', Card: PlaywrightCliCard },
-  { path: '/vault/cuelume', category: 'Interactions', Card: CuelumeCard },
   { path: '/vault/border-beam', category: 'Interactions', Card: BorderBeamCard },
   { path: '/vault/chief-keef-index', category: 'Interfaces', Card: ScrollgalleryCard },
   { path: '/vault/micro-buttons', category: 'Interactions', Card: MicroButtonsCard },
   { path: '/vault/better-colors', category: 'Skills', Card: BetterColorsCard },
   { path: '/vault/better-typography', category: 'Skills', Card: BetterTypographyCard },
-  { path: '/vault/better-ui', category: 'Skills', Card: BetterUiCard },
-  { path: '/vault/knockout-bracket', category: 'Interfaces', Card: KnockoutBracketCard },
   { path: '/vault/bottom-sheet', category: 'Interactions', Card: SheetCard },
   { path: '/vault/fluid-springs', category: 'Motion', Card: FluidSpringsCard },
 ] satisfies readonly { path: string; category: VaultCategory; Card: ComponentType }[]
@@ -702,22 +607,15 @@ export default function App() {
     transition ? <TransitionDetail definition={transition} />
     : aiCss ? <AiCssDetail definition={aiCss} />
     : emilSkill ? <EmilSkillDetail definition={emilSkill} />
+    : path === '/vault/skill-design-eng' ? <DesignEngineeringDetail />
     : shadcn ? <ShadcnDetail definition={shadcn} />
     : path === '/vault/reactive-dither' ? <ReactiveDitherDetail />
-    : path === '/vault/gradient-spin' ? <GradientSpinDetail />
-    : path === '/vault/scribble-index' ? <ScribbleIndexDetail />
-    : path === '/vault/interface-guidelines' ? <InterfaceGuidelinesDetail />
-    : path === '/vault/sonner' ? <SonnerDetail />
-    : path === '/vault/animation-principles' ? <AnimationPrinciplesDetail />
-    : path === '/vault/playwright-cli' ? <PlaywrightCliDetail />
-    : path === '/vault/cuelume' ? <CuelumeDetail />
+    : path === '/vault/liquid-connector' ? <LiquidConnectorDetail />
     : path === '/vault/border-beam' ? <BorderBeamDetail />
     : path === '/vault/chief-keef-index' ? <ScrollgalleryDetail />
     : path === '/vault/micro-buttons' ? <MicroButtonsDetail />
     : path === '/vault/better-colors' ? <BetterColorsDetail />
     : path === '/vault/better-typography' ? <BetterTypographyDetail />
-    : path === '/vault/better-ui' ? <BetterUiDetail />
-    : path === '/vault/knockout-bracket' ? <KnockoutBracketDetail />
     : path === '/vault/meeting-overlay' ? <MeetingOverlayDetail />
     : path === '/vault/fluid-springs' ? <FluidSpringsDetail />
     : path === '/vault/bottom-sheet' ? <SheetDetail />

@@ -1,24 +1,17 @@
 import {
   CaretDown,
   Check,
-  CheckCircle,
   Circle,
   CircleNotch,
-  Copy,
-  FileCode,
   GlobeHemisphereWest,
-  ImageSquare,
   LinkSimple,
   ListChecks,
   MagnifyingGlass,
-  Minus,
-  Sparkle,
 } from '@phosphor-icons/react'
 import {
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type ReactNode,
 } from 'react'
 import type { AiCssId } from '../../aicss/catalog'
@@ -57,19 +50,6 @@ function Specimen({
     <section className={`ac-specimen ${className}`} aria-label={label}>
       {children}
     </section>
-  )
-}
-
-function ThinkingState({ controls }: SpecimenProps) {
-  const [cycle, setCycle] = useState(0)
-  const replay = () => setCycle((value) => value + 1)
-  const reset = replay
-  exposeControls(controls, replay, reset)
-
-  return (
-    <Specimen label="Assistant thinking state" className="ac-thinking-state">
-      <span key={cycle} className="ac-thinking-label"><Sparkle size={14} weight="fill" /> Thinking</span>
-    </Specimen>
   )
 }
 
@@ -212,89 +192,42 @@ function WebSearch({ controls, compact }: SpecimenProps) {
   )
 }
 
-const DIFF_LINES = [
-  { kind: 'same', number: '18', text: 'const session = await getSession(request)' },
-  { kind: 'remove', number: '19', text: 'if (!session) return null' },
-  { kind: 'add', number: '19', text: 'if (!session) {' },
-  { kind: 'add', number: '20', text: "  throw new AuthError('Sign in required')" },
-  { kind: 'add', number: '21', text: '}' },
-  { kind: 'same', number: '22', text: 'return session.user' },
-] as const
-
-function FileDiff({ controls }: SpecimenProps) {
-  const [cycle, setCycle] = useState(0)
-  const replay = () => setCycle((value) => value + 1)
-  const reset = replay
-  exposeControls(controls, replay, reset)
-
-  return (
-    <Specimen label="Proposed file diff" className="ac-file-diff">
-      <div key={cycle} className="ac-diff-card">
-        <header><span><FileCode size={14} /> auth.ts</span><span className="ac-diff-counts"><b>+4</b><i>−1</i></span></header>
-        <div className="ac-diff-code">
-          {DIFF_LINES.map((line, index) => (
-            <div key={`${line.number}-${index}`} data-kind={line.kind} style={{ '--ac-i': index } as CSSProperties}>
-              <span>{line.number}</span><i>{line.kind === 'add' ? '+' : line.kind === 'remove' ? '−' : ' '}</i><code>{line.text}</code>
-            </div>
-          ))}
-        </div>
-      </div>
-    </Specimen>
-  )
-}
-
-function ImageGeneration({ controls, compact }: SpecimenProps) {
-  const [run, setRun] = useState(0)
-  const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    setDone(false)
-    const timer = window.setTimeout(() => setDone(true), compact ? 1800 : 2600)
-    return () => window.clearTimeout(timer)
-  }, [compact, run])
-
-  const replay = () => setRun((value) => value + 1)
-  const reset = replay
-  exposeControls(controls, replay, reset)
-
-  return (
-    <Specimen label="Image generation loading state" className="ac-image-generation">
-      <div className="ac-image-card" data-done={done ? 'true' : 'false'} aria-live="polite">
-        <div className="ac-generated-art" aria-label={done ? 'Generated abstract landscape' : 'Generating image'}>
-          <span className="ac-art-sun" /><span className="ac-art-hill ac-art-hill-one" /><span className="ac-art-hill ac-art-hill-two" />
-          <span className="ac-image-shimmer" />
-          <span className="ac-image-status">{done ? <><CheckCircle size={14} weight="fill" /> Generated</> : <><ImageSquare size={14} /> Generating…</>}</span>
-        </div>
-        <p>A quiet landscape made of paper and morning light</p>
-      </div>
-    </Specimen>
-  )
-}
-
-function TextResponse({ controls }: SpecimenProps) {
-  const [cycle, setCycle] = useState(0)
-  const replay = () => setCycle((value) => value + 1)
-  const reset = replay
-  exposeControls(controls, replay, reset)
-
-  return (
-    <Specimen label="Formatted assistant response" className="ac-text-response">
-      <article key={cycle}>
-        <p>A useful loading state does two things: it <strong>confirms the request</strong> and sets an honest expectation.</p>
-        <p>Keep the existing layout stable, use <code>aria-live</code> for meaningful updates, and let the final content replace the placeholder in place.</p>
-      </article>
-    </Specimen>
-  )
-}
-
 const STREAM_TEXT = 'A good interface explains what is happening, preserves context, and makes the next action feel obvious.'
 
 function StreamingText({ controls, compact }: SpecimenProps) {
+  const root = useRef<HTMLParagraphElement>(null)
   const [run, setRun] = useState(0)
   const [length, setLength] = useState(0)
+  const [inView, setInView] = useState(!compact)
+
+  useEffect(() => {
+    if (!compact) {
+      setInView(true)
+      return
+    }
+
+    const node = root.current
+    if (!node || !('IntersectionObserver' in window)) {
+      setInView(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setInView(entry.isIntersecting && entry.intersectionRatio >= 0.35)
+    }, { threshold: [0, 0.35, 0.75] })
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [compact])
 
   useEffect(() => {
     setLength(0)
+
+    if (compact && !inView) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setLength(STREAM_TEXT.length)
+      return
+    }
+
     const speed = compact ? 20 : 30
     const timer = window.setInterval(() => {
       setLength((value) => {
@@ -307,7 +240,7 @@ function StreamingText({ controls, compact }: SpecimenProps) {
       })
     }, speed)
     return () => window.clearInterval(timer)
-  }, [compact, run])
+  }, [compact, inView, run])
 
   const replay = () => setRun((value) => value + 1)
   const reset = replay
@@ -315,7 +248,7 @@ function StreamingText({ controls, compact }: SpecimenProps) {
 
   return (
     <Specimen label="Streaming text response" className="ac-streaming-text">
-      <p aria-live="polite">{STREAM_TEXT.slice(0, length)}<span data-done={length >= STREAM_TEXT.length ? 'true' : 'false'} className="ac-caret" /></p>
+      <p ref={root} data-in-view={inView ? 'true' : 'false'} aria-live="polite">{STREAM_TEXT.slice(0, length)}<span data-done={length >= STREAM_TEXT.length ? 'true' : 'false'} className="ac-caret" /></p>
     </Specimen>
   )
 }
@@ -348,41 +281,6 @@ function InlineCitations({ controls }: SpecimenProps) {
           ))}
         </footer>
       </article>
-    </Specimen>
-  )
-}
-
-const CODE_LINES = [
-  ['keyword', 'export'],
-  ['plain', ' function '],
-  ['function', 'formatStatus'],
-  ['plain', '(state: '],
-  ['type', 'State'],
-  ['plain', ') {\n  '],
-  ['keyword', 'return'],
-  ['plain', " state === 'done' ? "],
-  ['string', "'Ready'"],
-  ['plain', " : "],
-  ['string', "'Working…'"],
-  ['plain', '\n}'],
-] as const
-
-function CodeBlock({ controls }: SpecimenProps) {
-  const [copied, setCopied] = useState(false)
-  const replay = () => {
-    navigator.clipboard?.writeText("export function formatStatus(state: State) {\n  return state === 'done' ? 'Ready' : 'Working…'\n}").catch(() => {})
-    setCopied(true)
-    window.setTimeout(() => setCopied(false), 1400)
-  }
-  const reset = () => setCopied(false)
-  exposeControls(controls, replay, reset)
-
-  return (
-    <Specimen label="Copyable code block" className="ac-code-block">
-      <div>
-        <header><span><FileCode size={13} /> utils.ts</span><button type="button" onClick={replay}>{copied ? <Check size={12} weight="bold" /> : <Copy size={12} />}{copied ? 'Copied' : 'Copy'}</button></header>
-        <pre><code>{CODE_LINES.map(([kind, text], index) => <span key={index} data-token={kind}>{text}</span>)}</code></pre>
-      </div>
     </Specimen>
   )
 }
@@ -428,87 +326,12 @@ function TaskList({ controls }: SpecimenProps) {
   )
 }
 
-const TABLE_ROWS = [
-  { model: 'gpt-4o', context: 128, price: 2.5 },
-  { model: 'claude-3.5', context: 200, price: 3 },
-  { model: 'llama-3.1', context: 128, price: 0.9 },
-] as const
-
-function DataTable({ controls }: SpecimenProps) {
-  const [sort, setSort] = useState<'model' | 'context' | 'price'>('model')
-  const [ascending, setAscending] = useState(true)
-  const chooseSort = (next: typeof sort) => {
-    if (sort === next) setAscending((value) => !value)
-    else { setSort(next); setAscending(true) }
-  }
-  const replay = () => chooseSort(sort === 'model' ? 'context' : sort === 'context' ? 'price' : 'model')
-  const reset = () => { setSort('model'); setAscending(true) }
-  exposeControls(controls, replay, reset)
-  const rows = [...TABLE_ROWS].sort((a, b) => {
-    const left = a[sort]
-    const right = b[sort]
-    const result = typeof left === 'string' ? left.localeCompare(String(right)) : Number(left) - Number(right)
-    return ascending ? result : -result
-  })
-
-  return (
-    <Specimen label="Sortable model data table" className="ac-data-table">
-      <div className="ac-table-scroll">
-        <table>
-          <thead><tr>
-            <th><button type="button" onClick={() => chooseSort('model')}>Model <span>{sort === 'model' ? ascending ? '↑' : '↓' : ''}</span></button></th>
-            <th><button type="button" onClick={() => chooseSort('context')}>Context <span>{sort === 'context' ? ascending ? '↑' : '↓' : ''}</span></button></th>
-            <th><button type="button" onClick={() => chooseSort('price')}>$/1M in <span>{sort === 'price' ? ascending ? '↑' : '↓' : ''}</span></button></th>
-          </tr></thead>
-          <tbody>{rows.map((row) => <tr key={row.model}><td><span className="ac-model-dot" />{row.model}</td><td>{row.context}K</td><td>${row.price.toFixed(2)}</td></tr>)}</tbody>
-        </table>
-      </div>
-    </Specimen>
-  )
-}
-
-const FEATURES = [
-  ['Projects', '3', 'Unlimited'],
-  ['Team members', '1', 'Unlimited'],
-  ['Private workspaces', false, true],
-  ['Priority support', false, true],
-] as const
-
-function ComparisonTable({ controls }: SpecimenProps) {
-  const [selected, setSelected] = useState<'personal' | 'enterprise'>('enterprise')
-  const replay = () => setSelected((value) => value === 'personal' ? 'enterprise' : 'personal')
-  const reset = () => setSelected('enterprise')
-  exposeControls(controls, replay, reset)
-
-  return (
-    <Specimen label="Selectable plan comparison table" className="ac-comparison-table">
-      <div className="ac-table-scroll">
-        <table data-selected={selected}>
-          <thead><tr><th>Feature</th><th><button type="button" onClick={() => setSelected('personal')}>Personal</button></th><th><button type="button" onClick={() => setSelected('enterprise')}>Enterprise</button></th></tr></thead>
-          <tbody>{FEATURES.map(([feature, personal, enterprise]) => <tr key={feature}>
-            <td>{feature}</td>
-            <td>{typeof personal === 'boolean' ? personal ? <Check size={13} weight="bold" /> : <Minus size={13} /> : personal}</td>
-            <td>{typeof enterprise === 'boolean' ? enterprise ? <Check size={13} weight="bold" /> : <Minus size={13} /> : enterprise}</td>
-          </tr>)}</tbody>
-        </table>
-      </div>
-    </Specimen>
-  )
-}
-
 const COMPONENTS: Record<AiCssId, (props: SpecimenProps) => ReactNode> = {
-  'thinking-state': ThinkingState,
   'thinking-reasoning': ThinkingReasoning,
   'web-search': WebSearch,
-  'file-diff': FileDiff,
-  'image-generation': ImageGeneration,
-  'text-response': TextResponse,
   'streaming-text': StreamingText,
   'inline-citations': InlineCitations,
-  'code-block': CodeBlock,
   'task-list': TaskList,
-  'data-table': DataTable,
-  'comparison-table': ComparisonTable,
 }
 
 export function AiCssDemo({

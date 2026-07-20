@@ -221,171 +221,6 @@ function VocabularyDemo({ active, compact, controls, variant }: DemoProps) {
   )
 }
 
-const AUDIT_FINDINGS: Partial<Record<EmilSkillVariantId, [string, string]>> = {
-  'audit-purpose': ['Decorative entrance', 'Remove motion'],
-  'audit-easing': ['linear · 420ms', 'ease-out · 180ms'],
-  'audit-performance': ['animates bottom', 'translateY + opacity'],
-  'audit-accessibility': ['motion only', 'state preserved'],
-}
-
-function MotionAuditDemo({ active, compact, controls, variant }: DemoProps) {
-  const [playing, setPlaying] = useState(false)
-  const [cycle, setCycle] = useState(0)
-  const finding = AUDIT_FINDINGS[variant] ?? AUDIT_FINDINGS['audit-easing']!
-
-  const reset = () => {
-    setPlaying(false)
-    setCycle(0)
-  }
-  const settle = () => setPlaying(false)
-  const replay = () => {
-    setPlaying(true)
-    setCycle((value) => value + 1)
-  }
-
-  useAutoplay({ active, compact, controls, interval: 3700, replay, reset, settle, variant })
-
-  return (
-    <section className="ek-stage ek-audit-stage" aria-label={`${finding[0]} compared with ${finding[1]}`}>
-      <div
-        className="ek-audit-compare"
-        data-playing={playing ? 'true' : 'false'}
-        data-variant={variant}
-        role="group"
-        aria-label={`Before and after comparison: ${finding[0]} versus ${finding[1]}`}
-      >
-        <button
-          type="button"
-          className="ek-audit-side"
-          data-outcome="wrong"
-          onClick={replay}
-          aria-label={`Replay before example: ${finding[0]}`}
-        >
-          <span className="ek-audit-label">Before</span>
-          <span key={`wrong-${cycle}`} className="ek-audit-specimen" data-outcome="wrong">
-            <strong>Update ready</strong>
-            <small>Restart to apply</small>
-          </span>
-          <span className="ek-audit-detail">{finding[0]}</span>
-        </button>
-        <span className="ek-audit-divider" aria-hidden="true" />
-        <button
-          type="button"
-          className="ek-audit-side"
-          data-outcome="correct"
-          onClick={replay}
-          aria-label={`Replay after example: ${finding[1]}`}
-        >
-          <span className="ek-audit-label">After</span>
-          <span key={`correct-${cycle}`} className="ek-audit-specimen" data-outcome="correct">
-            <strong>Update ready</strong>
-            <small>Restart to apply</small>
-          </span>
-          <span className="ek-audit-detail">{finding[1]}</span>
-        </button>
-      </div>
-    </section>
-  )
-}
-
-function OpportunityDemo({ active, compact, controls, variant }: DemoProps) {
-  const [on, setOn] = useState(false)
-  const [cycle, setCycle] = useState(0)
-  const replay = () => {
-    setOn((value) => !value)
-    setCycle((value) => value + 1)
-  }
-  const reset = () => setOn(false)
-  const settle = () => setOn(true)
-  useAutoplay({ active, compact, controls, interval: 3200, replay, reset, settle, variant })
-
-  if (variant === 'disclosure') {
-    return (
-      <section className="ek-stage" aria-label="Animated disclosure opportunity">
-        <button type="button" className="ek-disclosure" data-open={on ? 'true' : 'false'} onClick={replay} aria-expanded={on}>
-          <span>Project details <CaretDown size={14} weight="bold" /></span>
-          <i><b /><b /></i>
-        </button>
-      </section>
-    )
-  }
-
-  if (variant === 'press-feedback') {
-    return (
-      <section className="ek-stage" aria-label="Button press feedback opportunity">
-        <button key={cycle} type="button" className="ek-press-button" onClick={replay}>Submit</button>
-      </section>
-    )
-  }
-
-  if (variant === 'rejected-label') {
-    return (
-      <section className="ek-stage" aria-label="Rejected decorative animation">
-        <button type="button" className="ek-rejected-motion" onClick={replay}>
-          <span>Status label</span><small>No motion needed</small>
-        </button>
-      </section>
-    )
-  }
-
-  return (
-    <section className="ek-stage" aria-label="Animated counter opportunity">
-      <button type="button" className="ek-counter-card" onClick={replay}>
-        <small>Notifications</small>
-        <span key={cycle}>{on ? 13 : 12}</span>
-      </button>
-    </section>
-  )
-}
-
-const REVIEW_LABELS: Partial<Record<EmilSkillVariantId, string>> = {
-  'review-duration': '180ms',
-  'review-easing': 'ease-out',
-  'review-performance': 'transform + opacity',
-  'review-interruptibility': 'interruptible',
-}
-
-function ReviewDemo({ active, compact, controls, variant }: DemoProps) {
-  const [entered, setEntered] = useState(false)
-  const [passed, setPassed] = useState(false)
-  const [cycle, setCycle] = useState(0)
-  const timers = useRef<number[]>([])
-
-  const reset = () => {
-    clearTimers(timers)
-    setEntered(false)
-    setPassed(false)
-  }
-  const settle = () => {
-    clearTimers(timers)
-    setEntered(true)
-    setPassed(true)
-  }
-  const replay = () => {
-    clearTimers(timers)
-    setEntered(false)
-    setPassed(false)
-    setCycle((value) => value + 1)
-    timers.current.push(window.setTimeout(() => setEntered(true), 100))
-    timers.current.push(window.setTimeout(() => setPassed(true), 680))
-  }
-
-  useAutoplay({ active, compact, controls, interval: 3400, replay, reset, settle, variant })
-  useEffect(() => () => clearTimers(timers), [])
-
-  return (
-    <section className="ek-stage" aria-label="Single animation review">
-      <button type="button" className="ek-review-card" onClick={replay}>
-        <span key={cycle} className="ek-review-toast" data-entered={entered ? 'true' : 'false'}><i /> Saved</span>
-        <span className="ek-review-verdict" data-passed={passed ? 'true' : 'false'}>
-          {passed ? <Check size={12} weight="bold" /> : null}
-          {passed ? `Pass · ${REVIEW_LABELS[variant] ?? 'crafted'}` : 'Reviewing…'}
-        </span>
-      </button>
-    </section>
-  )
-}
-
 function AppleDemo({ active, compact, controls, variant }: DemoProps) {
   const [on, setOn] = useState(false)
   const [open, setOpen] = useState(false)
@@ -523,9 +358,6 @@ function AppleDemo({ active, compact, controls, variant }: DemoProps) {
 const DEFAULT_VARIANTS: Record<EmilSkillId, EmilSkillVariantId> = {
   'emil-design-eng': 'button-feedback',
   'animation-vocabulary': 'pop-in',
-  'improve-animations': 'audit-easing',
-  'find-animation-opportunities': 'counter',
-  'review-animations': 'review-performance',
   'apple-design': 'interruptible-toggle',
 }
 
@@ -549,9 +381,6 @@ export function EmilSkillsDemo({
     >
       {id === 'emil-design-eng' ? <DesignEngineeringDemo {...props} /> : null}
       {id === 'animation-vocabulary' ? <VocabularyDemo {...props} /> : null}
-      {id === 'improve-animations' ? <MotionAuditDemo {...props} /> : null}
-      {id === 'find-animation-opportunities' ? <OpportunityDemo {...props} /> : null}
-      {id === 'review-animations' ? <ReviewDemo {...props} /> : null}
       {id === 'apple-design' ? <AppleDemo {...props} /> : null}
     </div>
   )

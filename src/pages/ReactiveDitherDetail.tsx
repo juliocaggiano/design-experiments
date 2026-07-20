@@ -1,8 +1,14 @@
-import { useRef } from 'react'
-import { ReactiveDitherDemo, type ReactiveDitherControls } from '../demos/ReactiveDitherDemo'
+import { useRef, useState } from 'react'
+import {
+  REACTIVE_DITHER_DEFAULTS,
+  ReactiveDitherControlPanel,
+  ReactiveDitherDemo,
+  type ReactiveDitherControls,
+  type ReactiveDitherSettings,
+} from '../demos/ReactiveDitherDemo'
 import demoSrc from '../demos/ReactiveDitherDemo.tsx?raw'
 import demoCss from '../demos/ReactiveDitherDemo.css?raw'
-import { ChipButton, CodeTabs, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
+import { ChipButton, CodeTabs, ControlsSection, CopyPromptChip, CreditRows, DetailShell, assembleCopy } from './detail-kit'
 
 const BUILD_PROMPT = `Build a light-mode React card that renders a shaded cube-tile logo as a field of real canvas dots that react to the pointer.
 
@@ -71,8 +77,8 @@ const REUSABLE_EXAMPLE = `type Dot = { hx: number; hy: number; x: number; y: num
 
 const R = 92          // interaction radius
 const strength = 30   // displacement at the field center
-const stiffness = 0.11
-const damping = 0.83
+const stiffness = 0.08
+const damping = 0.77
 
 function frame() {
   for (const d of dots) {
@@ -99,17 +105,27 @@ function frame() {
 
 export function ReactiveDitherDetail() {
   const controls = useRef<ReactiveDitherControls>({}).current
+  const [settings, setSettings] = useState<ReactiveDitherSettings>(REACTIVE_DITHER_DEFAULTS)
 
   return (
-    <DetailShell title="Reactive Dither">
-      <div
-        aria-label="Reactive dither preview"
-        className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]"
-      >
-        <ReactiveDitherDemo compact />
-      </div>
-
+    <DetailShell title="Liquid Dither Effect">
       <div className="flex min-w-0 flex-col gap-14">
+        <div className="flex min-w-0 flex-col gap-6">
+        <section className="flex min-w-0 flex-col gap-4">
+          <div className="min-w-0 overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)]">
+            <ReactiveDitherDemo chrome="stage" settings={settings} onSettingsChange={setSettings} controls={controls} />
+          </div>
+          <p className="text-[12px] text-[var(--text-tertiary)]">
+            Move across the mark to displace it; leave and the dots settle home. Every control updates the live canvas
+            immediately.
+          </p>
+        </section>
+
+        <ControlsSection actions={<ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>}>
+          <ReactiveDitherControlPanel settings={settings} onChange={setSettings} />
+        </ControlsSection>
+        </div>
+
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
             A mark made of thousands of individual dots feels alive when it reacts to you. Move the pointer across the
@@ -118,27 +134,10 @@ export function ReactiveDitherDetail() {
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
             The effect is rebuilt locally as a real canvas particle system: an offscreen mask sampled into a dot grid,
-            a radial push with cubic falloff, and a damped spring return. The thumbnail, expanded hero, and
-            implementation below all run the same engine with the same visual defaults.
+            a radial push with cubic falloff, and a damped spring return. The thumbnail and the implementation
+            above run the same engine with the same visual defaults.
           </p>
         </div>
-
-        <section className="flex min-w-0 flex-col gap-4">
-          <header className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">
-            <h2 className="font-semibold text-[var(--text-primary)]">Implementation</h2>
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] text-[var(--text-tertiary)]">Live controls</span>
-              <ChipButton onClick={() => controls.reset?.()}>Reset</ChipButton>
-            </div>
-          </header>
-          <div className="min-w-0 overflow-hidden rounded-xl border border-[var(--border-line)] bg-[var(--bg-page)]">
-            <ReactiveDitherDemo controls={controls} />
-          </div>
-          <p className="text-[12px] text-[var(--text-tertiary)]">
-            Move across the mark to displace it; leave and the dots settle home. Every control updates the live canvas
-            immediately.
-          </p>
-        </section>
 
         <section className="flex min-w-0 flex-col gap-5">
           <header className="flex items-center justify-between gap-3 border-b border-[var(--border-line)] pb-2">

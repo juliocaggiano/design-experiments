@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { SliderChip, SwitchChip } from '../pages/detail-kit'
 import './ReactiveDitherDemo.css'
 
 /*
@@ -53,8 +54,8 @@ const DEFAULT_SETTINGS: DitherSettings = {
   dotRadius: 0.65,
   interactionRadius: 100,
   strength: 16,
-  stiffness: 0.11,
-  damping: 0.85,
+  stiffness: 0.08,
+  damping: 0.77,
   falloff: 2,
   invert: false,
 }
@@ -65,21 +66,26 @@ const MARK_FILL = 0.62 // mark side as a fraction of the stage's smaller edge
 const IDLE_DELAY_MS = 4500 // pointer absence before the idle drift resumes
 const IDLE_GAIN = 0.55 // the idle drift stays noticeably subtler than a pointer
 
+export type ReactiveDitherSettings = DitherSettings
+
+export const REACTIVE_DITHER_DEFAULTS: DitherSettings = DEFAULT_SETTINGS
+
 const RANGE_CONTROLS: readonly {
   key: keyof Omit<DitherSettings, 'invert'>
   label: string
   min: number
   max: number
   step: number
+  round: (value: number) => number
   format: (value: number) => string
 }[] = [
-  { key: 'spacing', label: 'Dot spacing', min: 2.4, max: 10, step: 0.2, format: (v) => `${v.toFixed(1)} px` },
-  { key: 'dotRadius', label: 'Dot size', min: 0.6, max: 1.5, step: 0.05, format: (v) => `×${v.toFixed(2)}` },
-  { key: 'interactionRadius', label: 'Interaction radius', min: 36, max: 200, step: 2, format: (v) => `${Math.round(v)} px` },
-  { key: 'strength', label: 'Displacement strength', min: 0, max: 80, step: 1, format: (v) => `${Math.round(v)} px` },
-  { key: 'stiffness', label: 'Return stiffness', min: 0.03, max: 0.26, step: 0.005, format: (v) => v.toFixed(3) },
-  { key: 'damping', label: 'Damping', min: 0.7, max: 0.96, step: 0.005, format: (v) => v.toFixed(3) },
-  { key: 'falloff', label: 'Falloff intensity', min: 1, max: 5, step: 0.25, format: (v) => (v === 3 ? '3 · cubic' : v.toFixed(2)) },
+  { key: 'spacing', label: 'Dot spacing', min: 2.4, max: 10, step: 0.2, round: (v) => Math.round(v * 10) / 10, format: (v) => `${v.toFixed(1)} px` },
+  { key: 'dotRadius', label: 'Dot size', min: 0.6, max: 1.5, step: 0.05, round: (v) => Math.round(v * 100) / 100, format: (v) => `×${v.toFixed(2)}` },
+  { key: 'interactionRadius', label: 'Interaction radius', min: 36, max: 200, step: 2, round: Math.round, format: (v) => `${Math.round(v)} px` },
+  { key: 'strength', label: 'Displacement strength', min: 0, max: 80, step: 1, round: Math.round, format: (v) => `${Math.round(v)} px` },
+  { key: 'stiffness', label: 'Return stiffness', min: 0.03, max: 0.26, step: 0.005, round: (v) => Math.round(v * 1000) / 1000, format: (v) => v.toFixed(3) },
+  { key: 'damping', label: 'Damping', min: 0.7, max: 0.96, step: 0.005, round: (v) => Math.round(v * 1000) / 1000, format: (v) => v.toFixed(3) },
+  { key: 'falloff', label: 'Falloff intensity', min: 1, max: 5, step: 0.25, round: (v) => Math.round(v * 100) / 100, format: (v) => (v === 3 ? '3 · cubic' : v.toFixed(2)) },
 ]
 
 function roundedRectPath(
@@ -200,20 +206,33 @@ function usePrefersReducedMotion() {
 export function ReactiveDitherDemo({
   compact = false,
   controls,
+  settings: settingsProp,
+  onSettingsChange,
+  chrome = 'full',
 }: {
   compact?: boolean
   controls?: ReactiveDitherControls
+  /* Controlled mode lets a detail page mount the stage and the control panel
+     as separate siblings while one engine keeps running. */
+  settings?: DitherSettings
+  onSettingsChange?: (next: DitherSettings) => void
+  chrome?: 'full' | 'stage'
 }) {
   const rootRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const engineRef = useRef<DitherEngine | null>(null)
   const reduced = usePrefersReducedMotion()
-  const [settings, setSettings] = useState<DitherSettings>(DEFAULT_SETTINGS)
+  const [internalSettings, setInternalSettings] = useState<DitherSettings>(DEFAULT_SETTINGS)
+  const settings = settingsProp ?? internalSettings
+  const updateSettings = useCallback((recipe: (current: DitherSettings) => DitherSettings) => {
+    if (onSettingsChange) onSettingsChange(recipe(settingsProp ?? internalSettings))
+    else setInternalSettings((current) => recipe(current))
+  }, [onSettingsChange, settingsProp, internalSettings])
   const settingsRef = useRef(settings)
   const previousSettingsRef = useRef(settings)
 
-  const reset = useCallback(() => setSettings(DEFAULT_SETTINGS), [])
+  const reset = useCallback(() => updateSettings(() => DEFAULT_SETTINGS), [updateSettings])
 
   useEffect(() => {
     if (!controls) return
@@ -623,51 +642,47 @@ export function ReactiveDitherDemo({
         />
       </div>
 
-      {!compact ? (
-        <div className="rd-controls" aria-label="Reactive dither settings">
-          <div className="rd-ranges">
-            {RANGE_CONTROLS.map((control) => (
-              <label className="rd-range" key={control.key}>
-                <span className="rd-range-copy">
-                  <span>{control.label}</span>
-                  <output>{control.format(settings[control.key])}</output>
-                </span>
-                <input
-                  aria-label={control.label}
-                  type="range"
-                  min={control.min}
-                  max={control.max}
-                  step={control.step}
-                  value={settings[control.key]}
-                  onChange={(event) => {
-                    const value = Number(event.currentTarget.value)
-                    setSettings((current) => ({ ...current, [control.key]: value }))
-                  }}
-                />
-              </label>
-            ))}
-            <fieldset className="rd-control-group">
-              <legend>Color</legend>
-              <div className="rd-segmented">
-                <button
-                  type="button"
-                  aria-pressed={!settings.invert}
-                  onClick={() => setSettings((current) => ({ ...current, invert: false }))}
-                >
-                  Normal
-                </button>
-                <button
-                  type="button"
-                  aria-pressed={settings.invert}
-                  onClick={() => setSettings((current) => ({ ...current, invert: true }))}
-                >
-                  Inverted
-                </button>
-              </div>
-            </fieldset>
-          </div>
-        </div>
+      {!compact && chrome === 'full' ? (
+        <ReactiveDitherControlPanel settings={settings} onChange={(next) => updateSettings(() => next)} embedded />
       ) : null}
+    </div>
+  )
+}
+
+/* Control panel: shared SliderChip / SwitchChip bars from detail-kit (same
+   look and interaction as every other detail page); the invert setting is a
+   switch bar. Values are rounded per control so the formatted readouts and
+   QA-facing aria-valuetext stay stable. */
+export function ReactiveDitherControlPanel({
+  settings,
+  onChange,
+  embedded = false,
+}: {
+  settings: DitherSettings
+  onChange: (next: DitherSettings) => void
+  embedded?: boolean
+}) {
+  return (
+    <div
+      className={`rd-controls${embedded ? ' rd-controls--embedded' : ''} grid grid-cols-1 gap-3 sm:grid-cols-2`}
+      aria-label="Liquid dither effect settings"
+    >
+      {RANGE_CONTROLS.map((control) => (
+        <SliderChip
+          key={control.key}
+          label={control.label}
+          min={control.min}
+          max={control.max}
+          value={settings[control.key]}
+          format={control.format}
+          onChange={(v) => onChange({ ...settings, [control.key]: control.round(v) })}
+        />
+      ))}
+      <SwitchChip
+        label="Inverted"
+        checked={settings.invert}
+        onChange={(next) => onChange({ ...settings, invert: next })}
+      />
     </div>
   )
 }
