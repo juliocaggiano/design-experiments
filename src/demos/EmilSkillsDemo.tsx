@@ -194,6 +194,39 @@ function DesignEngineeringDemo({ active, compact, controls, variant }: DemoProps
   )
 }
 
+/* Feed-only thumbnail (batch 11): the Pinterest banking-UI reference
+   (artifacts/design-qa/batch11-2026-07-20/ref/pinterest-banking-app.jpg)
+   translated to the vault's light grayscale. Static by design — the
+   reference is a still UI frame, so there is no autoplay loop and reduced
+   motion is trivially satisfied. The detail page keeps the interactive
+   button-feedback specimen; the divergence is documented in PROJECT.md. */
+function DesignEngineeringThumb() {
+  return (
+    <section className="ek-stage" aria-label="Banking UI composition">
+      <div className="de-thumb" aria-hidden="true">
+        <div className="de-head">
+          <span className="de-avatar"><i /></span>
+          <span className="de-id">
+            <strong>Matango Inc</strong>
+            <small>hello@matango.co</small>
+          </span>
+          <strong className="de-balance">$11,000.00</strong>
+        </div>
+        <div className="de-card">
+          <div className="de-seg">
+            <span>Bank</span><span>Card</span><span className="de-pill">Pay Later</span>
+          </div>
+          <div className="de-seg">
+            <span className="de-pill">30</span><span>60</span><span>90</span><span>Days</span>
+          </div>
+          <div className="de-row"><span>Fee 1.6%</span><span>$176.00</span></div>
+          <div className="de-row de-total"><span>Total</span><span>$11,176.00</span></div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 const VOCAB_LABELS: Partial<Record<EmilSkillVariantId, string>> = {
   'pop-in': 'Pop in',
   'rubber-band': 'Rubber-banding',
@@ -379,7 +412,7 @@ export function EmilSkillsDemo({
       data-skill={id}
       data-variant={variant}
     >
-      {id === 'emil-design-eng' ? <DesignEngineeringDemo {...props} /> : null}
+      {id === 'emil-design-eng' ? (compact ? <DesignEngineeringThumb /> : <DesignEngineeringDemo {...props} />) : null}
       {id === 'animation-vocabulary' ? <VocabularyDemo {...props} /> : null}
       {id === 'apple-design' ? <AppleDemo {...props} /> : null}
     </div>

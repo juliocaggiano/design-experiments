@@ -180,8 +180,10 @@ if (afterKey <= beforeKey) throw new Error('Direct manipulation slider is not ke
 await page.goto(`${base}/?category=skills`, { waitUntil: 'networkidle' })
 const designCard = page.locator('article').filter({ has: page.locator('a[href="/vault/skill-design-eng"]') })
 await designCard.scrollIntoViewIfNeeded()
-await designCard.locator('.ek-save-button').click()
-if (new URL(page.url()).pathname !== '/') throw new Error('Clicking the thumbnail interaction navigated away from the feed')
+/* Batch 11: the Design Engineering thumbnail is a static banking-UI
+   composition — exactly one specimen, no interactive controls inside. */
+if (await designCard.locator('.de-thumb').count() !== 1) throw new Error('Design Engineering feed thumbnail is not the static banking composition')
+if (await designCard.locator('.ek-box button, .ek-box [role="slider"], .ek-box select').count() !== 0) throw new Error('Static Design Engineering thumbnail contains interactive controls')
 await designCard.locator('[data-card-caption]').click()
 if (new URL(page.url()).pathname !== '/vault/skill-design-eng') throw new Error('Clicking the card caption did not open the umbrella page')
 
@@ -205,8 +207,8 @@ for (const skill of reducedChecks) {
   await card.scrollIntoViewIfNeeded()
   await reduced.waitForFunction((id) => document.querySelector(`.ek-box[data-compact="true"][data-skill="${id}"]`)?.getAttribute('data-active') === 'true', skill.id)
   await reduced.waitForTimeout(30)
-  if (skill.id === 'emil-design-eng' && await box.locator('.ek-save-button').getAttribute('data-saved') !== 'true') {
-    throw new Error('Reduced motion did not preserve Design Engineering end state')
+  if (skill.id === 'emil-design-eng' && (await box.locator('.de-thumb .de-balance').textContent()) !== '$11,000.00') {
+    throw new Error('Reduced motion did not render the static Design Engineering composition')
   }
   if (skill.id === 'apple-design' && await box.locator('.ek-spring-toggle').getAttribute('aria-pressed') !== 'true') {
     throw new Error('Reduced motion did not preserve Fluid Interfaces end state')

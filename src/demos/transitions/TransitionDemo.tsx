@@ -96,7 +96,7 @@ function NotificationBadge({ controls }: SpecimenProps) {
   return (
     <Specimen label="Notification badge spring transition" className="td-notification">
       <button type="button" className="td-icon-button" onClick={replay} aria-label={visible ? 'Hide notification badge' : 'Show notification badge'}>
-        <Bell size={21} weight="regular" />
+        <Bell size={21} weight="fill" />
         <span className="td-badge" data-visible={visible ? 'true' : 'false'}>3</span>
       </button>
     </Specimen>

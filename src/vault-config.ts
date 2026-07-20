@@ -23,7 +23,7 @@ export const VAULT_ITEMS: readonly VaultItem[] = [
   ...SHADCN_DEFINITIONS.map(({ path, title, date, category }) => ({ path, title, date, category })),
   ...TRANSITION_DEFINITIONS.map(({ path, title, date, category }) => ({ path, title, date, category })),
   ...AICSS_DEFINITIONS.map(({ path, title, date, category }) => ({ path, title, date, category })),
-  { path: '/vault/border-beam', title: 'Gemini Button', date: 'Jul 14, 2026', category: 'Interactions' },
+  { path: '/vault/border-beam', title: 'Gradient Button', date: 'Jul 14, 2026', category: 'Interactions' },
   { path: '/vault/chief-keef-index', title: 'Scroll Gallery', date: 'Jul 14, 2026', category: 'Interfaces' },
   { path: '/vault/micro-buttons', title: 'Micro Interactions', date: 'Jul 14, 2026', category: 'Interactions' },
   { path: '/vault/better-colors', title: 'Cohesive Color Systems', date: 'Jul 13, 2026', category: 'Skills' },

@@ -14,8 +14,8 @@ export type BorderBeamSettings = {
 
 export const BORDER_BEAM_DEFAULTS: BorderBeamSettings = {
   beamType: 'line',
-  color: 'graphite',
-  strength: 60,
+  color: 'stone',
+  strength: 8,
 }
 
 const TYPE_OPTIONS: Array<{ label: string; value: BeamType }> = [

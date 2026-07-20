@@ -103,6 +103,29 @@ const browser = await chromium.launch()
   })
   check('every feed card renders a rich caption with a summary', coverage.summaries === coverage.cards && coverage.cards === 36, `${coverage.summaries}/${coverage.cards} cards`)
 
+  /* Pinned feed order (batch 11): the first nine cards are fixed. */
+  const EXPECTED_FIRST_NINE = [
+    '/vault/reactive-dither',
+    '/vault/number-pop-in',
+    '/vault/meeting-overlay',
+    '/vault/shimmer-text',
+    '/vault/tabs-sliding',
+    '/vault/ai-streaming-text',
+    '/vault/ai-web-search',
+    '/vault/fluid-springs',
+    '/vault/chief-keef-index',
+  ]
+  const firstNine = await page.evaluate(() =>
+    [...document.querySelectorAll('#vault-filter-results > a, #vault-filter-results > article')]
+      .slice(0, 9)
+      .map((el) => el.getAttribute('href') ?? el.querySelector('a')?.getAttribute('href') ?? null),
+  )
+  check(
+    'first nine feed cards match the pinned order',
+    JSON.stringify(firstNine) === JSON.stringify(EXPECTED_FIRST_NINE),
+    firstNine.map((href) => href?.replace('/vault/', '')).join(', '),
+  )
+
   /* Liquid pill: springs to the clicked tab and settles exactly on it. */
   const pillMatchesTab = async (tabName) => page.evaluate((name) => {
     const tab = [...document.querySelectorAll('[role="tab"]')].find((el) => el.textContent.trim().startsWith(name))

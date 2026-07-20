@@ -414,3 +414,117 @@
     transition-delay: 0ms !important;
   }
 }
+
+/* Design Engineering feed thumbnail (batch 11) — a banking-UI composition
+   (Pinterest reference, artifacts/design-qa/batch11-2026-07-20/ref/) translated
+   to the vault's light grayscale: gray header card with avatar, name and
+   balance; overlapping white card with segmented pill rows and amount rows.
+   Static by design — the reference is a still UI frame. The detail page
+   keeps the interactive button-feedback specimen (documented feed/detail
+   exception). */
+.de-thumb {
+  display: grid;
+  width: min(320px, 86%);
+  color: var(--ek-ink);
+  font-size: 11px;
+}
+
+.de-head {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 14px 16px 30px; /* bottom pad: the white card overlaps it */
+  border-radius: 18px;
+  background: #ececec;
+}
+
+.de-avatar {
+  display: grid;
+  flex: none;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 50%;
+  background: #d9d9d9;
+}
+
+.de-avatar i {
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  background: #242424;
+  transform: rotate(45deg);
+}
+
+.de-id {
+  display: grid;
+  gap: 2px;
+  line-height: 1.15;
+  min-width: 0;
+}
+
+.de-id strong { font-size: 11.5px; font-weight: 600; white-space: nowrap; }
+.de-id small { font-size: 9.5px; color: var(--ek-muted); white-space: nowrap; }
+
+.de-balance {
+  margin-left: auto;
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.de-card {
+  display: grid;
+  gap: 8px;
+  margin: -22px 10px 0;
+  padding: 12px;
+  border: 1px solid var(--ek-line);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 0.07);
+}
+
+.de-seg {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 3px;
+  padding: 3px;
+  border-radius: 999px;
+  background: #f0f0f0;
+}
+
+.de-seg span {
+  display: grid;
+  height: 20px;
+  place-items: center;
+  border-radius: 999px;
+  color: #6a6a6a;
+  font-size: 9.5px;
+  font-weight: 550;
+  white-space: nowrap;
+}
+
+.de-seg .de-pill { background: #242424; color: #fff; }
+
+.de-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 4px 0;
+  color: #6a6a6a;
+  font-size: 10.5px;
+}
+
+.de-row span:last-child { color: var(--ek-ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.de-total {
+  padding-top: 8px;
+  border-top: 1px solid var(--ek-line);
+  color: var(--ek-ink);
+  font-weight: 600;
+}
+
+/* The thumb renders inside .ek-stage, so the shared ek-stage container
+   queries above handle small-stage scaling — no de-thumb-specific rules. */

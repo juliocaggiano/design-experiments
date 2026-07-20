@@ -361,11 +361,11 @@ function ScrollgalleryCard() {
 
 function BorderBeamCard() {
   return (
-    <LinkCard href="/vault/border-beam" interactive label="Open Gemini Button">
+    <LinkCard href="/vault/border-beam" interactive label="Open Gradient Button">
       <div className="relative mx-auto aspect-[1344/520] w-full overflow-hidden rounded-[12px] border border-[var(--border-line)] bg-[var(--bg-page)]">
         <BorderBeamDemo compact />
       </div>
-      <RichCaption title="Gemini Button" summary="A button wrapped in a traveling border beam." category="Interactions" />
+      <RichCaption title="Gradient Button" summary="A button wrapped in a traveling border beam." category="Interactions" />
     </LinkCard>
   )
 }
@@ -538,22 +538,36 @@ function MeetingOverlayCard() {
   )
 }
 
+/* Pinned feed order (batch 11): the first nine cards are fixed. They are
+   picked out of the catalog-derived arrays here — the catalogs themselves
+   keep their order because they also drive VAULT_ITEMS nav. Everything
+   after the pinned nine keeps its previous relative order. */
+const PINNED_TRANSITION_PATHS = new Set(['/vault/number-pop-in', '/vault/shimmer-text', '/vault/tabs-sliding'])
+const PINNED_AICSS_PATHS = new Set(['/vault/ai-streaming-text', '/vault/ai-web-search'])
+const pickTransitionCard = (path: string) => TRANSITION_FEED_CARDS.find((card) => card.path === path)!
+const pickAiCssCard = (path: string) => AICSS_FEED_CARDS.find((card) => card.path === path)!
+
 const FEED_CARDS = [
-  { path: '/vault/meeting-overlay', category: 'Motion', Card: MeetingOverlayCard },
   { path: '/vault/reactive-dither', category: 'Motion', Card: ReactiveDitherCard },
+  pickTransitionCard('/vault/number-pop-in'),
+  { path: '/vault/meeting-overlay', category: 'Motion', Card: MeetingOverlayCard },
+  pickTransitionCard('/vault/shimmer-text'),
+  pickTransitionCard('/vault/tabs-sliding'),
+  pickAiCssCard('/vault/ai-streaming-text'),
+  pickAiCssCard('/vault/ai-web-search'),
+  { path: '/vault/fluid-springs', category: 'Motion', Card: FluidSpringsCard },
+  { path: '/vault/chief-keef-index', category: 'Interfaces', Card: ScrollgalleryCard },
   { path: '/vault/liquid-connector', category: 'Motion', Card: LiquidConnectorCard },
   { path: '/vault/skill-design-eng', category: 'Skills', Card: DesignEngineeringCard },
   ...EMIL_SKILL_FEED_CARDS,
   ...SHADCN_FEED_CARDS,
-  ...TRANSITION_FEED_CARDS,
-  ...AICSS_FEED_CARDS,
+  ...TRANSITION_FEED_CARDS.filter((card) => !PINNED_TRANSITION_PATHS.has(card.path)),
+  ...AICSS_FEED_CARDS.filter((card) => !PINNED_AICSS_PATHS.has(card.path)),
   { path: '/vault/border-beam', category: 'Interactions', Card: BorderBeamCard },
-  { path: '/vault/chief-keef-index', category: 'Interfaces', Card: ScrollgalleryCard },
   { path: '/vault/micro-buttons', category: 'Interactions', Card: MicroButtonsCard },
   { path: '/vault/better-colors', category: 'Skills', Card: BetterColorsCard },
   { path: '/vault/better-typography', category: 'Skills', Card: BetterTypographyCard },
   { path: '/vault/bottom-sheet', category: 'Interactions', Card: SheetCard },
-  { path: '/vault/fluid-springs', category: 'Motion', Card: FluidSpringsCard },
 ] satisfies readonly { path: string; category: VaultCategory; Card: ComponentType }[]
 
 function Feed() {

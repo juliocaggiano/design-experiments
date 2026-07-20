@@ -58,9 +58,9 @@ export function BorderBeamDetail() {
 
         <div className="flex flex-col gap-3">
           <p className="text-pretty text-[var(--text-primary)]">
-            A thin line can carry more energy than a loud surface. The default is a quiet graphite treatment, and the
-            playground exposes the complete type and tone system: rotating large and small beams plus the focused line
-            treatment, each in four grayscale palettes.
+            A thin line can carry more energy than a loud surface. The default is a quiet stone treatment at 8%
+            strength, and the playground exposes the complete type and tone system: rotating large and small beams
+            plus the focused line treatment, each in four grayscale palettes.
           </p>
           <p className="text-pretty text-[var(--text-primary)]">
             The effect is rebuilt locally with typed CSS properties, layered radial gradients, and a border mask —

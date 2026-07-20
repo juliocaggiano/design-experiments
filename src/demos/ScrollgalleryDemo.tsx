@@ -22,18 +22,23 @@ export type ScrollgalleryControls = {
   openSearch?: () => void
 }
 
+/* The owner's cover selection (batch 13), in the requested order. Cover
+   artwork, titles, and artist credits were pulled from each issue's page on
+   newyorker.com (og:image masters, cropped/resized to the 800x1086 pipeline);
+   the May 23, 2022 issue appears twice because the list includes it twice. */
 const COVERS: Cover[] = [
-  { id: 'landscape-portrait', title: 'Landscape Portrait', issue: 'June 29, 2026', issueDate: '2026-06-29', artist: 'Tom Gauld', note: 'Scenic vacation selfies.', cover: '/vault/scrollgallery/landscape-portrait.jpg' },
-  { id: 'the-secret-life-of-books', title: 'The Secret Life of Books', issue: 'June 8, 2026', issueDate: '2026-06-08', artist: 'Sergio García Sánchez & Lola Moral', note: 'A living library.', cover: '/vault/scrollgallery/the-secret-life-of-books.jpg' },
-  { id: 'plein-air', title: 'Plein Air', issue: 'May 25, 2026', issueDate: '2026-05-25', artist: 'Kadir Nelson', note: 'Impressions of spring.', cover: '/vault/scrollgallery/plein-air.jpg' },
-  { id: 'west-fourth', title: 'West Fourth', issue: 'April 27, 2026', issueDate: '2026-04-27', artist: 'Christoph Niemann', note: 'One of the city’s most iconic courts.', cover: '/vault/scrollgallery/west-fourth.jpg' },
-  { id: 'meet-cute', title: 'Meet-Cute', issue: 'April 20, 2026', issueDate: '2026-04-20', artist: 'R. Kikuo Johnson', note: 'The next generation.', cover: '/vault/scrollgallery/meet-cute.jpg' },
-  { id: 'parallel-lives', title: 'Parallel Lives', issue: 'April 6, 2026', issueDate: '2026-04-06', artist: 'Victoria Tentler-Krylov', note: 'Around and under construction.', cover: '/vault/scrollgallery/parallel-lives.jpg' },
-  { id: 'city-beasts', title: 'City Beasts', issue: 'March 30, 2026', issueDate: '2026-03-30', artist: 'Roz Chast', note: 'Where the wild things are.', cover: '/vault/scrollgallery/city-beasts.jpg' },
-  { id: 'amid-it-all', title: 'Amid It All', issue: 'March 23, 2026', issueDate: '2026-03-23', artist: 'Maira Kalman', note: 'The blooms burst forth.', cover: '/vault/scrollgallery/amid-it-all.jpg' },
+  { id: 'no-photos-please', title: 'No Photos, Please!', issue: 'August 29, 2022', issueDate: '2022-08-29', artist: 'Anita Kunz', note: 'The Mona Lisa declines the camera.', cover: '/vault/scrollgallery/no-photos-please.jpg' },
+  { id: 'uvalde-may-24-2022', title: 'Uvalde, May 24, 2022', issue: 'June 6, 2022', issueDate: '2022-06-06', artist: 'Eric Drooker', note: 'Chalk outlines on black.', cover: '/vault/scrollgallery/uvalde-may-24-2022.jpg' },
+  { id: 'summer-treat', title: 'Summer Treat', issue: 'August 9, 2021', issueDate: '2021-08-09', artist: 'Mark Ulriksen', note: 'Every dog in the park wants the same bone.', cover: '/vault/scrollgallery/summer-treat.jpg' },
+  { id: 'making-mischief', title: 'Making Mischief', issue: 'May 23, 2022', issueDate: '2022-05-23', artist: 'Ana Juan', note: 'One paw closer to the little bird.', cover: '/vault/scrollgallery/making-mischief.jpg' },
+  { id: 'heres-looking-at-you', title: 'Here’s Looking at You', issue: 'July 3, 2000', issueDate: '2000-07-03', artist: 'Anita Kunz', note: 'Scaling Liberty, at eye level.', cover: '/vault/scrollgallery/heres-looking-at-you.jpg' },
+  { id: 'rat-race', title: 'Rat Race', issue: 'December 5, 2016', issueDate: '2016-12-05', artist: 'Peter de Sève', note: 'Same commute, different species.', cover: '/vault/scrollgallery/rat-race.jpg' },
+  { id: 'the-face-of-justice', title: 'The Face of Justice', issue: 'July 22, 2024', issueDate: '2024-07-22', artist: 'Anita Kunz', note: 'Nine seats, one familiar face.', cover: '/vault/scrollgallery/the-face-of-justice.jpg' },
+  { id: 'making-mischief-redux', title: 'Making Mischief', issue: 'May 23, 2022', issueDate: '2022-05-23', artist: 'Ana Juan', note: 'One paw closer to the little bird.', cover: '/vault/scrollgallery/making-mischief.jpg' },
+  { id: 'fighting-back', title: 'Fighting Back', issue: 'October 24, 2011', issueDate: '2011-10-24', artist: 'Barry Blitt', note: 'The one per cent marches — for the status quo.', cover: '/vault/scrollgallery/fighting-back.jpg' },
 ]
 
-const DEFAULT_ID = 'west-fourth'
+const DEFAULT_ID = 'heres-looking-at-you'
 
 function relativeIndex(index: number, active: number, length: number) {
   let relative = index - active
