@@ -4,11 +4,50 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Vault</title>
-    <script type="module" crossorigin src="/assets/index-Cg1YTfRG.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-pWh_By9F.css">
+    <title>Design Experiments</title>
+    <style>
+      @font-face {
+        font-family: "neueMontreal";
+        src: url("/fonts/NeueMontreal-Regular.otf") format("opentype");
+        font-weight: 400;
+        font-display: swap;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { height: 100%; }
+      body {
+        font-family: "neueMontreal", -apple-system, "Helvetica Neue", sans-serif;
+        background: #fafafa;
+        color: #111;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-font-smoothing: antialiased;
+      }
+      main { text-align: center; padding: 24px; }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #111;
+        margin: 0 auto 28px;
+      }
+      h1 {
+        font-size: 20px;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+      }
+      p {
+        margin-top: 8px;
+        font-size: 14px;
+        color: #8a8a8a;
+      }
+    </style>
   </head>
-  <body class="antialiased max-w-[720px] mx-auto px-8 sm:px-4">
-    <div id="root"></div>
+  <body>
+    <main>
+      <div class="dot"></div>
+      <h1>Design Experiments</h1>
+      <p>Coming soon.</p>
+    </main>
   </body>
 </html>

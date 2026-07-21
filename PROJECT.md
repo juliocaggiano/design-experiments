@@ -80,6 +80,10 @@ node node_modules/vite/bin/vite.js build
 
 ## Update log
 
+### 2026-07-21 — Project paused: static "Coming soon" page (Kimi)
+
+- `index.html` replaced with a self-contained static page: black dot (matches favicon), "Design Experiments" + "Coming soon.", neueMontreal, centered on `#fafafa`. No React bundle loads. The entire vault codebase is untouched and safe in git history — to resume, restore the pre-pause `index.html` (see commit `5311f32a`) and push. tsc + build clean (1.38 kB static output); full entry in `design-qa.md`.
+
 ### 2026-07-21 — Batch 14: black-circle favicon + 2× mobile card thumbnails; project published (Kimi)
 
 - Publishing (context for this entry): the repo now lives at `github.com/juliocaggiano/design-experiments` (owner's personal account; full history force-pushed over the repo's placeholder LICENSE commit) and auto-deploys via Vercel at `design-experiments-nu.vercel.app` + custom subdomain `design.caggiano.studio` (CNAME `design` → Vercel DNS endpoint added in Wix). Every push to `main` redeploys automatically. Local folder renamed to `Design Experiments` — same repo, new path.

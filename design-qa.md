@@ -1,3 +1,17 @@
+# Pause: static "Coming soon" page replaces the live app — 2026-07-21
+
+## Scope and visual truth
+
+- The owner paused the project publicly. `index.html` is now a self-contained static page — no React mount, no script bundle: black-circle dot (matching the favicon), "Design Experiments" headline, "Coming soon." subline, neueMontreal from `/fonts`, `#fafafa` background, centered. The favicon link is unchanged. ALL vault code (src/, demos, pages, public/vault assets) is untouched in the tree and in git history; un-pausing = restore the previous `index.html` (commit `5311f32a` or earlier) and push.
+- Build shrinks to a single 1.38 kB `dist/index.html`; Vercel serves it at both `design-experiments-nu.vercel.app` and `design.caggiano.studio` after the push.
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (single static HTML output, no chunk warning since no bundle is emitted).
+- Page content verified in source: favicon link present, font-face points at the existing `/fonts/NeueMontreal-Regular.otf`, no external requests beyond font + favicon.
+
+final result: passed
+
 # Batch 14: black-circle favicon + 2× mobile card thumbnails — 2026-07-21
 
 ## Scope and visual truth
