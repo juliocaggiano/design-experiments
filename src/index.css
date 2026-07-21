@@ -131,6 +131,12 @@ body {
   .vault-filter-results { animation: none; }
 }
 
+/* mobile: card stages get 2× height (1344/1040 vs 1344/520) so thumbnails
+   read properly on narrow viewports; unlayered so it beats the utility */
+@media (max-width: 639px) {
+  .aspect-\[1344\/520\] { aspect-ratio: 1344 / 1040; }
+}
+
 /* graph-paper grid behind the pixel-select card (values measured from the
    live page: 8px fine grid + 32px major grid + 16px checker, faint blue) */
 .pixel-select {

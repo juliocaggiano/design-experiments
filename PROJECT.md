@@ -80,6 +80,13 @@ node node_modules/vite/bin/vite.js build
 
 ## Update log
 
+### 2026-07-21 — Batch 14: black-circle favicon + 2× mobile card thumbnails; project published (Kimi)
+
+- Publishing (context for this entry): the repo now lives at `github.com/juliocaggiano/design-experiments` (owner's personal account; full history force-pushed over the repo's placeholder LICENSE commit) and auto-deploys via Vercel at `design-experiments-nu.vercel.app` + custom subdomain `design.caggiano.studio` (CNAME `design` → Vercel DNS endpoint added in Wix). Every push to `main` redeploys automatically. Local folder renamed to `Design Experiments` — same repo, new path.
+- Favicon: new `public/favicon.svg` — a single solid black circle — linked from `index.html`.
+- Mobile thumbnails: one unlayered CSS rule in `src/index.css` doubles every `aspect-[1344/520]` stage to `1344/1040` under 640 px; feed cards and detail heroes both inherit it since they share the stage class. Desktop untouched.
+- QA: `verify-mobile-thumbs.mjs` (new) 9/9 — favicon served and valid, desktop ratio unchanged (0.387), mobile ratio 2× (0.774), zero overflow at 390/320, zero console errors. tsc + build clean. Evidence in `artifacts/design-qa/mobile-thumbs-2026-07-21/`; full entry in `design-qa.md`.
+
 ### 2026-07-20 — Batch 13: Fluid Cards reverted (toggle out), Scroll Gallery covers swapped to the owner's list (Kimi)
 
 - Fluid Cards: batches 11–12 for this card were reverted at the owner's request — the spring toggle is gone everywhere (`FluidSpringToggle.*` deleted), the detail page is back to the single draggable-card stage + controls with the original prose, and the feed thumbnail renders `FluidSpringDemo` (the blue-dot fluid card) again. One engine, no divergence; the pinned feed order from batch 11 is untouched.

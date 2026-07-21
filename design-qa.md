@@ -1,3 +1,19 @@
+# Batch 14: black-circle favicon + 2× mobile card thumbnails — 2026-07-21
+
+## Scope and visual truth
+
+- (1) FAVICON — new `public/favicon.svg`: a single solid black circle (64×64 viewBox, r=30), referenced from `index.html` via `<link rel="icon" type="image/svg+xml" href="/favicon.svg" />`. No other head changes; title stays "Vault".
+- (2) MOBILE THUMBNAILS — one global rule in `src/index.css`: under 640 px, every `.aspect-[1344/520]` stage renders at `aspect-ratio: 1344 / 1040` (exactly 2× taller). The rule is unlayered author CSS, so it beats the Tailwind v4 layered utility without touching any of the ~20 call sites in `src/App.tsx` / `src/demos/*`. Desktop ratio is byte-identical to before; feed cards and detail heroes share the same stage class, so both get the taller mobile treatment from one line.
+
+## Verification
+
+- `tsc -b`: 0 errors. Production build: pass (pre-existing chunk-size advisory only).
+- `scripts/verify-mobile-thumbs.mjs` (new): 9/9 — favicon link present, SVG served 200 and is a black circle, desktop stage h/w 0.387 (unchanged ≈520/1344), mobile stage h/w 0.774 (≈1040/1344 = 2×), zero horizontal overflow at 390/320 px, zero console errors on both viewports.
+- Visual pass over `artifacts/design-qa/mobile-thumbs-2026-07-21/`: mobile-feed-390 shows the Liquid Dither thumbnail tall and legible with the new caption layout intact; desktop-feed unchanged.
+- Dev server started per session with `--host 127.0.0.1 --strictPort` and killed afterward; port 5173 confirmed free.
+
+final result: passed
+
 # Batch 13: Fluid Cards revert (batches 11–12 undone per owner) + Scroll Gallery cover swap — 2026-07-20
 
 ## Scope and visual truth
